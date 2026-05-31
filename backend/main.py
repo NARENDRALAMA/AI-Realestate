@@ -26,7 +26,10 @@ app = FastAPI(title="REM Content Studio API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://main.d1zu60c9lypz4g.amplifyapp.com",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
