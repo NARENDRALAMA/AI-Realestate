@@ -43,6 +43,12 @@ function tonePhrases(tone: Tone) {
         hook: 'Standout features include',
         close: 'Act fast—this one will not sit long. Book your viewing today.',
       }
+    default:
+      return {
+        open: 'We are pleased to present',
+        hook: 'This residence offers',
+        close: 'Contact us to arrange an inspection.',
+      }
   }
 }
 
