@@ -29,6 +29,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [isGenerating, setIsGenerating] = useState(false)
   const [generationError, setGenerationError] = useState<string | null>(null)
   const [generationId, setGenerationId] = useState<number | null>(null)
+  const [modelUsed, setModelUsed] = useState<string | null>(null)
+  const [generationTimeMs, setGenerationTimeMs] = useState<number | null>(null)
 
   const loadSampleProperty = useCallback(() => {
     setProperty({ ...sampleProperty })
@@ -41,6 +43,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const result = await generateContent(property, settings)
       const bundle = result.bundle
       setGenerationId(result.id)
+      setModelUsed(result.model_used)
+      setGenerationTimeMs(result.generation_time_ms)
       setGenerated(bundle)
       setDrafts(bundle)
       setVersionHistory((h) => [
@@ -64,6 +68,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setDrafts(null)
     setGenerationError(null)
     setGenerationId(null)
+    setModelUsed(null)
+    setGenerationTimeMs(null)
   }, [])
 
   const finalizeEdits = useCallback((bundle: GeneratedBundle) => {
@@ -156,6 +162,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       isGenerating,
       generationError,
       generationId,
+      modelUsed,
+      generationTimeMs,
       setProperty,
       setSettings,
       loadSampleProperty,
@@ -180,6 +188,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       isGenerating,
       generationError,
       generationId,
+      modelUsed,
+      generationTimeMs,
       loadSampleProperty,
       runGeneration,
       applyImproveTone,

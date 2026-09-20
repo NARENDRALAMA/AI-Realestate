@@ -179,6 +179,11 @@ export function Library() {
                     <span style={{ textTransform: 'capitalize' }}>{item.content_type}</span>
                     <span>·</span>
                     <span>{item.created_at}</span>
+                    <span>·</span>
+                    <span className={`badge ${item.model_used === 'template' ? 'badge--template' : 'badge--ai'}`}>
+                      {item.model_used === 'template' ? 'Template fallback' : `AI: ${item.model_used}`}
+                    </span>
+                    <span>{item.generation_time_ms} ms</span>
                   </p>
                   <p className="library-item__preview">{item.preview}</p>
                 </div>
@@ -238,6 +243,14 @@ export function Library() {
                 <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700 }}>{detail.title}</h2>
                 <p style={{ margin: '0.2rem 0 0', fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
                   {detail.location} · {detail.tone} · {detail.created_at}
+                </p>
+                <p style={{ margin: '0.35rem 0 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span className={`badge ${detail.model_used === 'template' ? 'badge--template' : 'badge--ai'}`}>
+                    {detail.model_used === 'template' ? 'Template fallback' : `AI: ${detail.model_used}`}
+                  </span>
+                  <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+                    {detail.generation_time_ms} ms
+                  </span>
                 </p>
               </div>
               <button

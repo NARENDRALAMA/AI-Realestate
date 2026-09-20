@@ -14,6 +14,8 @@ export interface AppState {
   isGenerating: boolean
   generationError: string | null
   generationId: number | null
+  modelUsed: string | null
+  generationTimeMs: number | null
   setProperty: (p: PropertyData | ((prev: PropertyData) => PropertyData)) => void
   setSettings: (
     s: ContentSettings | ((prev: ContentSettings) => ContentSettings),
