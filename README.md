@@ -193,10 +193,11 @@ Generate a downloadable file. Returns a binary file with `Content-Disposition: a
 │   ├── generator.py        # Template-based content generation engine (Project 1, unchanged)
 │   ├── orchestrator.py     # LLM Orchestration Module — tries the AI backend, falls back to templates
 │   ├── prompts.py          # Prompt Engineering Module — LangChain PromptTemplates per content type
-│   ├── ai_service/         # AI service abstraction (local Transformers / remote HTTP backends)
+│   ├── ai_service/         # AI service abstraction (Transformers / remote HTTP / Ollama backends)
 │   │   ├── interface.py
 │   │   ├── local_transformers_backend.py
 │   │   ├── remote_http_backend.py
+│   │   ├── ollama_backend.py    # For laptops with no CUDA GPU (e.g. Apple Silicon)
 │   │   ├── factory.py
 │   │   ├── service_app.py       # Standalone FastAPI inference service (POST /generate)
 │   │   └── colab_notebook.ipynb # Runs service_app.py on a Colab GPU
@@ -246,9 +247,10 @@ generator.generate_bundle()   ──────────────► temp
 prompts.build_prompt(channel) ──► one grounded prompt per content type
       │
       ▼
-ai_service.factory.get_backend() ──► LocalTransformersBackend  or  RemoteHTTPBackend
-      │                                   (runs a model here)        (calls another
-      │                                                                machine's /generate)
+ai_service.factory.get_backend() ──► LocalTransformersBackend | RemoteHTTPBackend | OllamaBackend
+      │                                (runs a model here)   (calls another    (calls a local
+      │                                                        machine's       `ollama serve`)
+      │                                                        /generate)
       ▼
 orchestrator runs all 4 channels concurrently, each with its own
 LLM_TIMEOUT_SECONDS budget; a channel that errors/times out keeps its
@@ -260,15 +262,43 @@ template text. Returns (bundle, model_used, generation_time_ms).
 | Variable | Default | Meaning |
 |---|---|---|
 | `USE_LLM` | `false` | Feature flag — `true` to attempt real LLM generation, `false` to always use templates. |
-| `LLM_BACKEND` | `remote_http` | `local_transformers` (load the model in this process) or `remote_http` (call another machine's inference service). |
-| `LLM_MODEL_NAME` | `mistralai/Mistral-7B-Instruct-v0.2` | Hugging Face model id. For CPU-only laptop development, use a small model instead, e.g. `Qwen/Qwen2.5-0.5B-Instruct`. |
-| `LLM_LOAD_IN_4BIT` | `false` | `local_transformers` only — 4-bit quantisation via bitsandbytes, to fit a 7B/8B model on a smaller GPU. |
+| `LLM_BACKEND` | `remote_http` | `local_transformers` (load the model in this process with Transformers), `remote_http` (call another machine's inference service), or `ollama` (call a local `ollama serve` — best option for a laptop with no CUDA GPU, e.g. Apple Silicon Macs). |
+| `LLM_MODEL_NAME` | `mistralai/Mistral-7B-Instruct-v0.2` | Hugging Face model id for `local_transformers`/`remote_http`. For `ollama`, an Ollama model tag instead (e.g. `mistral`, `llama3`) — default `mistral`. For CPU-only Transformers, use a small model, e.g. `Qwen/Qwen2.5-0.5B-Instruct`. |
+| `LLM_LOAD_IN_4BIT` | `false` | `local_transformers` only, and only on a CUDA GPU — 4-bit quantisation via bitsandbytes. **Not supported on Apple Silicon / CPU**; use `ollama` there instead (it ships its own pre-quantised models). |
 | `LLM_SERVICE_URL` | _(empty)_ | `remote_http` only — base URL of a running `ai_service/service_app.py` (e.g. a Colab ngrok URL). Required when `LLM_BACKEND=remote_http`. |
+| `LLM_OLLAMA_URL` | `http://localhost:11434` | `ollama` only — base URL of a running `ollama serve`. |
 | `LLM_TIMEOUT_SECONDS` | `15` | Per-channel timeout before falling back to the template for that channel. |
 
 ### Running the AI inference service
 
-**Locally (small model, CPU is fine for testing the wiring):**
+**On a laptop with no CUDA GPU (e.g. an Apple Silicon MacBook) — Ollama:**
+
+`bitsandbytes` (used for 4-bit quantisation) is CUDA-only, so it doesn't work
+on Apple Silicon or plain CPU. [Ollama](https://ollama.com) sidesteps that
+entirely by shipping its own pre-quantised models and running them with Metal
+acceleration on Mac (or CPU/CUDA elsewhere) — no `torch`/`transformers`
+install needed on this side at all.
+
+```bash
+brew install ollama          # or see https://ollama.com/download
+ollama pull mistral          # downloads a 4-bit-quantised Mistral-7B-Instruct (~4GB)
+# ollama serve starts automatically after install; if not: `ollama serve`
+```
+
+Then point the main backend at it — this is the whole setup, no GPU/CUDA config needed:
+
+```bash
+cd backend
+pip install -r requirements.txt   # no requirements-llm.txt needed for Ollama
+USE_LLM=true LLM_BACKEND=ollama LLM_MODEL_NAME=mistral \
+    uvicorn main:app --reload --port 8000
+```
+
+Swap `LLM_MODEL_NAME=llama3` (after `ollama pull llama3`) to use Llama-3
+instead. `LLM_OLLAMA_URL` defaults to `http://localhost:11434`; only set it
+if Ollama is running on a different host/port.
+
+**Locally with Transformers (small model, CPU is fine for testing the wiring):**
 
 ```bash
 cd backend
@@ -306,8 +336,9 @@ pip install -r requirements.txt   # includes pytest, langchain-core, httpx
 pytest tests/ -v
 ```
 
-All 21 tests use a stub `AIBackend` — none of them download a model or need a
-GPU, so they run the same everywhere.
+All 25 tests use a stub `AIBackend` (or a mocked HTTP call for
+`OllamaBackend`) — none of them download a model or need a GPU, so they run
+the same everywhere.
 
 ### Running the evaluation
 
@@ -326,10 +357,14 @@ pass-rate summary split by `model_used` (`template` vs the real model name).
 ### Known limitations / not implemented
 
 - **No real LLM inference has been run in the development environment used to
-  build this feature** — it has no GPU and no verified way to download
-  multi-GB model weights. The AI service, prompts, and orchestration/fallback
-  logic are implemented and tested against a stub backend; running an actual
-  7B/8B model requires Colab (see above) or a machine with a GPU.
+  build this feature** — it has no GPU, and its network policy blocks
+  `huggingface.co` outright (confirmed with a direct connectivity test), so
+  even a tiny model download isn't possible there. The AI service, prompts,
+  and orchestration/fallback logic are implemented and tested against a stub
+  backend and a mocked HTTP call (`OllamaBackend`). Running an actual model
+  requires either Colab (see above, best for a real GPU), a machine with its
+  own CUDA GPU, or — the easiest path on a laptop with no CUDA GPU, e.g. an
+  Apple Silicon MacBook — Ollama (`LLM_BACKEND=ollama`, see above).
 - Login/authentication — not implemented.
 - User / ContentType / Tone lookup tables — content types and tones stay as
   fixed enums (`models.py`), not database-backed lookup tables.
