@@ -57,6 +57,8 @@ class GeneratedBundle(BaseModel):
 class GenerateResponse(BaseModel):
     id: int
     bundle: GeneratedBundle
+    model_used: str
+    generation_time_ms: int
 
 
 class LibraryItem(BaseModel):
@@ -66,6 +68,8 @@ class LibraryItem(BaseModel):
     content_type: str
     tone: str
     preview: str
+    model_used: str
+    generation_time_ms: int
     created_at: str
 
 
@@ -76,6 +80,8 @@ class LibraryDetail(BaseModel):
     content_type: str
     tone: str
     bundle: GeneratedBundle
+    model_used: str
+    generation_time_ms: int
     created_at: str
 
 

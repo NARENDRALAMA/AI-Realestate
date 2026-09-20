@@ -38,6 +38,8 @@ export function GeneratedContent() {
     isGenerating,
     generationError,
     runGeneration,
+    modelUsed,
+    generationTimeMs,
   } = useApp()
   const navigate = useNavigate()
   const [toast, setToast] = useState<string | null>(null)
@@ -143,6 +145,14 @@ export function GeneratedContent() {
               <Pencil size={18} aria-hidden />
               Edit
             </Link>
+            {modelUsed ? (
+              <span className="generation-meta">
+                <span className={`badge ${modelUsed === 'template' ? 'badge--template' : 'badge--ai'}`}>
+                  {modelUsed === 'template' ? 'Template fallback' : `AI: ${modelUsed}`}
+                </span>
+                {generationTimeMs !== null ? <span>{generationTimeMs} ms</span> : null}
+              </span>
+            ) : null}
           </div>
         </div>
 

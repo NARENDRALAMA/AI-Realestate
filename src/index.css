@@ -712,6 +712,25 @@ a:hover {
   color: var(--primary-hover);
 }
 
+.badge--ai {
+  background: var(--primary-soft);
+  color: var(--primary-hover);
+}
+
+.badge--template {
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.generation-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
 .toast {
   position: fixed;
   bottom: 1.5rem;

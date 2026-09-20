@@ -18,6 +18,8 @@ export interface LibraryItem {
   content_type: string
   tone: string
   preview: string
+  model_used: string
+  generation_time_ms: number
   created_at: string
 }
 
@@ -28,6 +30,8 @@ export interface LibraryDetail extends LibraryItem {
 export interface GenerateResult {
   id: number
   bundle: GeneratedBundle
+  model_used: string
+  generation_time_ms: number
 }
 
 export interface StatsResponse {

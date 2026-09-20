@@ -7,6 +7,14 @@ services:
       - "8000:8000"
     volumes:
       - ./backend/propcopy.db:/app/propcopy.db
+    environment:
+      # LLM integration is off by default so Project 1 behaviour is unchanged.
+      # See README.md "AI content generation" section to enable it.
+      - USE_LLM=false
+      - LLM_BACKEND=remote_http
+      - LLM_MODEL_NAME=mistralai/Mistral-7B-Instruct-v0.2
+      - LLM_SERVICE_URL=
+      - LLM_TIMEOUT_SECONDS=15
     restart: unless-stopped
 
   frontend:

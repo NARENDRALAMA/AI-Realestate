@@ -9,7 +9,8 @@ from fastapi.responses import Response
 
 import database
 import export_utils
-from generator import generate_bundle, refine_persuasive, refine_shorten, refine_tone
+from generator import refine_persuasive, refine_shorten, refine_tone
+from orchestrator import generate_with_fallback
 from models import (
     ExportRequest,
     GenerateRequest,
@@ -45,7 +46,7 @@ def startup() -> None:
 
 @app.post("/api/generate", response_model=GenerateResponse)
 def generate(request: GenerateRequest) -> GenerateResponse:
-    bundle = generate_bundle(request)
+    bundle, model_used, generation_time_ms = generate_with_fallback(request)
     record_id = database.save_output(
         title=request.title,
         location=request.location,
@@ -53,8 +54,15 @@ def generate(request: GenerateRequest) -> GenerateResponse:
         tone=request.tone,
         bundle=bundle.model_dump(),
         image_path=request.image_path,
+        model_used=model_used,
+        generation_time_ms=generation_time_ms,
     )
-    return GenerateResponse(id=record_id, bundle=bundle)
+    return GenerateResponse(
+        id=record_id,
+        bundle=bundle,
+        model_used=model_used,
+        generation_time_ms=generation_time_ms,
+    )
 
 
 # ─── library ──────────────────────────────────────────────────────────────────
@@ -77,6 +85,8 @@ def get_library_item(record_id: int) -> LibraryDetail:
         content_type=row["content_type"],
         tone=row["tone"],
         bundle=GeneratedBundle(**row["bundle"]),
+        model_used=row["model_used"],
+        generation_time_ms=row["generation_time_ms"],
         created_at=row["created_at"],
     )
 
