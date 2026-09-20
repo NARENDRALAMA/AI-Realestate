@@ -11,6 +11,38 @@ import type {
 
 const BASE = (import.meta.env.VITE_API_URL ?? '') + '/api'
 
+interface FastApiValidationError {
+  loc?: (string | number)[]
+  msg: string
+}
+
+/**
+ * FastAPI error bodies come in two shapes: `{ detail: "some string" }` for a
+ * plain HTTPException, or `{ detail: [{ loc, msg, ... }, ...] }` for a 422
+ * Pydantic validation error. Rendering the array form directly (e.g. via
+ * template-literal coercion) produces "[object Object],[object Object]", so
+ * this pulls out readable "field: message" text instead.
+ */
+function extractErrorMessage(body: unknown, fallback: string): string {
+  const detail = (body as { detail?: unknown } | null)?.detail
+
+  if (typeof detail === 'string' && detail.trim()) return detail
+
+  if (Array.isArray(detail)) {
+    const messages = detail
+      .map((item) => {
+        if (!item || typeof item !== 'object' || !('msg' in item)) return null
+        const { loc, msg } = item as FastApiValidationError
+        const field = loc?.filter((part) => part !== 'body').join('.')
+        return field ? `${field}: ${msg}` : msg
+      })
+      .filter((msg): msg is string => Boolean(msg))
+    if (messages.length > 0) return messages.join('; ')
+  }
+
+  return fallback
+}
+
 export interface LibraryItem {
   id: number
   title: string
@@ -80,10 +112,8 @@ export async function generateContent(
   })
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({}))
-    throw new Error(
-      (err as { detail?: string }).detail ?? `Generation failed (${res.status})`,
-    )
+    const err = await res.json().catch(() => null)
+    throw new Error(extractErrorMessage(err, `Generation failed (${res.status})`))
   }
 
   return res.json() as Promise<GenerateResult>
