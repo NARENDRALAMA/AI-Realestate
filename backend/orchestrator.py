@@ -20,7 +20,8 @@ from __future__ import annotations
 import logging
 import os
 import time
-from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import wait as futures_wait
 
 from ai_service.factory import get_backend
 from ai_service.interface import AIBackend, AIBackendError
@@ -87,12 +88,18 @@ def generate_with_fallback(request: GenerateRequest) -> tuple[GeneratedBundle, s
             channel: pool.submit(_generate_channel, backend, request, channel)
             for channel in CHANNELS
         }
+        # A single shared deadline for all 4 channels together. Calling
+        # future.result(timeout=...) in a per-channel loop would be wrong here:
+        # each call starts its own fresh clock, so N slow channels would
+        # compound to N*timeout total instead of sharing one timeout window.
+        _done, not_done = futures_wait(futures.values(), timeout=timeout)
         for channel, future in futures.items():
-            try:
-                values[channel] = future.result(timeout=timeout)
-                successes += 1
-            except FutureTimeoutError:
+            if future in not_done:
                 logger.warning("path=template channel=%s reason=timeout timeout_s=%s", channel, timeout)
+                continue
+            try:
+                values[channel] = future.result()
+                successes += 1
             except AIBackendError as exc:
                 logger.warning("path=template channel=%s reason=backend_error error=%s", channel, exc)
             except Exception as exc:  # unexpected error in a single channel must not break the others
