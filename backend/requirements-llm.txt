@@ -1,0 +1,14 @@
+# Extra dependencies for LLM_BACKEND=local_transformers only.
+# Not installed by default (see requirements.txt) so the template-only
+# Project 1 workflow, and LLM_BACKEND=remote_http, stay lightweight.
+#
+#   pip install -r requirements.txt -r requirements-llm.txt
+#
+# For a 7B/8B model (Mistral-7B-Instruct, Llama-3-8B-Instruct) you need a GPU
+# with ~16GB VRAM, or set LLM_LOAD_IN_4BIT=true to fit a smaller GPU via
+# bitsandbytes. For CPU-only laptop development, point LLM_MODEL_NAME at a
+# small instruct model instead, e.g. Qwen/Qwen2.5-0.5B-Instruct.
+torch==2.5.1
+transformers==4.47.1
+accelerate==1.2.1
+bitsandbytes==0.45.0
