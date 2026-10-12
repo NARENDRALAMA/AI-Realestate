@@ -33,3 +33,4 @@ backend/.venv
 audit/raw/*.db
 audit/raw/*.log
 backend/uploads/
+propcopy.backup-*.db
