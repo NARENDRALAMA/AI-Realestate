@@ -1,0 +1,1290 @@
+[
+  {
+    "property": {
+      "title": "Sunlit 3-Bed Terrace",
+      "price": "$1,250,000",
+      "location": "Richmond, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "land_size": "320 m²",
+      "interior_size": "142 m²",
+      "features": "North-facing living, engineered oak floors, SMEG kitchen"
+    },
+    "channel": "listing",
+    "engine": "template",
+    "source": "template",
+    "text": "It is our pleasure to introduce Sunlit 3-Bed Terrace, a refined and well-appointed residence in Richmond, VIC.\n\nOffering 3 bedrooms, 2 bathrooms, 2 car spaces across a land of approximately 320 m² and interior living of approximately 142 m².\n\nThis distinguished residence offers the following:\n• North-facing living\n• engineered oak floors\n• SMEG kitchen\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options,\n\nWe invite qualified purchasers to arrange a private and confidential inspection at their earliest convenience."
+  },
+  {
+    "property": {
+      "title": "Sunlit 3-Bed Terrace",
+      "price": "$1,250,000",
+      "location": "Richmond, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "land_size": "320 m²",
+      "interior_size": "142 m²",
+      "features": "North-facing living, engineered oak floors, SMEG kitchen"
+    },
+    "channel": "listing",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Experience the captivating Sunlit 3-Bed Terrace in the heart of Richmond, VIC. Offering a sophisticated living experience, this property boasts a spacious interior of 142 m², complemented by a generous 320 m² land size.\n\nPriced at $1,250,000, this stylish residence showcases North-facing living, engineered oak floors, and a contemporary SMEG kitchen. The property accommodates three bedrooms and two bathrooms, along with ample parking for two vehicles.\n\nIdeally located in Richmond, this property places you in the heart of the city's vibrant culture, entertainment, and lifestyle amenities. Don't miss your opportunity to make this Sunlit 3-Bed Terrace your new home. Inquire today!"
+  },
+  {
+    "property": {
+      "title": "Sunlit 3-Bed Terrace",
+      "price": "$1,250,000",
+      "location": "Richmond, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "land_size": "320 m²",
+      "interior_size": "142 m²",
+      "features": "North-facing living, engineered oak floors, SMEG kitchen"
+    },
+    "channel": "social",
+    "engine": "template",
+    "source": "template",
+    "text": "Now available: Sunlit 3-Bed Terrace, Richmond, VIC.\n3 bed · 2 bath · 2 parking\n✓ North-facing living\n$1,250,000\n\n#RealEstate #PropertyForSale #HomeForSale #Investment"
+  },
+  {
+    "property": {
+      "title": "Sunlit 3-Bed Terrace",
+      "price": "$1,250,000",
+      "location": "Richmond, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "land_size": "320 m²",
+      "interior_size": "142 m²",
+      "features": "North-facing living, engineered oak floors, SMEG kitchen"
+    },
+    "channel": "social",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "🌞 Introducing the Sunlit 3-Bed Terrace in desirable Richmond, VIC! 🌞\n\nPriced at $1,250,000, this stunning residence boasts a spacious interior of 142m², nestled on a generous 320m² block with 2 secure parking spots.\n\nThe heart of the home features an SMEG kitchen, engineered oak floors, and a North-facing living area that bathes in sunlight throughout the day.\n\nThree bedrooms and two bathrooms cater to your family's needs, ensuring comfort and convenience.\n\nLocated in the heart of Richmond, you'll find a plethora of amenities at your doorstep. Don't miss out on this exceptional opportunity.\n\n🏡 3 Beds 🛁 2 Baths 🏡 🚗 2 Parks 📍 Richmond, VIC 💳 $1,250,000 📍 #RichmondLiving #VictorianRealEstate #HomeForSale #SpaciousLiving #EngineeredOakFloors #SMEGKitchen #NorthFacingLiving"
+  },
+  {
+    "property": {
+      "title": "Sunlit 3-Bed Terrace",
+      "price": "$1,250,000",
+      "location": "Richmond, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "land_size": "320 m²",
+      "interior_size": "142 m²",
+      "features": "North-facing living, engineered oak floors, SMEG kitchen"
+    },
+    "channel": "email",
+    "engine": "template",
+    "source": "template",
+    "text": "Subject: Property Opportunity: Sunlit 3-Bed Terrace — Richmond, VIC\n\nDear Client,\n\nWe invite discerning purchasers to consider Sunlit 3-Bed Terrace, positioned in the sought-after precinct of Richmond, VIC.\n\nProperty highlights:\n• 3 bed / 2 bath / 2 parking\n• Land: 320 m²\n• Interior: 142 m²\n• Price: $1,250,000\n• North-facing living\n• engineered oak floors\n• SMEG kitchen\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options this property ticks every box.\n\nPlease do not hesitate to contact our office to arrange a viewing at a time that suits you.\n\nKind regards,\nYour Property Marketing Desk"
+  },
+  {
+    "property": {
+      "title": "Sunlit 3-Bed Terrace",
+      "price": "$1,250,000",
+      "location": "Richmond, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "land_size": "320 m²",
+      "interior_size": "142 m²",
+      "features": "North-facing living, engineered oak floors, SMEG kitchen"
+    },
+    "channel": "email",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Subject: Exclusive Opportunity: Sunlit 3-Bed Terrace in Prestigious Richmond, VIC\n\nDear Home Seeker,\n\nWe are pleased to present to you a rare find in the heart of Richmond - a Sunlit 3-Bed Terrace, priced at $1,250,000. Nestled within a coveted neighborhood, this property offers an exceptional blend of modern living and timeless charm.\n\nSpanning over 142 m², the property boasts three well-proportioned bedrooms, two contemporary bathrooms, and a stylish SMEG kitchen that promises culinary delight. The living areas, bathed in natural light, are adorned with engineered oak floors, adding a touch of elegance to your everyday life.\n\nParking is convenient with two allocated spaces, while a generous 320 m² land size ensures ample outdoor space for relaxation or entertaining.\n\nLocated in the vibrant Richmond, you'll find an abundance of amenities at your doorstep, from dining and shopping to parks and schools.\n\nDon't miss this opportunity to secure a beautiful home in one of Melbourne's most sought-after suburbs. Arrange your private inspection today.\n\nBest Regards,\n[Your Name]\n[Your Contact Information]"
+  },
+  {
+    "property": {
+      "title": "Sunlit 3-Bed Terrace",
+      "price": "$1,250,000",
+      "location": "Richmond, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "land_size": "320 m²",
+      "interior_size": "142 m²",
+      "features": "North-facing living, engineered oak floors, SMEG kitchen"
+    },
+    "channel": "video",
+    "engine": "template",
+    "source": "template",
+    "text": "[Scene 1 — Introduction]\nWelcome. Today we present Sunlit 3-Bed Terrace, a refined property in Richmond, VIC.\nPriced at $1,250,000, this property offers 3 bedrooms and 2 bathrooms across approximately 142 m² of interior space.\n\n[Scene 2 — Living Areas & Kitchen]\nThe open-plan living and dining areas are refined, perfect for both everyday living and entertaining. The kitchen features North-facing living and engineered oak floors.\n\n[Scene 3 — Bedrooms & Bathrooms]\nThe property offers 3 well-appointed bedrooms and 2 bathrooms. Smeg kitchen.\n\n[Scene 4 — Outdoor & Parking]\nThe outdoor areas are ideal for entertaining, with 2 parking and a land size of 320 m².\n\n[Scene 5 — Closing]\nFor further information or to arrange a private inspection, please contact our office."
+  },
+  {
+    "property": {
+      "title": "Sunlit 3-Bed Terrace",
+      "price": "$1,250,000",
+      "location": "Richmond, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "land_size": "320 m²",
+      "interior_size": "142 m²",
+      "features": "North-facing living, engineered oak floors, SMEG kitchen"
+    },
+    "channel": "video",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "[Scene 1 - Introduction]\nWelcome to our Sunlit 3-Bed Terrace, nestled in the heart of Richmond, Victoria. With a price tag of $1,250,000, this exquisite property offers an exceptional lifestyle opportunity.\n\n[Scene 2 - Exterior]\nAs you approach, the pristine facade, set amidst a landscaped garden of 320 m², welcomes you home. The double carport promises convenience for those with multiple vehicles.\n\n[Scene 3 - Interior]\nStepping inside, the spacious 142 m² interior greets you with engineered oak floors underfoot and a sense of light and space, thanks to the North-facing living area.\n\n[Scene 4 - Kitchen]\nThe SMEG-equipped kitchen, the heart of the home, boasts sleek cabinetry, stone benchtops, and a breakfast bar, perfect for informal meals or entertaining guests.\n\n[Scene 5 - Bedrooms and Bathrooms]\nThree generously sized bedrooms await, each offering ample space for relaxation. Two contemporary bathrooms complete the picture of comfort and luxury.\n\n[Scene 6 - Conclusion]\nThis Sunlit 3-Bed Terrace in Richmond is more than just a home - it's a lifestyle choice. Don't miss your chance to make it yours. Contact us today for a private viewing."
+  },
+  {
+    "property": {
+      "title": "Modern 2-Bed Apartment",
+      "price": "$680,000",
+      "location": "South Yarra, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "interior_size": "85 m²",
+      "features": "Floor-to-ceiling windows, city views, gym access"
+    },
+    "channel": "listing",
+    "engine": "template",
+    "source": "template",
+    "text": "We invite discerning purchasers to consider Modern 2-Bed Apartment, positioned in the sought-after precinct of South Yarra, VIC.\n\nOffering 2 bedrooms, 1 bathroom, 1 car space across a interior living of approximately 85 m².\n\nThis distinguished residence offers the following:\n• Floor-to-ceiling windows\n• city views\n• gym access\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options,\n\nWe invite qualified purchasers to arrange a private and confidential inspection at their earliest convenience."
+  },
+  {
+    "property": {
+      "title": "Modern 2-Bed Apartment",
+      "price": "$680,000",
+      "location": "South Yarra, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "interior_size": "85 m²",
+      "features": "Floor-to-ceiling windows, city views, gym access"
+    },
+    "channel": "listing",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Discover the epitome of modern living in this stylish 2-bedroom apartment, expertly positioned in the vibrant heart of South Yarra, VIC. Priced at $680,000, this immaculate residence boasts an interior size of 85 m², offering an inviting and spacious environment.\n\nThe apartment showcases floor-to-ceiling windows that flood the living spaces with natural light, while providing captivating city views. Two bedrooms, each offering a sanctuary of relaxation, are complemented by a sleek and contemporary bathroom.\n\nResidents will appreciate the convenience of secure parking for one vehicle, and access to a nearby gym for maintaining an active lifestyle. South Yarra's diverse array of dining, shopping, and entertainment options are just steps away, ensuring an unrivaled urban experience.\n\nThis Modern 2-Bed Apartment promises a blend of luxury, comfort, and connectivity in one of Melbourne's most sought-after locations. Don't miss this exceptional opportunity to call this stunning residence your own."
+  },
+  {
+    "property": {
+      "title": "Modern 2-Bed Apartment",
+      "price": "$680,000",
+      "location": "South Yarra, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "interior_size": "85 m²",
+      "features": "Floor-to-ceiling windows, city views, gym access"
+    },
+    "channel": "social",
+    "engine": "template",
+    "source": "template",
+    "text": "Now available: Modern 2-Bed Apartment, South Yarra, VIC.\n2 bed · 1 bath · 1 parking\n✓ Floor-to-ceiling windows\n$680,000\n\n#RealEstate #PropertyForSale #HomeForSale #Investment"
+  },
+  {
+    "property": {
+      "title": "Modern 2-Bed Apartment",
+      "price": "$680,000",
+      "location": "South Yarra, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "interior_size": "85 m²",
+      "features": "Floor-to-ceiling windows, city views, gym access"
+    },
+    "channel": "social",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "🏡 Modern 2-Bed Apartment in the Heart of South Yarra 🏙️\n\nEmbrace sleek, urban living at its finest with our stunning 2-bedroom apartment. Perfectly positioned in the vibrant South Yarra, VIC, you'll find yourself just steps away from the best cafes, restaurants, and shops.\n\nStep inside to find an open-plan living area with floor-to-ceiling windows that bathe the space in natural light and offer captivating city views. The modern kitchen is equipped with stainless steel appliances, making cooking a delight.\n\nWith 2 cozy bedrooms, a chic bathroom, and a secure car space, this 85m² apartment offers the perfect balance of comfort and style. Plus, exclusive access to a state-of-the-art gym keeps your wellness routine on track.\n\nPriced at $680,000, this modern abode is not just a home, but a lifestyle. Don't miss out on this exceptional opportunity!\n\n📍 South Yarra, VIC\n🏢 2 Bedrooms, 1 Bathroom, 1 Parking Space\n💰 $680,000\n🏋️‍♀️ Gym access\n🏠 Sleek, urban living\n🌆 City views"
+  },
+  {
+    "property": {
+      "title": "Modern 2-Bed Apartment",
+      "price": "$680,000",
+      "location": "South Yarra, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "interior_size": "85 m²",
+      "features": "Floor-to-ceiling windows, city views, gym access"
+    },
+    "channel": "email",
+    "engine": "template",
+    "source": "template",
+    "text": "Subject: Property Opportunity: Modern 2-Bed Apartment — South Yarra, VIC\n\nDear Client,\n\nIt is our pleasure to introduce Modern 2-Bed Apartment, a refined and well-appointed residence in South Yarra, VIC.\n\nProperty highlights:\n• 2 bed / 1 bath / 1 parking\n• Interior: 85 m²\n• Price: $680,000\n• Floor-to-ceiling windows\n• city views\n• gym access\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options this property ticks every box.\n\nPlease do not hesitate to contact our office to arrange a viewing at a time that suits you.\n\nKind regards,\nYour Property Marketing Desk"
+  },
+  {
+    "property": {
+      "title": "Modern 2-Bed Apartment",
+      "price": "$680,000",
+      "location": "South Yarra, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "interior_size": "85 m²",
+      "features": "Floor-to-ceiling windows, city views, gym access"
+    },
+    "channel": "email",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Subject: Introducing: Modern 2-Bed Apartment in the Heart of South Yarra\n\nDear Prospective Homeowner,\n\nWe are delighted to present to you an exquisite opportunity in the coveted neighborhood of South Yarra. Our Modern 2-Bed Apartment, priced at $680,000, offers an exceptional living experience with its stylish design and premium amenities.\n\nSpanning over 85 m², this spacious apartment boasts a sleek and modern interior, complete with floor-to-ceiling windows that provide breathtaking city views. The property features two generous bedrooms and one bathroom, ensuring ample space for comfort and privacy.\n\nResidents of this property will also enjoy the convenience of a secure car park and access to a state-of-the-art gym. Located in the vibrant South Yarra, you'll be just steps away from an array of dining, shopping, and entertainment options.\n\nDo not miss out on this chance to secure a modern and stylish apartment in one of Melbourne's most desirable locations. We invite you to schedule a viewing at your earliest convenience.\n\nBest Regards,\n[Your Name]\n[Your Contact Information]"
+  },
+  {
+    "property": {
+      "title": "Modern 2-Bed Apartment",
+      "price": "$680,000",
+      "location": "South Yarra, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "interior_size": "85 m²",
+      "features": "Floor-to-ceiling windows, city views, gym access"
+    },
+    "channel": "video",
+    "engine": "template",
+    "source": "template",
+    "text": "[Scene 1 — Introduction]\nWelcome. Today we present Modern 2-Bed Apartment, a refined property in South Yarra, VIC.\nPriced at $680,000, this property offers 2 bedrooms and 1 bathrooms across approximately 85 m² of interior space.\n\n[Scene 2 — Living Areas & Kitchen]\nThe open-plan living and dining areas are well-appointed, perfect for both everyday living and entertaining. The kitchen features Floor-to-ceiling windows and city views.\n\n[Scene 3 — Bedrooms & Bathrooms]\nThe property offers 2 well-appointed bedrooms and 1 bathrooms. Gym access.\n\n[Scene 4 — Outdoor & Parking]\nThe outdoor areas are ideal for entertaining, with 1 parking and a land size of generous proportions.\n\n[Scene 5 — Closing]\nFor further information or to arrange a private inspection, please contact our office."
+  },
+  {
+    "property": {
+      "title": "Modern 2-Bed Apartment",
+      "price": "$680,000",
+      "location": "South Yarra, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "interior_size": "85 m²",
+      "features": "Floor-to-ceiling windows, city views, gym access"
+    },
+    "channel": "video",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Title: Modern 2-Bed Apartment in South Yarra, VIC\n\n[Scene 1 - Introduction]\nWelcome to a stunning modern 2-bed apartment, nestled in the vibrant heart of South Yarra, Victoria.\n\n[Scene 2 - Overview]\nThis immaculate 85m² space boasts an open-plan living area, floor-to-ceiling windows, and breathtaking city views. The sleek kitchen, complete with modern appliances, is perfect for any culinary enthusiast.\n\n[Scene 3 - Bedrooms]\nRetreat to one of the two spacious bedrooms, each offering ample room for comfort and relaxation.\n\n[Scene 4 - Bathroom]\nThe contemporary bathroom features stylish fixtures and a relaxing ambiance.\n\n[Scene 5 - Extras]\nResidents can enjoy exclusive gym access, adding an extra layer of convenience to this already exceptional property.\n\n[Scene 6 - Location]\nConveniently located in the bustling South Yarra, you'll find a wealth of amenities right at your doorstep.\n\n[Scene 7 - Pricing]\nYours for $680,000, this modern 2-bed apartment is a must-see for anyone seeking the perfect blend of style, comfort, and convenience.\n\n[Scene 8 - Conclusion]\nDon't miss your chance to call this exceptional property your home. Contact us today to arrange a viewing."
+  },
+  {
+    "property": {
+      "title": "Family Home with Pool",
+      "price": "$1,890,000",
+      "location": "Brighton, VIC",
+      "bedrooms": "4",
+      "bathrooms": "3",
+      "parking": "2",
+      "land_size": "650 m²",
+      "features": "In-ground pool, solar panels, home theatre"
+    },
+    "channel": "listing",
+    "engine": "template",
+    "source": "template",
+    "text": "It is our pleasure to introduce Family Home with Pool, a refined and well-appointed residence in Brighton, VIC.\n\nOffering 4 bedrooms, 3 bathrooms, 2 car spaces across a land of approximately 650 m².\n\nThis distinguished residence offers the following:\n• In-ground pool\n• solar panels\n• home theatre\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options,\n\nWe invite qualified purchasers to arrange a private and confidential inspection at their earliest convenience."
+  },
+  {
+    "property": {
+      "title": "Family Home with Pool",
+      "price": "$1,890,000",
+      "location": "Brighton, VIC",
+      "bedrooms": "4",
+      "bathrooms": "3",
+      "parking": "2",
+      "land_size": "650 m²",
+      "features": "In-ground pool, solar panels, home theatre"
+    },
+    "channel": "listing",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Nestled in the heart of prestigious Brighton, VIC, this exquisite family home offers a lavish lifestyle of exceptional comfort and convenience. Priced at $1,890,000, this 4-bedroom, 3-bathroom residence spans across a generously sized 650m² block, complete with a double carport.\n\nBoasting a meticulously designed interior, this abode showcases a harmonious blend of style and practicality. The open-plan living area seamlessly flows onto a stunning in-ground pool, perfect for summer relaxation.\n\nSustainability is at the forefront with the addition of solar panels, ensuring energy efficiency and cost savings for the homeowner. The home theatre provides an unparalleled entertainment experience for the whole family.\n\nThis remarkable property offers the ideal setting for a family seeking a luxurious living environment in one of Melbourne's most sought-after suburbs. Don't miss this exceptional opportunity to make this stunning family home with pool yours. Inspect today!"
+  },
+  {
+    "property": {
+      "title": "Family Home with Pool",
+      "price": "$1,890,000",
+      "location": "Brighton, VIC",
+      "bedrooms": "4",
+      "bathrooms": "3",
+      "parking": "2",
+      "land_size": "650 m²",
+      "features": "In-ground pool, solar panels, home theatre"
+    },
+    "channel": "social",
+    "engine": "template",
+    "source": "template",
+    "text": "Now available: Family Home with Pool, Brighton, VIC.\n4 bed · 3 bath · 2 parking\n✓ In-ground pool\n$1,890,000\n\n#RealEstate #PropertyForSale #HomeForSale #Investment"
+  },
+  {
+    "property": {
+      "title": "Family Home with Pool",
+      "price": "$1,890,000",
+      "location": "Brighton, VIC",
+      "bedrooms": "4",
+      "bathrooms": "3",
+      "parking": "2",
+      "land_size": "650 m²",
+      "features": "In-ground pool, solar panels, home theatre"
+    },
+    "channel": "social",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "🏠 Discover your family's dream home in the heart of Brighton, VIC! 🏖️\n\nPriced at $1,890,000, this stunning 4-bedroom residence boasts a spacious 650m² land parcel, perfect for growing families. 🌳\n\nRelax and unwind in the inviting in-ground pool, or escape to the private home theatre for a cinematic experience. 🎬🏊‍♂️\n\nSolar panels ensure a sustainable living environment, while the double garage provides ample parking. 🌞🚗\n\nLocated in one of Melbourne's most sought-after suburbs, this property offers a premier lifestyle choice. 🌃\n\nDon't miss out on this opportunity to make lasting memories in your very own family home. 🏠💞\n\n#Brighton #Victoria #FamilyHome #Pool #SustainableLiving #HomeTheatre #DreamHome\n\nInquire today to arrange a viewing! 📞💬"
+  },
+  {
+    "property": {
+      "title": "Family Home with Pool",
+      "price": "$1,890,000",
+      "location": "Brighton, VIC",
+      "bedrooms": "4",
+      "bathrooms": "3",
+      "parking": "2",
+      "land_size": "650 m²",
+      "features": "In-ground pool, solar panels, home theatre"
+    },
+    "channel": "email",
+    "engine": "template",
+    "source": "template",
+    "text": "Subject: Property Opportunity: Family Home with Pool — Brighton, VIC\n\nDear Client,\n\nIt is our pleasure to introduce Family Home with Pool, a refined and well-appointed residence in Brighton, VIC.\n\nProperty highlights:\n• 4 bed / 3 bath / 2 parking\n• Land: 650 m²\n• Price: $1,890,000\n• In-ground pool\n• solar panels\n• home theatre\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options this property ticks every box.\n\nPlease do not hesitate to contact our office to arrange a viewing at a time that suits you.\n\nKind regards,\nYour Property Marketing Desk"
+  },
+  {
+    "property": {
+      "title": "Family Home with Pool",
+      "price": "$1,890,000",
+      "location": "Brighton, VIC",
+      "bedrooms": "4",
+      "bathrooms": "3",
+      "parking": "2",
+      "land_size": "650 m²",
+      "features": "In-ground pool, solar panels, home theatre"
+    },
+    "channel": "email",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Subject: Introducing: Family Home with Pool - Perfect for Your Dream Lifestyle in Brighton, VIC\n\nDear Home Seeker,\n\nWe are thrilled to introduce a remarkable property that promises an exceptional living experience for your family. Nestled in the heart of Brighton, VIC, this immaculate 4-bedroom home is a testament to luxury, comfort, and functionality.\n\nPriced at $1,890,000, this spacious residence boasts a generous land size of 650 m², providing ample room for relaxation and play. The home features four well-appointed bedrooms, three stylish bathrooms, and a contemporary open-plan living area.\n\nOutdoor enthusiasts will delight in the in-ground pool, perfect for summer entertainment. The home's eco-friendly credentials are enhanced with the addition of solar panels, contributing to a reduced carbon footprint and saving on energy costs.\n\nFor those seeking entertainment, the home theatre is an ideal space to unwind and enjoy quality time with loved ones. Ample parking for two vehicles ensures convenience and added peace of mind.\n\nDon't miss this outstanding opportunity to secure a family home that offers style, comfort, and practicality. Arrange your private inspection today to experience the luxurious lifestyle on offer in Brighton, VIC.\n\nYours sincerely,\n\n[Your Name]\n[Your Position]\n[Your Contact Information]"
+  },
+  {
+    "property": {
+      "title": "Family Home with Pool",
+      "price": "$1,890,000",
+      "location": "Brighton, VIC",
+      "bedrooms": "4",
+      "bathrooms": "3",
+      "parking": "2",
+      "land_size": "650 m²",
+      "features": "In-ground pool, solar panels, home theatre"
+    },
+    "channel": "video",
+    "engine": "template",
+    "source": "template",
+    "text": "[Scene 1 — Introduction]\nWelcome. Today we present Family Home with Pool, a refined property in Brighton, VIC.\nPriced at $1,890,000, this property offers 4 bedrooms and 3 bathrooms across approximately generous of interior space.\n\n[Scene 2 — Living Areas & Kitchen]\nThe open-plan living and dining areas are refined, perfect for both everyday living and entertaining. The kitchen features In-ground pool and solar panels.\n\n[Scene 3 — Bedrooms & Bathrooms]\nThe property offers 4 well-appointed bedrooms and 3 bathrooms. Home theatre.\n\n[Scene 4 — Outdoor & Parking]\nThe outdoor areas are ideal for entertaining, with 2 parking and a land size of 650 m².\n\n[Scene 5 — Closing]\nFor further information or to arrange a private inspection, please contact our office."
+  },
+  {
+    "property": {
+      "title": "Family Home with Pool",
+      "price": "$1,890,000",
+      "location": "Brighton, VIC",
+      "bedrooms": "4",
+      "bathrooms": "3",
+      "parking": "2",
+      "land_size": "650 m²",
+      "features": "In-ground pool, solar panels, home theatre"
+    },
+    "channel": "video",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Title: Family Home with Pool - Welcome to Your Dream Retreat in Brighton, VIC\n\n[Scene 1 - Introduction]\nStep into a world of luxury and comfort at our stunning 4-bedroom, 3-bathroom family home, nestled in the heart of Brighton, VIC. This magnificent property, priced at $1,890,000, boasts a spacious 650 m² land area and a host of premium features designed to elevate your lifestyle.\n\n[Scene 2 - Exterior]\nOutside, you'll be greeted by a pristine in-ground pool, perfect for those hot summer afternoons. Solar panels have been thoughtfully installed to help reduce your energy bills, while the double carport provides ample parking space.\n\n[Scene 3 - Home Theatre]\nIndoors, a state-of-the-art home theatre system awaits, promising endless entertainment for the whole family.\n\n[Scene 4 - Bedrooms]\nEach of the four generous bedrooms offers a serene retreat, complete with en-suite access in the master suite.\n\n[Scene 5 - Conclusion]\nThis exceptional family home with pool in Brighton, VIC, is more than just a property - it's a sanctuary where memories are made and cherished. Don't miss out on your opportunity to make it yours. Contact us today for a private viewing."
+  },
+  {
+    "property": {
+      "title": "Cosy 1-Bed Studio",
+      "price": "$420,000",
+      "location": "Fitzroy, VIC",
+      "bedrooms": "1",
+      "bathrooms": "1",
+      "parking": "0",
+      "interior_size": "48 m²",
+      "features": "Exposed brick, high ceilings, walk to trams"
+    },
+    "channel": "listing",
+    "engine": "template",
+    "source": "template",
+    "text": "It is our pleasure to introduce Cosy 1-Bed Studio, a refined and well-appointed residence in Fitzroy, VIC.\n\nOffering 1 bedroom, 1 bathroom, 0 car spaces across a interior living of approximately 48 m².\n\nThis distinguished residence offers the following:\n• Exposed brick\n• high ceilings\n• walk to trams\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options,\n\nWe invite qualified purchasers to arrange a private and confidential inspection at their earliest convenience."
+  },
+  {
+    "property": {
+      "title": "Cosy 1-Bed Studio",
+      "price": "$420,000",
+      "location": "Fitzroy, VIC",
+      "bedrooms": "1",
+      "bathrooms": "1",
+      "parking": "0",
+      "interior_size": "48 m²",
+      "features": "Exposed brick, high ceilings, walk to trams"
+    },
+    "channel": "listing",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Nestled in the heart of vibrant Fitzroy, VIC, this charming 1-Bed Studio offers an irresistible blend of contemporary comfort and historic charm. Boasting an intimate interior size of 48m², this cosy abode features exposed brickwork and high ceilings, creating an ambiance that seamlessly merges character and modernity. Ideal for first home buyers or investors, this property offers a prime location, with easy access to an array of amenities and transport links, including trams that run directly through the neighborhood. Priced at $420,000, this is a unique opportunity to secure a stylish residence in one of Melbourne's most sought-after suburbs. Don't miss your chance to call this enchanting studio home."
+  },
+  {
+    "property": {
+      "title": "Cosy 1-Bed Studio",
+      "price": "$420,000",
+      "location": "Fitzroy, VIC",
+      "bedrooms": "1",
+      "bathrooms": "1",
+      "parking": "0",
+      "interior_size": "48 m²",
+      "features": "Exposed brick, high ceilings, walk to trams"
+    },
+    "channel": "social",
+    "engine": "template",
+    "source": "template",
+    "text": "Now available: Cosy 1-Bed Studio, Fitzroy, VIC.\n1 bed · 1 bath · 0 parking\n✓ Exposed brick\n$420,000\n\n#RealEstate #PropertyForSale #HomeForSale #Investment"
+  },
+  {
+    "property": {
+      "title": "Cosy 1-Bed Studio",
+      "price": "$420,000",
+      "location": "Fitzroy, VIC",
+      "bedrooms": "1",
+      "bathrooms": "1",
+      "parking": "0",
+      "interior_size": "48 m²",
+      "features": "Exposed brick, high ceilings, walk to trams"
+    },
+    "channel": "social",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "🌟 Introducing the quaint and charming 1-Bed Studio in the vibrant heart of Fitzroy, VIC! 🏢\n\nNestled in a historic building, this 48m² gem boasts captivating exposed brick and high ceilings that combine modern comfort with a touch of timeless elegance. 🏠🔝\n\nPerfect for first-time buyers or downsizers, this cosy abode offers the ideal urban retreat. With trams just steps away, explore the local buzz, cafes, and arts scene effortlessly. 🚗🏙️\n\nPriced at $420,000, this is your chance to secure a unique property in one of Melbourne's most sought-after neighbourhoods. Don't miss out! 💼🌟\n\n#FitzroyLiving #MelbourneRealEstate #UrbanLifestyle #StudioApartment #ExposedBrick #HighCeilings #TramAccessible #FirstHomeBuyer #Downsizer #HistoricBuilding #ModernComfort #TimelessElegance #UrbanRetreat #PropertyForSale #VictoriaRealEstate #CosyHome #DreamHome #RealEstateAustralia"
+  },
+  {
+    "property": {
+      "title": "Cosy 1-Bed Studio",
+      "price": "$420,000",
+      "location": "Fitzroy, VIC",
+      "bedrooms": "1",
+      "bathrooms": "1",
+      "parking": "0",
+      "interior_size": "48 m²",
+      "features": "Exposed brick, high ceilings, walk to trams"
+    },
+    "channel": "email",
+    "engine": "template",
+    "source": "template",
+    "text": "Subject: Property Opportunity: Cosy 1-Bed Studio — Fitzroy, VIC\n\nDear Client,\n\nWe invite discerning purchasers to consider Cosy 1-Bed Studio, positioned in the sought-after precinct of Fitzroy, VIC.\n\nProperty highlights:\n• 1 bed / 1 bath / 0 parking\n• Interior: 48 m²\n• Price: $420,000\n• Exposed brick\n• high ceilings\n• walk to trams\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options this property ticks every box.\n\nPlease do not hesitate to contact our office to arrange a viewing at a time that suits you.\n\nKind regards,\nYour Property Marketing Desk"
+  },
+  {
+    "property": {
+      "title": "Cosy 1-Bed Studio",
+      "price": "$420,000",
+      "location": "Fitzroy, VIC",
+      "bedrooms": "1",
+      "bathrooms": "1",
+      "parking": "0",
+      "interior_size": "48 m²",
+      "features": "Exposed brick, high ceilings, walk to trams"
+    },
+    "channel": "email",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Subject: Discover Your New Home: Cosy 1-Bed Studio in Vibrant Fitzroy\n\nDear Home Seeker,\n\nWe are delighted to introduce to you an exceptional opportunity to reside in the heart of Fitzroy, VIC. Our Cosy 1-Bed Studio, priced at $420,000, boasts a unique charm with its interior size of 48 m².\n\nLocated in a thriving neighbourhood, this property offers easy access to trams, ensuring your daily commute is effortless. The space boasts a blend of modern and vintage appeal with its exposed brick and high ceilings.\n\nThis studio is the perfect blend of style and comfort, providing an ideal living space for those seeking a home that complements their urban lifestyle. Don't miss out on this opportunity to call Fitzroy your new home.\n\nPlease contact us to schedule a viewing and experience the charm of this property for yourself.\n\nBest Regards,\n[Your Name]\n[Your Position]\n[Your Contact Information]"
+  },
+  {
+    "property": {
+      "title": "Cosy 1-Bed Studio",
+      "price": "$420,000",
+      "location": "Fitzroy, VIC",
+      "bedrooms": "1",
+      "bathrooms": "1",
+      "parking": "0",
+      "interior_size": "48 m²",
+      "features": "Exposed brick, high ceilings, walk to trams"
+    },
+    "channel": "video",
+    "engine": "template",
+    "source": "template",
+    "text": "[Scene 1 — Introduction]\nWelcome. Today we present Cosy 1-Bed Studio, a refined property in Fitzroy, VIC.\nPriced at $420,000, this property offers 1 bedrooms and 1 bathrooms across approximately 48 m² of interior space.\n\n[Scene 2 — Living Areas & Kitchen]\nThe open-plan living and dining areas are refined, perfect for both everyday living and entertaining. The kitchen features Exposed brick and high ceilings.\n\n[Scene 3 — Bedrooms & Bathrooms]\nThe property offers 1 well-appointed bedrooms and 1 bathrooms. Walk to trams.\n\n[Scene 4 — Outdoor & Parking]\nThe outdoor areas are ideal for entertaining, with 0 parking and a land size of generous proportions.\n\n[Scene 5 — Closing]\nFor further information or to arrange a private inspection, please contact our office."
+  },
+  {
+    "property": {
+      "title": "Cosy 1-Bed Studio",
+      "price": "$420,000",
+      "location": "Fitzroy, VIC",
+      "bedrooms": "1",
+      "bathrooms": "1",
+      "parking": "0",
+      "interior_size": "48 m²",
+      "features": "Exposed brick, high ceilings, walk to trams"
+    },
+    "channel": "video",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Title: Cosy 1-Bed Studio in Vibrant Fitzroy, VIC\n\n[Scene 1 - Introduction]\nWelcome to our Cosy 1-Bed Studio, a unique urban sanctuary nestled in the heart of Fitzroy, Victoria. This property is a perfect blend of charm and convenience, offering an unparalleled living experience.\n\n[Scene 2 - Interior]\nAs you step inside, you'll be greeted by a warm and inviting 48m² space. The open-plan living area, featuring exposed brick and high ceilings, creates a characterful backdrop for your daily life. The contemporary kitchen, complete with modern appliances, is thoughtfully designed to maximize functionality.\n\n[Scene 3 - Bedroom]\nThe bedroom, a cozy retreat, offers a comfortable space to unwind. The room, equipped with built-in wardrobes, ensures ample storage for your belongings.\n\n[Scene 4 - Bathroom]\nThe sleek bathroom, featuring a combined shower over bath, provides a refreshing start to every morning.\n\n[Scene 5 - Location]\nLocated in the vibrant Fitzroy, you'll find yourself just a short walk away from an array of cafes, restaurants, and vibrant nightlife. Add to that the convenience of nearby trams, and you've got a location that truly has it all.\n\n[Scene 6 - Conclusion]\nPriced at $420,000, this Cosy 1-Bed Studio presents an excellent opportunity for those seeking a unique living experience in a sought-after location. Don't miss out on this gem!"
+  },
+  {
+    "property": {
+      "title": "Acreage Retreat",
+      "price": "",
+      "location": "Yarra Valley, VIC",
+      "bedrooms": "5",
+      "bathrooms": "3",
+      "parking": "4",
+      "land_size": "2 hectares",
+      "features": "Vineyard views, dam, workshop shed"
+    },
+    "channel": "listing",
+    "engine": "template",
+    "source": "template",
+    "text": "We invite discerning purchasers to consider Acreage Retreat, positioned in the sought-after precinct of Yarra Valley, VIC.\n\nOffering 5 bedrooms, 3 bathrooms, 4 car spaces across a land of approximately 2 hectares.\n\nThis distinguished residence offers the following:\n• Vineyard views\n• dam\n• workshop shed\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options,\n\nWe invite qualified purchasers to arrange a private and confidential inspection at their earliest convenience."
+  },
+  {
+    "property": {
+      "title": "Acreage Retreat",
+      "price": "",
+      "location": "Yarra Valley, VIC",
+      "bedrooms": "5",
+      "bathrooms": "3",
+      "parking": "4",
+      "land_size": "2 hectares",
+      "features": "Vineyard views, dam, workshop shed"
+    },
+    "channel": "listing",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Nestled in the picturesque Yarra Valley, 'Acreage Retreat' promises a serene and luxurious escape. This stunning 5-bedroom residence, set upon 2 hectares, boasts panoramic vineyard views and a soothing dam, creating a tranquil backdrop for daily life.\n\nThe home offers spacious interiors with 3 bathrooms, catering to the needs of a growing family or guests. Ample parking for 4 vehicles ensures effortless arrival and departure.\n\nExplore the 2 hectares of land, taking in the charming workshop shed, perfect for hobbies or home projects. This property offers a unique blend of rural charm and modern convenience, making it an ideal retreat for those seeking a peaceful and private lifestyle.\n\nEmbrace the tranquility and beauty of 'Acreage Retreat' in the heart of the Yarra Valley, where picturesque landscapes and refined living come together. Don't miss your opportunity to claim this extraordinary property as your own."
+  },
+  {
+    "property": {
+      "title": "Acreage Retreat",
+      "price": "",
+      "location": "Yarra Valley, VIC",
+      "bedrooms": "5",
+      "bathrooms": "3",
+      "parking": "4",
+      "land_size": "2 hectares",
+      "features": "Vineyard views, dam, workshop shed"
+    },
+    "channel": "social",
+    "engine": "template",
+    "source": "template",
+    "text": "Now available: Acreage Retreat, Yarra Valley, VIC.\n5 bed · 3 bath · 4 parking\n✓ Vineyard views\nPrice on application\n\n#RealEstate #PropertyForSale #HomeForSale #Investment"
+  },
+  {
+    "property": {
+      "title": "Acreage Retreat",
+      "price": "",
+      "location": "Yarra Valley, VIC",
+      "bedrooms": "5",
+      "bathrooms": "3",
+      "parking": "4",
+      "land_size": "2 hectares",
+      "features": "Vineyard views, dam, workshop shed"
+    },
+    "channel": "social",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "🌄🍇 Experience the serenity of the Yarra Valley with our stunning 2-hectare Acreage Retreat! 🌄🍇\n\nNestled in picturesque landscapes, this 5-bedroom beauty boasts captivating vineyard vistas and a tranquil dam, offering an idyllic escape from city life. 🏡🌳\n\nEquipped with 3 bathrooms and 4 parking spaces, it provides ample space for your family and guests. 🚗🛁\n\nFor the enthusiasts, a spacious workshop shed awaits for your creative pursuits. 🔧💡\n\nDiscover the perfect blend of luxury and tranquility, just minutes from wineries, restaurants, and the heart of Yarra Valley. 🍷🍴🌐\n\nDon't miss this opportunity to own a piece of paradise! 🌞🏞️\n\n#YarraValleyLiving #DreamHome #AcreageProperty #VineyardViews #LuxuryRealEstate #WorkshopShed #CountryLife #RelocateToVictoria #RealEstateInvestment #PropertyForSale #VictoriaAustralia #YarraValleyWineryCountry"
+  },
+  {
+    "property": {
+      "title": "Acreage Retreat",
+      "price": "",
+      "location": "Yarra Valley, VIC",
+      "bedrooms": "5",
+      "bathrooms": "3",
+      "parking": "4",
+      "land_size": "2 hectares",
+      "features": "Vineyard views, dam, workshop shed"
+    },
+    "channel": "email",
+    "engine": "template",
+    "source": "template",
+    "text": "Subject: Property Opportunity: Acreage Retreat — Yarra Valley, VIC\n\nDear Client,\n\nWe are pleased to present Acreage Retreat, an outstanding property in Yarra Valley, VIC.\n\nProperty highlights:\n• 5 bed / 3 bath / 4 parking\n• Land: 2 hectares\n• Vineyard views\n• dam\n• workshop shed\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options this property ticks every box.\n\nPlease do not hesitate to contact our office to arrange a viewing at a time that suits you.\n\nKind regards,\nYour Property Marketing Desk"
+  },
+  {
+    "property": {
+      "title": "Acreage Retreat",
+      "price": "",
+      "location": "Yarra Valley, VIC",
+      "bedrooms": "5",
+      "bathrooms": "3",
+      "parking": "4",
+      "land_size": "2 hectares",
+      "features": "Vineyard views, dam, workshop shed"
+    },
+    "channel": "email",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Subject: Discover Your Private Acreage Retreat in the Stunning Yarra Valley\n\nDear [Recipient's Name],\n\nI am thrilled to present an extraordinary opportunity for you to escape the urban hustle and embrace the tranquility of nature at our exquisite property, the \"Acreage Retreat\" nestled in the heart of the picturesque Yarra Valley, Victoria.\n\nThis remarkable residence boasts 5 spacious bedrooms, 3 modern bathrooms, and 4 secure parking spaces, providing ample room for you and your loved ones. Spanning across a generous 2-hectare estate, you'll be captivated by the breathtaking vineyard views that surround this idyllic retreat.\n\nNotable features of this property include a serene dam and a versatile workshop shed, perfect for those with a penchant for DIY projects or pursuing a hobby. Immerse yourself in the beauty of the Yarra Valley while enjoying the convenience of its prime location.\n\nDon't miss this chance to create unforgettable memories in this unique retreat. I invite you to schedule a private viewing to truly appreciate the charm and serenity that awaits you at the Acreage Retreat.\n\nBest Regards,\n[Your Name]\n[Your Contact Information]"
+  },
+  {
+    "property": {
+      "title": "Acreage Retreat",
+      "price": "",
+      "location": "Yarra Valley, VIC",
+      "bedrooms": "5",
+      "bathrooms": "3",
+      "parking": "4",
+      "land_size": "2 hectares",
+      "features": "Vineyard views, dam, workshop shed"
+    },
+    "channel": "video",
+    "engine": "template",
+    "source": "template",
+    "text": "[Scene 1 — Introduction]\nWelcome. Today we present Acreage Retreat, a refined property in Yarra Valley, VIC.\nPriced at price on application, this property offers 5 bedrooms and 3 bathrooms across approximately generous of interior space.\n\n[Scene 2 — Living Areas & Kitchen]\nThe open-plan living and dining areas are refined, perfect for both everyday living and entertaining. The kitchen features Vineyard views and dam.\n\n[Scene 3 — Bedrooms & Bathrooms]\nThe property offers 5 well-appointed bedrooms and 3 bathrooms. Workshop shed.\n\n[Scene 4 — Outdoor & Parking]\nThe outdoor areas are ideal for entertaining, with 4 parking and a land size of 2 hectares.\n\n[Scene 5 — Closing]\nFor further information or to arrange a private inspection, please contact our office."
+  },
+  {
+    "property": {
+      "title": "Acreage Retreat",
+      "price": "",
+      "location": "Yarra Valley, VIC",
+      "bedrooms": "5",
+      "bathrooms": "3",
+      "parking": "4",
+      "land_size": "2 hectares",
+      "features": "Vineyard views, dam, workshop shed"
+    },
+    "channel": "video",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Title: Acreage Retreat in the Heart of Yarra Valley, VIC\n\n[Scene 1 - Introduction]\nWelcome to our Acreage Retreat, a stunning property nestled in the picturesque Yarra Valley. This 5-bedroom, 3-bathroom home boasts a spacious living area, perfect for entertaining or relaxing with your loved ones.\n\n[Scene 2 - Exterior]\nStep outside and behold the breathtaking vineyard views that surround the property. The 2-hectare land provides ample space for outdoor activities, while the nearby dam adds a serene touch to your daily life.\n\n[Scene 3 - Interior]\nInside, the home offers a warm and inviting atmosphere. The kitchen, with its modern appliances, is a cook's dream, and the five bedrooms ensure ample space for family and guests.\n\n[Scene 4 - Workshop Shed]\nFor those with a passion for DIY projects, the large workshop shed is an ideal space for pursuing hobbies or tending to maintenance tasks.\n\n[Scene 5 - Parking]\nWith 4 parking spaces, you'll never have to worry about finding a spot for your vehicles.\n\n[Scene 6 - Conclusion]\nIf you're seeking a unique, spacious property in a beautiful setting, look no further than our Acreage Retreat in Yarra Valley, VIC. Contact us today to schedule a viewing."
+  },
+  {
+    "property": {
+      "title": "Renovated Victorian Cottage",
+      "price": "$1,050,000",
+      "location": "Carlton, VIC",
+      "bedrooms": "3",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "210 m²",
+      "features": "Period facade, modern extension, courtyard garden"
+    },
+    "channel": "listing",
+    "engine": "template",
+    "source": "template",
+    "text": "It is our pleasure to introduce Renovated Victorian Cottage, a refined and well-appointed residence in Carlton, VIC.\n\nOffering 3 bedrooms, 1 bathroom, 1 car space across a land of approximately 210 m².\n\nThis distinguished residence offers the following:\n• Period facade\n• modern extension\n• courtyard garden\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options,\n\nWe invite qualified purchasers to arrange a private and confidential inspection at their earliest convenience."
+  },
+  {
+    "property": {
+      "title": "Renovated Victorian Cottage",
+      "price": "$1,050,000",
+      "location": "Carlton, VIC",
+      "bedrooms": "3",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "210 m²",
+      "features": "Period facade, modern extension, courtyard garden"
+    },
+    "channel": "listing",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Nestled in the heart of Carlton, VIC, this stunningly restored Victorian Cottage offers a harmonious blend of historical charm and contemporary sophistication. Priced at $1,050,000, the property boasts a spacious 210m² land size and a generous 3-bedroom layout, perfect for growing families or discerning homebuyers.\n\nStepping inside, you'll be greeted by a beautifully renovated interior, featuring a modern extension that seamlessly combines the old-world elegance of the period facade with the comforts of modern living. The home benefits from one bathroom and an allocated parking space, ensuring convenience and practicality.\n\nOutside, the private courtyard garden offers a serene retreat, where you can unwind after a long day. This charming property represents an exceptional opportunity for those seeking a unique blend of history, character, and contemporary style. Don't miss out on this Renovated Victorian Cottage - your dream home awaits in Carlton."
+  },
+  {
+    "property": {
+      "title": "Renovated Victorian Cottage",
+      "price": "$1,050,000",
+      "location": "Carlton, VIC",
+      "bedrooms": "3",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "210 m²",
+      "features": "Period facade, modern extension, courtyard garden"
+    },
+    "channel": "social",
+    "engine": "template",
+    "source": "template",
+    "text": "Now available: Renovated Victorian Cottage, Carlton, VIC.\n3 bed · 1 bath · 1 parking\n✓ Period facade\n$1,050,000\n\n#RealEstate #PropertyForSale #HomeForSale #Investment"
+  },
+  {
+    "property": {
+      "title": "Renovated Victorian Cottage",
+      "price": "$1,050,000",
+      "location": "Carlton, VIC",
+      "bedrooms": "3",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "210 m²",
+      "features": "Period facade, modern extension, courtyard garden"
+    },
+    "channel": "social",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "🏡 Introducing the enchanting Renovated Victorian Cottage, nestled in the heart of Carlton, VIC 🏡\n\nStep into a perfect blend of history and modernity, as this 3-bedroom gem showcases a striking period facade and a sleek, contemporary extension. The property boasts a spacious 210m² land size and a private courtyard garden, perfect for relaxing moments.\n\nPark your vehicle securely in the dedicated parking space, and indulge in the comfort of a stylish, fully renovated home. With a single bathroom, this charming cottage provides a cozy ambiance for your everyday living.\n\nLocated in the vibrant neighborhood of Carlton, you'll find a wealth of amenities at your fingertips. 🌳🏘️🏫🚂\n\nDiscover your new sanctuary, priced at $1,050,000. Don't miss out on this extraordinary opportunity! ❤️🏡 #RenovatedVictorianCottage #CarltonLiving #DreamHome #RealEstate #PropertyForSale #Victoria #CottageCharm #ContemporaryLiving #CarltonVic"
+  },
+  {
+    "property": {
+      "title": "Renovated Victorian Cottage",
+      "price": "$1,050,000",
+      "location": "Carlton, VIC",
+      "bedrooms": "3",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "210 m²",
+      "features": "Period facade, modern extension, courtyard garden"
+    },
+    "channel": "email",
+    "engine": "template",
+    "source": "template",
+    "text": "Subject: Property Opportunity: Renovated Victorian Cottage — Carlton, VIC\n\nDear Client,\n\nIt is our pleasure to introduce Renovated Victorian Cottage, a refined and well-appointed residence in Carlton, VIC.\n\nProperty highlights:\n• 3 bed / 1 bath / 1 parking\n• Land: 210 m²\n• Price: $1,050,000\n• Period facade\n• modern extension\n• courtyard garden\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options this property ticks every box.\n\nPlease do not hesitate to contact our office to arrange a viewing at a time that suits you.\n\nKind regards,\nYour Property Marketing Desk"
+  },
+  {
+    "property": {
+      "title": "Renovated Victorian Cottage",
+      "price": "$1,050,000",
+      "location": "Carlton, VIC",
+      "bedrooms": "3",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "210 m²",
+      "features": "Period facade, modern extension, courtyard garden"
+    },
+    "channel": "email",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Subject: Discover the Charm of Renovated Victorian Cottage in Carlton, VIC - $1,050,000\n\nDear Home Seeker,\n\nWe are delighted to introduce to you an exquisite opportunity to own a beautifully renovated Victorian Cottage in the heart of Carlton, VIC. Nestled on a generous 210m² land, this charming residence boasts a unique blend of period charm and contemporary elegance.\n\nThe property features three well-appointed bedrooms, a tastefully updated bathroom, and a modern extension that seamlessly merges indoor and outdoor living. A highlight of this property is its private courtyard garden, perfect for entertaining or unwinding amidst lush greenery.\n\nParking is no concern with a designated space available. Situated in the vibrant Carlton neighborhood, you'll be just steps away from an array of cafes, restaurants, and cultural attractions.\n\nDon't miss this rare chance to own a piece of history with a modern twist. Schedule a viewing today to explore this exceptional property further.\n\nBest Regards,\n[Your Name]\n[Your Contact Information]"
+  },
+  {
+    "property": {
+      "title": "Renovated Victorian Cottage",
+      "price": "$1,050,000",
+      "location": "Carlton, VIC",
+      "bedrooms": "3",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "210 m²",
+      "features": "Period facade, modern extension, courtyard garden"
+    },
+    "channel": "video",
+    "engine": "template",
+    "source": "template",
+    "text": "[Scene 1 — Introduction]\nWelcome. Today we present Renovated Victorian Cottage, a refined property in Carlton, VIC.\nPriced at $1,050,000, this property offers 3 bedrooms and 1 bathrooms across approximately generous of interior space.\n\n[Scene 2 — Living Areas & Kitchen]\nThe open-plan living and dining areas are refined, perfect for both everyday living and entertaining. The kitchen features Period facade and modern extension.\n\n[Scene 3 — Bedrooms & Bathrooms]\nThe property offers 3 well-appointed bedrooms and 1 bathrooms. Courtyard garden.\n\n[Scene 4 — Outdoor & Parking]\nThe outdoor areas are ideal for entertaining, with 1 parking and a land size of 210 m².\n\n[Scene 5 — Closing]\nFor further information or to arrange a private inspection, please contact our office."
+  },
+  {
+    "property": {
+      "title": "Renovated Victorian Cottage",
+      "price": "$1,050,000",
+      "location": "Carlton, VIC",
+      "bedrooms": "3",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "210 m²",
+      "features": "Period facade, modern extension, courtyard garden"
+    },
+    "channel": "video",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Title: Renovated Victorian Cottage - Carlton, VIC\n\n[Scene 1 - Introduction]\nWelcome to our renovated Victorian Cottage, a charming abode nestled in the heart of Carlton. This property blends classic Victorian aesthetics with modern comforts, offering an exceptional living experience.\n\n[Scene 2 - Exterior]\nAs you approach, the property's period facade captivates with its intricate details and elegant charm. The well-maintained garden adds a touch of serenity to the home's exterior.\n\n[Scene 3 - Interior]\nUpon entering, you're greeted by a warm and inviting living space, tastefully designed to harmonize with the home's heritage character. The modern extension seamlessly integrates contemporary conveniences, providing a functional and stylish living environment.\n\n[Scene 4 - Bedrooms]\nThe home offers three spacious bedrooms, each thoughtfully designed to provide comfort and relaxation.\n\n[Scene 5 - Bathroom]\nThe bathroom, while traditional in style, features modern fixtures and fittings for a luxurious bathing experience.\n\n[Scene 6 - Courtyard]\nStep outside to the courtyard garden, a perfect extension of your living space, perfect for entertaining or simply unwinding.\n\n[Scene 7 - Parking]\nFor your convenience, there's a dedicated parking space available.\n\n[Scene 8 - Location]\nLocated in the vibrant suburb of Carlton, you'll find an abundance of amenities, restaurants, and transport options at your doorstep.\n\n[Scene 9 - Conclusion]\nThis Renovated Victorian Cottage, priced at $1,050,000, offers a unique opportunity to experience the charm of yesteryears while enjoying modern conveniences"
+  },
+  {
+    "property": {
+      "title": "Beachside Apartment",
+      "price": "$795,000",
+      "location": "St Kilda, VIC",
+      "bedrooms": "2",
+      "bathrooms": "2",
+      "parking": "1",
+      "interior_size": "92 m²",
+      "features": "Ocean glimpses, balcony, secure building"
+    },
+    "channel": "listing",
+    "engine": "template",
+    "source": "template",
+    "text": "We invite discerning purchasers to consider Beachside Apartment, positioned in the sought-after precinct of St Kilda, VIC.\n\nOffering 2 bedrooms, 2 bathrooms, 1 car space across a interior living of approximately 92 m².\n\nThis distinguished residence offers the following:\n• Ocean glimpses\n• balcony\n• secure building\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options,\n\nWe invite qualified purchasers to arrange a private and confidential inspection at their earliest convenience."
+  },
+  {
+    "property": {
+      "title": "Beachside Apartment",
+      "price": "$795,000",
+      "location": "St Kilda, VIC",
+      "bedrooms": "2",
+      "bathrooms": "2",
+      "parking": "1",
+      "interior_size": "92 m²",
+      "features": "Ocean glimpses, balcony, secure building"
+    },
+    "channel": "listing",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Discover the allure of beachside living in this exceptional 2-bedroom, 2-bathroom apartment in the heart of St Kilda, VIC. Nestled within a secure building, this spacious 92m² home boasts a desirable interior that seamlessly blends functionality and style. The open-plan living area, featuring a modern kitchen with stainless-steel appliances, flows effortlessly onto a private balcony, offering ocean glimpses that capture the essence of coastal living. The master suite showcases a luxurious en-suite, while the second bedroom offers a tranquil retreat. With an allocated parking space, this apartment is perfect for those seeking a convenient and elegant lifestyle. Embrace the vibrancy of St Kilda and indulge in the unrivaled coastal charm of this exceptional beachside apartment, priced at $795,000."
+  },
+  {
+    "property": {
+      "title": "Beachside Apartment",
+      "price": "$795,000",
+      "location": "St Kilda, VIC",
+      "bedrooms": "2",
+      "bathrooms": "2",
+      "parking": "1",
+      "interior_size": "92 m²",
+      "features": "Ocean glimpses, balcony, secure building"
+    },
+    "channel": "social",
+    "engine": "template",
+    "source": "template",
+    "text": "Now available: Beachside Apartment, St Kilda, VIC.\n2 bed · 2 bath · 1 parking\n✓ Ocean glimpses\n$795,000\n\n#RealEstate #PropertyForSale #HomeForSale #Investment"
+  },
+  {
+    "property": {
+      "title": "Beachside Apartment",
+      "price": "$795,000",
+      "location": "St Kilda, VIC",
+      "bedrooms": "2",
+      "bathrooms": "2",
+      "parking": "1",
+      "interior_size": "92 m²",
+      "features": "Ocean glimpses, balcony, secure building"
+    },
+    "channel": "social",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "🌊🏆 Introducing the Beachside Apartment, a luxurious haven in the heart of St Kilda, VIC! 🌄🏘️\n\nPriced at $795,000, this stunning 2-bedroom, 2-bathroom residence spans 92m², offering a sophisticated living space with ocean glimpses. 🌅🏖️\n\nStep out onto your private balcony and let the sea breeze refresh your senses. Secure parking ensures peace of mind, while the secure building provides a sense of safety and privacy. 🚗🔒\n\nPositioned in one of St Kilda's most sought-after locations, you'll find an array of amenities at your doorstep. 🌟🛍️\n\nDon't miss out on this remarkable opportunity to embrace the coastal lifestyle. Contact us today to arrange a viewing! 📞📧\n\n#BeachsideLiving #StKilda #LuxuryApartment #OceanViews #CoastalLifestyle #SeaBreeze #SecureParking #UrbanLiving #VictoriaRealEstate #StKildaProperties #DreamHome #FindYourPerfectHome #RealEstateAgent #MelbourneLiving #SophisticatedLifestyle #WaterfrontLiving #BalconyLife #SeasideProperty #Victoria #Melbourne"
+  },
+  {
+    "property": {
+      "title": "Beachside Apartment",
+      "price": "$795,000",
+      "location": "St Kilda, VIC",
+      "bedrooms": "2",
+      "bathrooms": "2",
+      "parking": "1",
+      "interior_size": "92 m²",
+      "features": "Ocean glimpses, balcony, secure building"
+    },
+    "channel": "email",
+    "engine": "template",
+    "source": "template",
+    "text": "Subject: Property Opportunity: Beachside Apartment — St Kilda, VIC\n\nDear Client,\n\nWe are pleased to present Beachside Apartment, an outstanding property in St Kilda, VIC.\n\nProperty highlights:\n• 2 bed / 2 bath / 1 parking\n• Interior: 92 m²\n• Price: $795,000\n• Ocean glimpses\n• balcony\n• secure building\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options this property ticks every box.\n\nPlease do not hesitate to contact our office to arrange a viewing at a time that suits you.\n\nKind regards,\nYour Property Marketing Desk"
+  },
+  {
+    "property": {
+      "title": "Beachside Apartment",
+      "price": "$795,000",
+      "location": "St Kilda, VIC",
+      "bedrooms": "2",
+      "bathrooms": "2",
+      "parking": "1",
+      "interior_size": "92 m²",
+      "features": "Ocean glimpses, balcony, secure building"
+    },
+    "channel": "email",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Subject: Introducing: Stunning Beachside Apartment in Exclusive St Kilda\n\nDear Prospective Buyer,\n\nWe are delighted to present to you an exceptional opportunity to acquire a captivating 2-bedroom, 2-bathroom apartment nestled in the heart of St Kilda, VIC. This immaculate residence boasts an interior size of 92 m² and offers unparalleled ocean glimpses, a coveted feature in the thriving coastal community.\n\nThe apartment, priced at $795,000, is located in a secure building and features a spacious balcony, perfect for enjoying the coastal breeze. The property comes equipped with 1 car space, ensuring your convenience and peace of mind.\n\nThis property offers an unparalleled lifestyle, providing easy access to St Kilda's vibrant cafes, shops, and renowned beaches.\n\nDon't miss this rare opportunity to own a piece of the sought-after St Kilda coastline. Arrange a viewing today to experience the charm of this beautiful apartment for yourself.\n\nBest Regards,\n\n[Your Name]\n[Your Contact Information]"
+  },
+  {
+    "property": {
+      "title": "Beachside Apartment",
+      "price": "$795,000",
+      "location": "St Kilda, VIC",
+      "bedrooms": "2",
+      "bathrooms": "2",
+      "parking": "1",
+      "interior_size": "92 m²",
+      "features": "Ocean glimpses, balcony, secure building"
+    },
+    "channel": "video",
+    "engine": "template",
+    "source": "template",
+    "text": "[Scene 1 — Introduction]\nWelcome. Today we present Beachside Apartment, a refined property in St Kilda, VIC.\nPriced at $795,000, this property offers 2 bedrooms and 2 bathrooms across approximately 92 m² of interior space.\n\n[Scene 2 — Living Areas & Kitchen]\nThe open-plan living and dining areas are premier, perfect for both everyday living and entertaining. The kitchen features Ocean glimpses and balcony.\n\n[Scene 3 — Bedrooms & Bathrooms]\nThe property offers 2 well-appointed bedrooms and 2 bathrooms. Secure building.\n\n[Scene 4 — Outdoor & Parking]\nThe outdoor areas are ideal for entertaining, with 1 parking and a land size of generous proportions.\n\n[Scene 5 — Closing]\nFor further information or to arrange a private inspection, please contact our office."
+  },
+  {
+    "property": {
+      "title": "Beachside Apartment",
+      "price": "$795,000",
+      "location": "St Kilda, VIC",
+      "bedrooms": "2",
+      "bathrooms": "2",
+      "parking": "1",
+      "interior_size": "92 m²",
+      "features": "Ocean glimpses, balcony, secure building"
+    },
+    "channel": "video",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Title: Beachside Apartment - St Kilda, VIC\n\n[Scene 1 - Introduction]\nWelcome to our Beachside Apartment, a stunning residence in the heart of St Kilda, boasting ocean glimpses and a prime location that's hard to beat.\n\n[Scene 2 - Property Overview]\nThis two-bedroom, two-bathroom apartment spans across 92 m², offering a modern living space with a sleek, stylish design. Step onto the spacious balcony, where you can enjoy the fresh sea breeze and captivating views of the ocean.\n\n[Scene 3 - Key Features]\nResiding in a secure building, this apartment provides peace of mind with its safety features. The property comes with one secure parking space, ensuring convenience for you and your guests.\n\n[Scene 4 - Location Highlight]\nSituated in the vibrant heart of St Kilda, you're moments away from the beach, popular cafes, restaurants, and the St Kilda Pier. With a price tag of $795,000, this is an opportunity not to be missed.\n\n[Scene 5 - Call to Action]\nExperience the Beachside Apartment for yourself. Contact us today to arrange a private viewing and make this coastal haven your new home."
+  },
+  {
+    "property": {
+      "title": "New Build Townhouse",
+      "price": "$920,000",
+      "location": "Preston, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "160 m²",
+      "features": "Ducted heating/cooling, solar hot water, low-maintenance yard"
+    },
+    "channel": "listing",
+    "engine": "template",
+    "source": "template",
+    "text": "We are pleased to present New Build Townhouse, an outstanding property in Preston, VIC.\n\nOffering 3 bedrooms, 2 bathrooms, 2 car spaces across a interior living of approximately 160 m².\n\nThis distinguished residence offers the following:\n• Ducted heating/cooling\n• solar hot water\n• low-maintenance yard\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options,\n\nWe invite qualified purchasers to arrange a private and confidential inspection at their earliest convenience."
+  },
+  {
+    "property": {
+      "title": "New Build Townhouse",
+      "price": "$920,000",
+      "location": "Preston, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "160 m²",
+      "features": "Ducted heating/cooling, solar hot water, low-maintenance yard"
+    },
+    "channel": "listing",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Introducing a stunning new build townhouse in the heart of Preston, VIC. Nestled within a thriving community, this immaculate 3-bedroom, 2-bathroom residence offers a sophisticated living experience with an interior size of 160 m².\n\nPriced at $920,000, this townhouse boasts a contemporary design that seamlessly blends functionality and style. Ducted heating and cooling ensure year-round comfort, while solar hot water provides energy efficiency.\n\nThe open-plan living and dining area opens onto a low-maintenance yard, perfect for outdoor entertaining. The modern kitchen, equipped with high-quality appliances, is a chef's dream.\n\nThe three spacious bedrooms feature built-in robes, and the master suite includes an ensuite. Two secure parking spaces complete this impressive package.\n\nLocated in a convenient and family-friendly area, this property provides easy access to local amenities, schools, and transport links. Don't miss your chance to secure this exceptional new build townhouse. Inspect today!"
+  },
+  {
+    "property": {
+      "title": "New Build Townhouse",
+      "price": "$920,000",
+      "location": "Preston, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "160 m²",
+      "features": "Ducted heating/cooling, solar hot water, low-maintenance yard"
+    },
+    "channel": "social",
+    "engine": "template",
+    "source": "template",
+    "text": "Now available: New Build Townhouse, Preston, VIC.\n3 bed · 2 bath · 2 parking\n✓ Ducted heating/cooling\n$920,000\n\n#RealEstate #PropertyForSale #HomeForSale #Investment"
+  },
+  {
+    "property": {
+      "title": "New Build Townhouse",
+      "price": "$920,000",
+      "location": "Preston, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "160 m²",
+      "features": "Ducted heating/cooling, solar hot water, low-maintenance yard"
+    },
+    "channel": "social",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "🏠🏡 Introducing a stunning new build townhouse in Preston, VIC! 🏡🏠\n\nNestled in a prime location, this exceptional 3-bedroom, 2-bathroom home boasts a spacious interior of 160 m², perfect for modern living. 🏠\n\nEquipped with ducted heating and cooling, solar hot water, and a low-maintenance yard, this property offers unparalleled comfort and convenience. 🌞🌟\n\nSecure your private parking spot for two, and enjoy the serene neighborhood feel just minutes from the heart of Preston. 🚗🌅\n\nPriced at $920,000, this is your chance to make a wise investment in a property that's as beautiful as it is functional. 💼🏡\n\nDon't miss out on this exceptional opportunity! 🌟🏡\n\n#NewBuild #Preston #Victoria #RealEstate #DreamHome #ModernLiving #Location #Investment #DuctedHeating #SolarHotWater #LowMaintenance #LiveTheDream #PropertyForSale #PrestonVIC #DreamProperty #NewHome #InvestInRealEstate #ModernLuxury #LifeInPreston #HomeSweetHome"
+  },
+  {
+    "property": {
+      "title": "New Build Townhouse",
+      "price": "$920,000",
+      "location": "Preston, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "160 m²",
+      "features": "Ducted heating/cooling, solar hot water, low-maintenance yard"
+    },
+    "channel": "email",
+    "engine": "template",
+    "source": "template",
+    "text": "Subject: Property Opportunity: New Build Townhouse — Preston, VIC\n\nDear Client,\n\nWe are pleased to present New Build Townhouse, an outstanding property in Preston, VIC.\n\nProperty highlights:\n• 3 bed / 2 bath / 2 parking\n• Interior: 160 m²\n• Price: $920,000\n• Ducted heating/cooling\n• solar hot water\n• low-maintenance yard\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options this property ticks every box.\n\nPlease do not hesitate to contact our office to arrange a viewing at a time that suits you.\n\nKind regards,\nYour Property Marketing Desk"
+  },
+  {
+    "property": {
+      "title": "New Build Townhouse",
+      "price": "$920,000",
+      "location": "Preston, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "160 m²",
+      "features": "Ducted heating/cooling, solar hot water, low-maintenance yard"
+    },
+    "channel": "email",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Subject: Introducing: Stylish New Build Townhouse in Preston, VIC\n\nDear Home Seeker,\n\nWe are delighted to present an exceptional opportunity in the sought-after suburb of Preston, VIC. Our New Build Townhouse offers a unique blend of modern living and convenience, perfect for growing families or discerning buyers.\n\nNestled in a vibrant and connected location, this three-bedroom, two-bathroom townhouse boasts an interior size of 160 m², providing ample space for comfortable living. The property features ducted heating and cooling for year-round comfort, as well as solar hot water to reduce energy costs.\n\nParking is never an issue with two designated spaces available. Outside, you'll find a low-maintenance yard, ideal for relaxing or entertaining.\n\nPriced at $920,000, this New Build Townhouse in Preston is a must-see for those seeking a stylish, low-maintenance home in a desirable location.\n\nWe invite you to arrange a private viewing at your earliest convenience.\n\nBest Regards,\n\n[Your Name]\n[Your Position]\n[Your Contact Information]"
+  },
+  {
+    "property": {
+      "title": "New Build Townhouse",
+      "price": "$920,000",
+      "location": "Preston, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "160 m²",
+      "features": "Ducted heating/cooling, solar hot water, low-maintenance yard"
+    },
+    "channel": "video",
+    "engine": "template",
+    "source": "template",
+    "text": "[Scene 1 — Introduction]\nWelcome. Today we present New Build Townhouse, a refined property in Preston, VIC.\nPriced at $920,000, this property offers 3 bedrooms and 2 bathrooms across approximately 160 m² of interior space.\n\n[Scene 2 — Living Areas & Kitchen]\nThe open-plan living and dining areas are distinguished, perfect for both everyday living and entertaining. The kitchen features Ducted heating/cooling and solar hot water.\n\n[Scene 3 — Bedrooms & Bathrooms]\nThe property offers 3 well-appointed bedrooms and 2 bathrooms. Low-maintenance yard.\n\n[Scene 4 — Outdoor & Parking]\nThe outdoor areas are ideal for entertaining, with 2 parking and a land size of generous proportions.\n\n[Scene 5 — Closing]\nFor further information or to arrange a private inspection, please contact our office."
+  },
+  {
+    "property": {
+      "title": "New Build Townhouse",
+      "price": "$920,000",
+      "location": "Preston, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "160 m²",
+      "features": "Ducted heating/cooling, solar hot water, low-maintenance yard"
+    },
+    "channel": "video",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Title: New Build Townhouse - Preston, VIC\n\n[Scene 1 - Introduction]\nWelcome to our latest offering, a stunning new build townhouse nestled in the heart of Preston, Victoria. This exquisite property boasts an impressive interior size of 160 m², three bedrooms, two bathrooms, and a low-maintenance yard, all for $920,000.\n\n[Scene 2 - Exterior]\nAs you approach, the modern facade with its sleek lines and immaculate landscaping immediately captivates. The property offers two secure parking spaces, ensuring convenience for you and your guests.\n\n[Scene 3 - Interior]\nStepping inside, you'll be greeted by the warm embrace of ducted heating and cooling, ensuring year-round comfort. The open-plan living and dining area is bathed in natural light, creating a spacious and inviting environment.\n\n[Scene 4 - Kitchen]\nThe contemporary kitchen, equipped with top-of-the-line appliances, is a chef's dream. Enjoy preparing meals while admiring the panoramic views of your low-maintenance yard.\n\n[Scene 5 - Bedrooms & Bathrooms]\nAll three spacious bedrooms offer built-in wardrobes, providing ample storage. The master suite includes an ensuite, and the main bathroom features a relaxing soaking tub.\n\n[Scene 6 - Outdoor Space]\nOutside, the yard offers a tranquil retreat, perfect for entertaining or unwinding. Solar hot water is included, ensuring energy efficiency and sustainability.\n\n[Scene 7 - Conclusion]\nThis exceptional new build townhouse in Preston offers the perfect blend of style, comfort, and convenience. Book your inspection today and make this your new home."
+  },
+  {
+    "property": {
+      "title": "Inner-City Penthouse",
+      "price": "$2,450,000",
+      "location": "Melbourne, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "180 m²",
+      "features": "Rooftop terrace, wine cellar, concierge"
+    },
+    "channel": "listing",
+    "engine": "template",
+    "source": "template",
+    "text": "It is our pleasure to introduce Inner-City Penthouse, a refined and well-appointed residence in Melbourne, VIC.\n\nOffering 3 bedrooms, 2 bathrooms, 2 car spaces across a interior living of approximately 180 m².\n\nThis distinguished residence offers the following:\n• Rooftop terrace\n• wine cellar\n• concierge\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options,\n\nWe invite qualified purchasers to arrange a private and confidential inspection at their earliest convenience."
+  },
+  {
+    "property": {
+      "title": "Inner-City Penthouse",
+      "price": "$2,450,000",
+      "location": "Melbourne, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "180 m²",
+      "features": "Rooftop terrace, wine cellar, concierge"
+    },
+    "channel": "listing",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Discover the epitome of urban living in Melbourne's vibrant heart with our Inner-City Penthouse, priced at $2,450,000. Located in a coveted address, this luxurious 180 m² abode boasts 3 bedrooms, 2 bathrooms, and 2 secure car spaces.\n\nStep inside to find a sleek and sophisticated interior design. The open-plan living and dining area offers unparalleled city views, perfect for entertaining or unwinding. The modern kitchen is equipped with top-of-the-line appliances, ensuring culinary pursuits are a pleasure.\n\nRetreat to the master suite, complete with an ensuite and access to a private balcony. Two additional bedrooms, each with built-in robes, ensure ample accommodation for family or guests.\n\nThe pièce de résistance? A stunning rooftop terrace, complete with a wine cellar, offering panoramic city vistas. Plus, the added convenience of a concierge service ensures your every need is catered to.\n\nEmbrace the lifestyle of luxury and convenience with this Inner-City Penthouse. Book your exclusive viewing today."
+  },
+  {
+    "property": {
+      "title": "Inner-City Penthouse",
+      "price": "$2,450,000",
+      "location": "Melbourne, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "180 m²",
+      "features": "Rooftop terrace, wine cellar, concierge"
+    },
+    "channel": "social",
+    "engine": "template",
+    "source": "template",
+    "text": "Now available: Inner-City Penthouse, Melbourne, VIC.\n3 bed · 2 bath · 2 parking\n✓ Rooftop terrace\n$2,450,000\n\n#RealEstate #PropertyForSale #HomeForSale #Investment"
+  },
+  {
+    "property": {
+      "title": "Inner-City Penthouse",
+      "price": "$2,450,000",
+      "location": "Melbourne, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "180 m²",
+      "features": "Rooftop terrace, wine cellar, concierge"
+    },
+    "channel": "social",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "🌆🏢 Discover the epitome of luxury living in our Inner-City Penthouse, nestled in the heart of Melbourne, VIC. 🏙️ priced at $2,450,000. 💼 With 3 bedrooms, 2 bathrooms, and a spacious 180m² interior, this residence offers the perfect blend of comfort and elegance. 🏡 Highlights include a breathtaking rooftop terrace, private wine cellar, and dedicated concierge service. 🌅🍷 Parking for 2 vehicles is also provided. 🚗 Embrace an unrivaled lifestyle in this sought-after location. 🌆 Don't miss out on this opportunity to own a piece of the city skyline. #LuxuryLiving #MelbourneRealEstate #PenthouseLife #InnerCityLiving #HighEndProperty #DreamHome #CityView"
+  },
+  {
+    "property": {
+      "title": "Inner-City Penthouse",
+      "price": "$2,450,000",
+      "location": "Melbourne, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "180 m²",
+      "features": "Rooftop terrace, wine cellar, concierge"
+    },
+    "channel": "email",
+    "engine": "template",
+    "source": "template",
+    "text": "Subject: Property Opportunity: Inner-City Penthouse — Melbourne, VIC\n\nDear Client,\n\nIt is our pleasure to introduce Inner-City Penthouse, a refined and well-appointed residence in Melbourne, VIC.\n\nProperty highlights:\n• 3 bed / 2 bath / 2 parking\n• Interior: 180 m²\n• Price: $2,450,000\n• Rooftop terrace\n• wine cellar\n• concierge\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options this property ticks every box.\n\nPlease do not hesitate to contact our office to arrange a viewing at a time that suits you.\n\nKind regards,\nYour Property Marketing Desk"
+  },
+  {
+    "property": {
+      "title": "Inner-City Penthouse",
+      "price": "$2,450,000",
+      "location": "Melbourne, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "180 m²",
+      "features": "Rooftop terrace, wine cellar, concierge"
+    },
+    "channel": "email",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Subject: Introducing the Inner-City Penthouse - a Luxurious Haven in the Heart of Melbourne\n\nDear [Recipient's Name],\n\nI am delighted to present to you an exceptional opportunity to acquire the Inner-City Penthouse, a stunning 3-bedroom, 2-bathroom residence located in the vibrant heart of Melbourne, Victoria.\n\nSituated on the top floor of an exclusive building, this 180 m² penthouse offers a unique blend of sophistication and comfort. The spacious interior, featuring high-end finishes and expansive windows, offers breathtaking city views.\n\nResidents will enjoy an array of premium amenities, including a private rooftop terrace, a wine cellar, and a concierge service. The property also includes two secure parking spaces.\n\nWith its prime location, the Inner-City Penthouse offers effortless access to Melbourne's renowned cafes, shops, and cultural attractions.\n\nIf you are seeking a luxurious urban retreat, look no further. Contact us today to arrange a private viewing.\n\nYours sincerely,\n[Your Name]\n[Your Contact Information]"
+  },
+  {
+    "property": {
+      "title": "Inner-City Penthouse",
+      "price": "$2,450,000",
+      "location": "Melbourne, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "180 m²",
+      "features": "Rooftop terrace, wine cellar, concierge"
+    },
+    "channel": "video",
+    "engine": "template",
+    "source": "template",
+    "text": "[Scene 1 — Introduction]\nWelcome. Today we present Inner-City Penthouse, a refined property in Melbourne, VIC.\nPriced at $2,450,000, this property offers 3 bedrooms and 2 bathrooms across approximately 180 m² of interior space.\n\n[Scene 2 — Living Areas & Kitchen]\nThe open-plan living and dining areas are refined, perfect for both everyday living and entertaining. The kitchen features Rooftop terrace and wine cellar.\n\n[Scene 3 — Bedrooms & Bathrooms]\nThe property offers 3 well-appointed bedrooms and 2 bathrooms. Concierge.\n\n[Scene 4 — Outdoor & Parking]\nThe outdoor areas are ideal for entertaining, with 2 parking and a land size of generous proportions.\n\n[Scene 5 — Closing]\nFor further information or to arrange a private inspection, please contact our office."
+  },
+  {
+    "property": {
+      "title": "Inner-City Penthouse",
+      "price": "$2,450,000",
+      "location": "Melbourne, VIC",
+      "bedrooms": "3",
+      "bathrooms": "2",
+      "parking": "2",
+      "interior_size": "180 m²",
+      "features": "Rooftop terrace, wine cellar, concierge"
+    },
+    "channel": "video",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "[Scene 1 - Introduction]\nWelcome to our Inner-City Penthouse, a stunning 180m² residence nestled in the heart of Melbourne, Victoria.\n\n[Scene 2 - Exterior]\nAs you approach, the building's sleek architecture and panoramic city views set the stage for the exceptional living experience that awaits you.\n\n[Scene 3 - Entrance]\nUpon entering, you'll be greeted by a spacious, light-filled foyer, leading to the three generous bedrooms and two elegant bathrooms.\n\n[Scene 4 - Living Area]\nThe open-plan living area boasts a modern kitchen with top-of-the-line appliances, a dining area, and a lounge perfect for relaxation or entertaining.\n\n[Scene 5 - Rooftop Terrace]\nStep outside onto the private rooftop terrace, where you can unwind while taking in the breathtaking cityscape.\n\n[Scene 6 - Wine Cellar]\nFor the connoisseur, a personal wine cellar adds a touch of luxury to this already exceptional home.\n\n[Scene 7 - Concierge]\nResidents of this prestigious building enjoy the added convenience of a dedicated concierge service.\n\n[Scene 8 - Parking]\nTwo secure parking spaces ensure effortless commuting and peace of mind.\n\n[Scene 9 - Conclusion]\nPriced at $2,450,000, this Inner-City Penthouse offers an unparalleled urban lifestyle in the vibrant city of Melbourne. Contact us today to arrange a private viewing."
+  },
+  {
+    "property": {
+      "title": "Quiet Suburban Bungalow",
+      "price": "",
+      "location": "Box Hill, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "480 m²",
+      "features": "Established garden, single-level, close to station"
+    },
+    "channel": "listing",
+    "engine": "template",
+    "source": "template",
+    "text": "We are pleased to present Quiet Suburban Bungalow, an outstanding property in Box Hill, VIC.\n\nOffering 2 bedrooms, 1 bathroom, 1 car space across a land of approximately 480 m².\n\nThis distinguished residence offers the following:\n• Established garden\n• single-level\n• close to station\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options,\n\nWe invite qualified purchasers to arrange a private and confidential inspection at their earliest convenience."
+  },
+  {
+    "property": {
+      "title": "Quiet Suburban Bungalow",
+      "price": "",
+      "location": "Box Hill, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "480 m²",
+      "features": "Established garden, single-level, close to station"
+    },
+    "channel": "listing",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Nestled in the heart of Box Hill, VIC, this delightful single-level bungalow offers a serene suburban living experience. Boasting 2 bedrooms and 1 bathroom, this home provides ample space for comfort and privacy. The property's 480m² land, beautifully landscaped with an established garden, offers a tranquil outdoor escape. Conveniently located just a stone's throw away from the local train station, this home offers effortless commuting options. Ideal for first-time buyers or downsizers, this property offers a low-maintenance lifestyle in a sought-after location. Don't miss your chance to call this quiet suburban bungalow your home."
+  },
+  {
+    "property": {
+      "title": "Quiet Suburban Bungalow",
+      "price": "",
+      "location": "Box Hill, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "480 m²",
+      "features": "Established garden, single-level, close to station"
+    },
+    "channel": "social",
+    "engine": "template",
+    "source": "template",
+    "text": "Now available: Quiet Suburban Bungalow, Box Hill, VIC.\n2 bed · 1 bath · 1 parking\n✓ Established garden\nPrice on application\n\n#RealEstate #PropertyForSale #HomeForSale #Investment"
+  },
+  {
+    "property": {
+      "title": "Quiet Suburban Bungalow",
+      "price": "",
+      "location": "Box Hill, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "480 m²",
+      "features": "Established garden, single-level, close to station"
+    },
+    "channel": "social",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "🏠 Nestled in the heart of Box Hill, VIC, discover the charm of our Quiet Suburban Bungalow. 🌳\n\nThis 2-bedroom, single-level abode, boasting an established garden, offers a serene retreat in the bustling city. 🏡\n\nWith a generous 480m² land size, enjoy the comfort of a home that's both spacious and cozy. 🏝️\n\nParking is a breeze with 1 allocated spot. 🚗\n\nIdeally located near the station, commuting is a breeze. 🚦\n\nPerfect for those seeking the tranquility of a suburban lifestyle, yet close to the city's vibrant amenities. 🌃\n\nDon't miss this opportunity to call this gem your own. 🏠🔓\n\nContact us today for your exclusive viewing. 📞\n\n#QuietSuburbanBungalow #BoxHillLiving #2BedroomBungalow #SingleLevelHome #EstablishedGarden #CloseToStation #UrbanRetreat #SpaciousCozyHome #SuburbanLifestyle #CommutingEase #PropertyForSale #VictoriaRealEstate #DreamHome #RealEstateAustralia #BoxHillVIC"
+  },
+  {
+    "property": {
+      "title": "Quiet Suburban Bungalow",
+      "price": "",
+      "location": "Box Hill, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "480 m²",
+      "features": "Established garden, single-level, close to station"
+    },
+    "channel": "email",
+    "engine": "template",
+    "source": "template",
+    "text": "Subject: Property Opportunity: Quiet Suburban Bungalow — Box Hill, VIC\n\nDear Client,\n\nIt is our pleasure to introduce Quiet Suburban Bungalow, a refined and well-appointed residence in Box Hill, VIC.\n\nProperty highlights:\n• 2 bed / 1 bath / 1 parking\n• Land: 480 m²\n• Established garden\n• single-level\n• close to station\n\nIdeally situated within convenient proximity to reputable schools, efficient public transport, and a variety of retail and dining options this property ticks every box.\n\nPlease do not hesitate to contact our office to arrange a viewing at a time that suits you.\n\nKind regards,\nYour Property Marketing Desk"
+  },
+  {
+    "property": {
+      "title": "Quiet Suburban Bungalow",
+      "price": "",
+      "location": "Box Hill, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "480 m²",
+      "features": "Established garden, single-level, close to station"
+    },
+    "channel": "email",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "Subject: Discover Your Perfect Retreat: Quiet Suburban Bungalow in Box Hill, VIC\n\nDear Home Seeker,\n\nWe are delighted to introduce you to an exceptional opportunity in the sought-after suburb of Box Hill. Our Quiet Suburban Bungalow presents a rare blend of comfort, style, and convenience.\n\nNestled on a spacious 480 m² block, this single-level residence boasts 2 bedrooms, a well-appointed bathroom, and a secure parking space. The garden, meticulously established, offers a serene retreat, perfect for relaxing or entertaining.\n\nLocated just a stone's throw away from the local station, this property offers quick and easy access to the city, making your daily commute a breeze.\n\nDon't miss this chance to secure a comfortable and stylish home in a convenient location. Contact us today to arrange an inspection.\n\nBest Regards,\n[Your Name]\n[Your Contact Information]"
+  },
+  {
+    "property": {
+      "title": "Quiet Suburban Bungalow",
+      "price": "",
+      "location": "Box Hill, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "480 m²",
+      "features": "Established garden, single-level, close to station"
+    },
+    "channel": "video",
+    "engine": "template",
+    "source": "template",
+    "text": "[Scene 1 — Introduction]\nWelcome. Today we present Quiet Suburban Bungalow, a refined property in Box Hill, VIC.\nPriced at price on application, this property offers 2 bedrooms and 1 bathrooms across approximately generous of interior space.\n\n[Scene 2 — Living Areas & Kitchen]\nThe open-plan living and dining areas are refined, perfect for both everyday living and entertaining. The kitchen features Established garden and single-level.\n\n[Scene 3 — Bedrooms & Bathrooms]\nThe property offers 2 well-appointed bedrooms and 1 bathrooms. Close to station.\n\n[Scene 4 — Outdoor & Parking]\nThe outdoor areas are ideal for entertaining, with 1 parking and a land size of 480 m².\n\n[Scene 5 — Closing]\nFor further information or to arrange a private inspection, please contact our office."
+  },
+  {
+    "property": {
+      "title": "Quiet Suburban Bungalow",
+      "price": "",
+      "location": "Box Hill, VIC",
+      "bedrooms": "2",
+      "bathrooms": "1",
+      "parking": "1",
+      "land_size": "480 m²",
+      "features": "Established garden, single-level, close to station"
+    },
+    "channel": "video",
+    "engine": "llm_run",
+    "source": "model",
+    "text": "[Scene 1 - Introduction]\nWelcome to our latest listing, a serene suburban bungalow nestled in the heart of Box Hill, Victoria.\n\n[Scene 2 - Exterior]\nAs you approach, the well-manicured garden immediately catches your eye, setting the scene for this 480 m² property. A single-level design ensures easy accessibility.\n\n[Scene 3 - Interior]\nStepping inside, you'll find two comfortable bedrooms, perfect for a growing family or those looking for ample space. The home's cozy ambiance is complemented by a spacious living area and a functional kitchen.\n\n[Scene 4 - Bathroom]\nThe contemporary bathroom offers a refreshing retreat, equipped with all necessary amenities.\n\n[Scene 5 - Location]\nLocated just a stone's throw away from the local station, this property provides easy commuting options. The vibrant Box Hill community is at your doorstep, offering a wealth of dining, shopping, and recreational opportunities.\n\n[Scene 6 - Conclusion]\nWhether you're starting a family, downsizing, or seeking a convenient lifestyle, this Quiet Suburban Bungalow in Box Hill, VIC, could be your perfect match. Book a viewing today!"
+  }
+]

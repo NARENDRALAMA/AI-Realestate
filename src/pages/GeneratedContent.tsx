@@ -1,33 +1,36 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
 import {
   AlertCircle,
-  Building2,
-  Copy,
-  Loader2,
-  MapPin,
-  Pencil,
+  ArrowRight,
+  CheckCircle2,
+  Download,
+  PenLine,
   RefreshCw,
+  Square,
   Sparkles,
 } from 'lucide-react'
-import { Card } from '../components/Card'
+import { ChannelPanel, ExtraPanel, VersionPicker } from '../components/ChannelPanel'
+import { EngineBadge } from '../components/EngineBadge'
+import { GenerationProgress } from '../components/GenerationProgress'
+import { PropertySummary } from '../components/PropertySummary'
+import { Badge } from '../components/ui/Badge'
+import { Button, LinkButton } from '../components/ui/Button'
+import { Card } from '../components/ui/Card'
+import { Dialog } from '../components/ui/Dialog'
+import { EmptyState } from '../components/ui/EmptyState'
+import { PageHeader } from '../components/ui/PageHeader'
+import { Tabs } from '../components/ui/Tabs'
+import { StepTips } from '../components/StepTips'
 import { useApp } from '../hooks/useApp'
-import { copyText } from '../lib/copy'
-import type { ContentType, GeneratedBundle } from '../types'
-
-const labels: Record<keyof GeneratedBundle, string> = {
-  listing: 'Listing Description',
-  social: 'Social Post',
-  email: 'Email Copy',
-  video: 'Video Script',
-}
-
-const typeLabel: Record<ContentType, string> = {
-  listing: 'Listing Description',
-  social: 'Social Media Post',
-  email: 'Email',
-  video: 'Video Script',
-}
+import {
+  channelLabels,
+  CHANNELS,
+  contentTypeLabel,
+  extraFormatLabel,
+  lengthLabel,
+  toneLabel,
+} from '../lib/content-options'
+import type { ExtraFormat, GeneratedBundle } from '../types'
 
 export function GeneratedContent() {
   const {
@@ -37,186 +40,225 @@ export function GeneratedContent() {
     drafts,
     isGenerating,
     generationError,
+    generationFieldErrors,
+    generationStartedAt,
+    generationMeta,
     runGeneration,
+    live,
+    stopGeneration,
+    generationStopped,
+    extras,
+    versions,
+    selectVersion,
   } = useApp()
-  const navigate = useNavigate()
-  const [toast, setToast] = useState<string | null>(null)
+  const [tab, setTab] = useState<string>(settings.contentType)
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
   const bundle = drafts ?? generated
-  const primary = settings.contentType
+  const extraKeys = Object.keys(extras) as ExtraFormat[]
+  const hasEdits =
+    !!drafts && !!generated && CHANNELS.some((c) => drafts[c] !== generated[c])
 
-  const showToast = (msg: string) => {
-    setToast(msg)
-    window.setTimeout(() => setToast(null), 2200)
-  }
-
-  const handleCopy = async (text: string, label: string) => {
-    const ok = await copyText(text)
-    showToast(ok ? `Copied ${label}` : 'Copy failed')
-  }
-
-  if (isGenerating) {
+  if (isGenerating && generationStartedAt !== null) {
     return (
-      <div className="page">
-        <div className="empty-state">
-          <Loader2 size={40} strokeWidth={1.25} className="spin" aria-hidden />
-          <h1 className="page-title">Generating content…</h1>
-          <p className="page-lead">Building all four channels from your property data.</p>
-        </div>
-      </div>
+      <GenerationProgress
+        startedAt={generationStartedAt}
+        live={live}
+        onStop={stopGeneration}
+        focus={settings.contentType}
+      />
+    )
+  }
+
+  if (generationStopped && !generated) {
+    return (
+      <Card padding="lg">
+        <EmptyState
+          headingLevel={1}
+          icon={<Square />}
+          title="Generation stopped"
+          description="You stopped this run before it finished, so nothing was saved to your library."
+          actions={
+            <>
+              <LinkButton to="/app/settings" variant="secondary">
+                Change settings
+              </LinkButton>
+              <Button variant="primary" icon={<RefreshCw aria-hidden />} onClick={() => runGeneration()}>
+                Generate again
+              </Button>
+            </>
+          }
+        />
+      </Card>
     )
   }
 
   if (generationError) {
+    const fieldProblem = Object.keys(generationFieldErrors).length > 0
     return (
-      <div className="page">
-        <div className="empty-state">
-          <AlertCircle size={40} strokeWidth={1.25} aria-hidden />
-          <h1 className="page-title">Generation failed</h1>
-          <p className="page-lead">{generationError}</p>
-          <div className="empty-state__actions">
-            <Link to="/settings" className="btn btn--secondary">
-              Back to settings
-            </Link>
-            <button
-              type="button"
-              className="btn btn--primary"
-              onClick={() => runGeneration()}
-            >
-              Retry
-            </button>
-          </div>
-        </div>
-      </div>
+      <Card padding="lg">
+        <EmptyState
+          headingLevel={1}
+          tone="danger"
+          icon={<AlertCircle />}
+          title="We couldn't generate your content"
+          description={generationError}
+          actions={
+            <>
+              {fieldProblem ? (
+                <LinkButton to="/app/property" variant="secondary">
+                  Fix property details
+                </LinkButton>
+              ) : (
+                <LinkButton to="/app/settings" variant="secondary">
+                  Back to settings
+                </LinkButton>
+              )}
+              <Button variant="primary" icon={<RefreshCw aria-hidden />} onClick={() => runGeneration()}>
+                Try again
+              </Button>
+            </>
+          }
+        />
+      </Card>
     )
   }
 
   if (!bundle) {
     return (
-      <div className="page">
-        <div className="empty-state">
-          <Sparkles size={40} strokeWidth={1.25} aria-hidden />
-          <h1 className="page-title">No generated content yet</h1>
-          <p className="page-lead">
-            Add a property, choose settings, and run generation to see channel outputs
-            here.
-          </p>
-          <div className="empty-state__actions">
-            <Link to="/property" className="btn btn--secondary">
-              Property input
-            </Link>
-            <Link to="/settings" className="btn btn--primary">
-              Content settings
-            </Link>
-          </div>
-        </div>
-      </div>
+      <Card padding="lg">
+        <EmptyState
+          headingLevel={1}
+          icon={<Sparkles />}
+          title="No content yet"
+          description="Add your property details and choose your settings, then generate to see your copy here."
+          actions={
+            <LinkButton to="/app/property" variant="primary" iconAfter={<ArrowRight aria-hidden />}>
+              Start with property details
+            </LinkButton>
+          }
+        />
+      </Card>
     )
   }
 
+  const regenerate = () => {
+    setConfirmOpen(false)
+    void runGeneration()
+  }
+
   return (
-    <div className="page page--split">
-      {toast ? <div className="toast" role="status">{toast}</div> : null}
-
-      <div className="page--split__main">
-        <div className="page-header">
-          <h1 className="page-title">Generated content</h1>
-          <p className="page-lead">
-            Outputs use the <strong>{settings.tone}</strong> tone at{' '}
-            <strong>{settings.length}</strong> length. Primary focus:{' '}
-            <strong>{typeLabel[primary]}</strong>.
-          </p>
-          <div className="page-header__row">
-            <button
-              type="button"
-              className="btn btn--secondary"
-              onClick={() => {
-                runGeneration()
-                showToast('Regenerating…')
-              }}
-              disabled={isGenerating}
+    <>
+      <PageHeader
+        eyebrow="Step 3"
+        title="Your content is ready"
+        description={`${toneLabel(settings.tone)} tone · ${lengthLabel(settings.length)} length · focus on ${contentTypeLabel(settings.contentType).toLowerCase()}`}
+        actions={
+          <>
+            <Button
+              variant="secondary"
+              icon={<RefreshCw aria-hidden />}
+              onClick={() => (hasEdits ? setConfirmOpen(true) : regenerate())}
             >
-              <RefreshCw size={18} aria-hidden />
               Regenerate
-            </button>
-            <Link to="/edit" className="btn btn--primary">
-              <Pencil size={18} aria-hidden />
-              Edit
-            </Link>
-          </div>
-        </div>
+            </Button>
+            <LinkButton to="/app/export" variant="secondary" icon={<Download aria-hidden />}>
+              Export
+            </LinkButton>
+            <LinkButton to="/app/edit" variant="primary" iconAfter={<ArrowRight aria-hidden />}>
+              Review &amp; refine
+            </LinkButton>
+          </>
+        }
+      >
+        {generationMeta ? <EngineBadge meta={generationMeta} /> : null}
+        <Badge tone="success" icon={<CheckCircle2 aria-hidden />}>
+          Saved to library
+        </Badge>
+        {hasEdits ? <Badge tone="primary">Showing your edits</Badge> : null}
+      </PageHeader>
 
-        {(Object.keys(bundle) as (keyof GeneratedBundle)[]).map((key) => (
-          <Card key={key} className={key === primary ? 'card--accent' : ''}>
-            <div className="output-block">
-              <div className="output-block__head">
-                <h2 className="output-block__title">{labels[key]}</h2>
-                {key === primary ? (
-                  <span className="badge badge--primary">Primary focus</span>
-                ) : null}
-              </div>
-              <pre className="output-block__body">{bundle[key]}</pre>
-              <div className="output-block__actions">
-                <button
-                  type="button"
-                  className="btn btn--ghost btn--sm"
-                  onClick={() => handleCopy(bundle[key], labels[key])}
-                >
-                  <Copy size={16} aria-hidden />
-                  Copy
-                </button>
-                <button
-                  type="button"
-                  className="btn btn--ghost btn--sm"
-                  onClick={() => navigate('/edit')}
-                >
-                  <Pencil size={16} aria-hidden />
-                  Edit
-                </button>
-              </div>
-            </div>
-          </Card>
-        ))}
+      <StepTips step="results" />
+
+      <div className="layout-aside">
+        <Card padding="lg">
+          <Tabs
+            label="Generated channels"
+            value={tab}
+            onChange={setTab}
+            items={[
+              ...CHANNELS.map((ch) => ({
+                id: ch as string,
+                label: channelLabels[ch],
+                meta:
+                  ch === settings.contentType ? (
+                    <Badge tone="accent" className="tab-badge">
+                      Focus
+                    </Badge>
+                  ) : undefined,
+              })),
+              ...extraKeys.map((fmt) => ({
+                id: `extra:${fmt}`,
+                label: extraFormatLabel[fmt],
+                meta: (
+                  <Badge tone="neutral" className="tab-extra">
+                    Extra
+                  </Badge>
+                ),
+              })),
+            ]}
+          >
+            {tab.startsWith('extra:') ? (
+              <ExtraPanel format={tab.slice(6) as ExtraFormat} text={extras[tab.slice(6) as ExtraFormat] ?? ''} />
+            ) : (
+              <ChannelPanel
+                channel={tab as keyof GeneratedBundle}
+                text={bundle[tab as keyof GeneratedBundle]}
+                actions={
+                  <>
+                    <VersionPicker
+                      count={versions[tab as keyof GeneratedBundle]?.length ?? 1}
+                      selected={
+                        versions[tab as keyof GeneratedBundle]?.indexOf(bundle[tab as keyof GeneratedBundle]) ?? 0
+                      }
+                      onSelect={(i) => selectVersion(tab as keyof GeneratedBundle, i)}
+                    />
+                    <LinkButton
+                      to={`/app/edit?channel=${tab}`}
+                      variant="ghost"
+                      size="sm"
+                      icon={<PenLine aria-hidden />}
+                    >
+                      Edit
+                    </LinkButton>
+                  </>
+                }
+              />
+            )}
+          </Tabs>
+        </Card>
+
+        <div className="layout-aside__side">
+          <PropertySummary property={property} />
+        </div>
       </div>
 
-      <aside className="side-panel" aria-label="Property summary">
-        <Card>
-          <h3 className="side-panel__title">
-            <Building2 size={18} aria-hidden />
-            Property summary
-          </h3>
-          <ul className="summary-list">
-            <li>
-              <strong>Title</strong>
-              <span>{property.title || '—'}</span>
-            </li>
-            <li>
-              <strong>Price</strong>
-              <span>{property.price || '—'}</span>
-            </li>
-            <li>
-              <strong>Location</strong>
-              <span className="summary-list__inline">
-                <MapPin size={14} aria-hidden />
-                {property.location || '—'}
-              </span>
-            </li>
-            <li>
-              <strong>Specs</strong>
-              <span>
-                {property.bedrooms || '—'} bed · {property.bathrooms || '—'} bath ·{' '}
-                {property.parking || '—'} parking
-              </span>
-            </li>
-            <li>
-              <strong>Sizes</strong>
-              <span>
-                Land {property.landSize || '—'}, interior {property.interiorSize || '—'}
-              </span>
-            </li>
-          </ul>
-        </Card>
-      </aside>
-    </div>
+      <Dialog
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        title="Replace your edits?"
+        description="Regenerating writes fresh copy for all four channels. Your current edits will be replaced."
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setConfirmOpen(false)} data-autofocus>
+              Keep my edits
+            </Button>
+            <Button variant="danger" icon={<RefreshCw aria-hidden />} onClick={regenerate}>
+              Regenerate
+            </Button>
+          </>
+        }
+      />
+    </>
   )
 }

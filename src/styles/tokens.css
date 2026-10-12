@@ -1,0 +1,150 @@
+/*
+ * REM Content Studio — design tokens.
+ * Editorial real estate palette: warm paper neutrals, deep ink navy, one terracotta accent.
+ * Every colour, size, radius, shadow and duration in the UI comes from here.
+ * Text pairings are checked against WCAG AA on --color-surface, --color-bg and --color-sand.
+ */
+:root {
+  /* ── Colour: neutrals ─────────────────────────────────────────────── */
+  --color-bg: #f6f2ec;             /* paper */
+  --color-surface: #ffffff;
+  --color-surface-muted: #f3eee6;
+  --color-surface-sunken: #ebe4d9;
+  --color-sand: #ece4d8;
+  --color-text-strong: #14202e;    /* ink — 16:1 on paper */
+  --color-text: #2f3a48;           /* 11:1 on paper */
+  --color-text-muted: #5c6470;     /* 5.3:1 on paper, 4.6:1 on sand */
+  --color-text-inverse: #ffffff;
+  --color-border: #e2d9cc;
+  --color-border-strong: #8c8478;  /* 3.7:1 on white — form controls */
+  --color-overlay: rgba(20, 32, 46, 0.55);
+
+  /* ── Colour: ink (dark surfaces) ──────────────────────────────────── */
+  --color-ink: #14202e;
+  --color-ink-raised: #1c2a3a;
+  --color-ink-line: rgba(255, 255, 255, 0.1);
+  --color-ink-text: #e9e4dc;       /* 13:1 on ink */
+  --color-ink-muted: #a9b0ba;      /* 7.6:1 on ink */
+
+  /* ── Colour: accent (terracotta) ──────────────────────────────────── */
+  --color-primary: #a8461f;        /* 5.9:1 on white, 5.3:1 on paper */
+  --color-primary-hover: #8e3a18;
+  --color-primary-active: #763012;
+  --color-primary-soft: #f6e7dd;
+  --color-primary-soft-hover: #eed6c6;
+  --color-accent: #a8461f;
+  --color-accent-soft: #f6e7dd;
+  --color-accent-on-ink: #e8a27f;  /* 7.4:1 on ink */
+
+  /* ── Colour: semantic ─────────────────────────────────────────────── */
+  --color-success: #2f6b4f;
+  --color-success-soft: #e5f0e9;
+  --color-warning: #8a5a00;
+  --color-warning-soft: #f8eed9;
+  --color-danger: #a32a1f;
+  --color-danger-hover: #87221a;
+  --color-danger-soft: #f9e6e3;
+
+  /* ── Focus ────────────────────────────────────────────────────────── */
+  --focus-ring: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-text-strong);
+
+  /* ── Typography ───────────────────────────────────────────────────── */
+  --font-sans: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Newsreader Variable', 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --text-xs: 0.75rem;   /* 12 */
+  --text-sm: 0.875rem;  /* 14 */
+  --text-md: 1rem;      /* 16 */
+  --text-lg: 1.125rem;  /* 18 */
+  --text-xl: 1.25rem;   /* 20 */
+  --text-2xl: 1.5rem;   /* 24 */
+  --text-3xl: 1.875rem; /* 30 */
+
+  /* Display sizes scale with the viewport. */
+  --display-h2: clamp(1.5rem, 1.2rem + 1.2vw, 1.875rem);   /* 24 → 30 */
+  --display-h1: clamp(1.875rem, 1.5rem + 1.6vw, 2.5rem);   /* 30 → 40 */
+  --display-l: clamp(2.25rem, 1.6rem + 2.8vw, 3.5rem);     /* 36 → 56 */
+  --display-xl: clamp(2.75rem, 1.6rem + 5vw, 5rem);        /* 44 → 80 */
+
+  --leading-display: 1.08;
+  --leading-tight: 1.25;
+  --leading-snug: 1.4;
+  --leading-normal: 1.6;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --tracking-display: -0.02em;
+  --tracking-tight: -0.011em;
+  --tracking-wide: 0.08em;
+
+  /* ── Spacing (4px base) ───────────────────────────────────────────── */
+  --space-1: 0.25rem;  /* 4 */
+  --space-2: 0.5rem;   /* 8 */
+  --space-3: 0.75rem;  /* 12 */
+  --space-4: 1rem;     /* 16 */
+  --space-5: 1.25rem;  /* 20 */
+  --space-6: 1.5rem;   /* 24 */
+  --space-8: 2rem;     /* 32 */
+  --space-10: 2.5rem;  /* 40 */
+  --space-12: 3rem;    /* 48 */
+  --space-16: 4rem;    /* 64 */
+  --space-20: 5rem;    /* 80 */
+  --space-24: 6rem;    /* 96 */
+  --space-32: 8rem;    /* 128 */
+  --section-y: clamp(4rem, 2.5rem + 6vw, 8rem);
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+
+  /* ── Radius ───────────────────────────────────────────────────────── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 999px;
+
+  /* ── Elevation (warm-tinted) ──────────────────────────────────────── */
+  --shadow-xs: 0 1px 2px rgba(60, 42, 20, 0.06);
+  --shadow-sm: 0 1px 3px rgba(60, 42, 20, 0.07), 0 1px 2px rgba(60, 42, 20, 0.04);
+  --shadow-md: 0 8px 24px rgba(60, 42, 20, 0.08), 0 2px 6px rgba(60, 42, 20, 0.05);
+  --shadow-lg: 0 24px 60px rgba(20, 32, 46, 0.18), 0 6px 16px rgba(20, 32, 46, 0.08);
+
+  /* ── Sizing ───────────────────────────────────────────────────────── */
+  --control-height-sm: 2rem;    /* 32 */
+  --control-height-md: 2.5rem;  /* 40 */
+  --control-height-lg: 3rem;    /* 48 */
+  --icon-sm: 1rem;
+  --icon-md: 1.25rem;
+  --sidebar-width: 16rem;
+  --topbar-height: 3.5rem;
+  --nav-height: 4.5rem;
+  --content-max: 70rem;      /* 1120 app */
+  --content-narrow: 48rem;   /* 768 */
+  --site-max: 76rem;         /* 1216 landing */
+  --dialog-width: 32rem;
+  --drawer-width: 36rem;
+
+  /* ── Motion ───────────────────────────────────────────────────────── */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ── Layers ───────────────────────────────────────────────────────── */
+  --z-sticky: 20;
+  --z-topbar: 30;
+  --z-dialog: 50;
+  --z-toast: 60;
+  --z-tooltip: 70;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
+}

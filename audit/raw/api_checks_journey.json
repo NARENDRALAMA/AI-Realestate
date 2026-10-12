@@ -1,0 +1,116 @@
+[
+  {
+    "status": 200,
+    "model_used": "mistral",
+    "generation_time_ms": 58228,
+    "wall_ms": 58234,
+    "id": 1,
+    "check": "real_generate"
+  },
+  {
+    "status": 200,
+    "model_used": "mistral",
+    "generation_time_ms": 40851,
+    "wall_ms": 40856,
+    "listing_words_before": 127,
+    "listing_words_after": 90,
+    "changed": true,
+    "check": "real_regenerate_casual_short"
+  },
+  {
+    "items": 2,
+    "detail_matches": true,
+    "model_used": "mistral",
+    "stored_fields": [
+      "bundle",
+      "content_type",
+      "created_at",
+      "extras",
+      "generation_time_ms",
+      "id",
+      "location",
+      "model_used",
+      "title",
+      "tone",
+      "variants"
+    ],
+    "check": "library_roundtrip"
+  },
+  {
+    "status": 200,
+    "bytes": 4867,
+    "file": "export_llm.txt",
+    "ctype": "text/plain; charset=utf-8",
+    "all_channels_verbatim": true,
+    "check": "export_llm_txt"
+  },
+  {
+    "status": 200,
+    "bytes": 6357,
+    "file": "export_llm.pdf",
+    "ctype": "application/pdf",
+    "magic_ok": true,
+    "text_check": "pypdf not installed",
+    "check": "export_llm_pdf"
+  },
+  {
+    "status": 200,
+    "bytes": 38628,
+    "file": "export_llm.docx",
+    "ctype": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "zip_ok": true,
+    "paragraphs": 70,
+    "channel_paragraphs_found": {
+      "listing": true,
+      "social": true,
+      "email": true,
+      "video": true
+    },
+    "check": "export_llm_docx"
+  },
+  {
+    "wall_ms": 59171,
+    "first_token_ms": 59167,
+    "job_sources": {
+      "listing:0": "ai",
+      "social:0": "ai",
+      "email:0": "ai",
+      "video:0": "ai"
+    },
+    "model_used": "mistral",
+    "generation_time_ms": 59160,
+    "id": 3,
+    "check": "real_stream"
+  },
+  {
+    "status": 200,
+    "model_used": "template",
+    "wall_ms": 5020,
+    "threads_alive": 3,
+    "check": "real_timeout_5s_run1"
+  },
+  {
+    "status": 200,
+    "model_used": "template",
+    "wall_ms": 5011,
+    "threads_alive": 7,
+    "check": "real_timeout_5s_run2"
+  },
+  {
+    "status": 200,
+    "model_used": "template",
+    "wall_ms": 5024,
+    "threads_alive": 3,
+    "check": "real_timeout_5s_run3"
+  },
+  {
+    "baseline": 3,
+    "now": 3,
+    "check": "threads_after_timeouts"
+  },
+  {
+    "baseline": 3,
+    "now": 3,
+    "check": "threads_after_40s_drain"
+  }
+]

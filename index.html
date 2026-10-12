@@ -2,14 +2,46 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>REM Content Studio — AI Real Estate Marketing Content</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <title>REM Content Studio — Listing, social, email and video copy from one property</title>
+    <meta
+      name="description"
+      content="Enter a property once and get a listing description, social post, email and video script in one of six tones. Review, refine and export to PDF, Word or plain text."
+    />
+    <meta name="theme-color" content="#14202e" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      // The landing page is prerendered into #root. Hide it on app routes until React takes over.
+      if (location.pathname !== '/') document.documentElement.setAttribute('data-spa', '')
+    </script>
+    <style>
+      html[data-spa] #root > * { display: none; }
+    </style>
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="REM Content Studio" />
+    <meta property="og:title" content="REM Content Studio — One property. Every channel it needs." />
+    <meta
+      property="og:description"
+      content="Listing, social, email and video copy from one set of property details, in six tones. Export to PDF, Word or text."
+    />
+    <meta property="og:url" content="https://main.d1zu60c9lypz4g.amplifyapp.com/" />
+    <meta property="og:image" content="https://main.d1zu60c9lypz4g.amplifyapp.com/images/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="REM Content Studio wordmark over a modern home at dusk" />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="image"
+      type="image/webp"
+      href="/images/hero-960.webp"
+      imagesrcset="/images/hero-640.webp 640w, /images/hero-960.webp 960w, /images/hero-1280.webp 1280w, /images/hero-1920.webp 1920w"
+      imagesizes="(min-width: 64rem) 55vw, 100vw"
+      media="(min-width: 64rem)"
+      fetchpriority="high"
     />
   </head>
   <body>

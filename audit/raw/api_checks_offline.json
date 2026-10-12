@@ -1,0 +1,133 @@
+[
+  {
+    "status": 422,
+    "body": "{\"detail\":[{\"type\":\"value_error\",\"loc\":[\"body\",\"title\"],\"msg\":\"Value error, title is required\",\"input\":\"  \",\"ctx\":{\"error\":{}}}]}",
+    "check": "validation_missing_title"
+  },
+  {
+    "status": 422,
+    "body": "{\"detail\":[{\"type\":\"missing\",\"loc\":[\"body\",\"location\"],\"msg\":\"Field required\",\"input\":{\"title\":\"Audit Test Cottage\",\"price\":\"$720,000\",\"bedrooms\":\"2\",\"bathrooms\":\"1\",\"parking\":\"1\",\"land_size\":\"600 m²\"",
+    "check": "validation_missing_location"
+  },
+  {
+    "status": 422,
+    "body": "{\"detail\":[{\"type\":\"literal_error\",\"loc\":[\"body\",\"tone\"],\"msg\":\"Input should be 'formal', 'casual', 'promotional', 'luxury', 'concise' or 'friendly'\",\"input\":\"angry\",\"ctx\":{\"expected\":\"'formal', 'casu",
+    "check": "validation_bad_tone"
+  },
+  {
+    "status": 422,
+    "body": "{\"detail\":[{\"type\":\"literal_error\",\"loc\":[\"body\",\"length\"],\"msg\":\"Input should be 'short', 'medium', 'long' or 'extended'\",\"input\":\"huge\",\"ctx\":{\"expected\":\"'short', 'medium', 'long' or 'extended'\"}}]",
+    "check": "validation_bad_length"
+  },
+  {
+    "status": 422,
+    "body": "{\"detail\":[{\"type\":\"literal_error\",\"loc\":[\"body\",\"content_type\"],\"msg\":\"Input should be 'listing', 'social', 'email' or 'video'\",\"input\":\"tiktok\",\"ctx\":{\"expected\":\"'listing', 'social', 'email' or 'vi",
+    "check": "validation_bad_type"
+  },
+  {
+    "status": 200,
+    "body": "{\"id\":1,\"bundle\":{\"listing\":\"It is our pleasure to introduce Audit Test Cottage, a refined and well-appointed residence in Katoomba, NSW.\\n\\nOffering lots bedrooms, 1 bathroom, 1 car space across a la",
+    "check": "validation_non_numeric_bedrooms"
+  },
+  {
+    "status": 200,
+    "body": "{\"id\":2,\"bundle\":{\"listing\":\"We invite discerning purchasers to consider Audit Test Cottage, positioned in the sought-after precinct of Katoomba, NSW.\\n\\nOffering 2 bedrooms, 1 bathroom, 1 car space a",
+    "check": "validation_negative_price"
+  },
+  {
+    "status": 200,
+    "model_used": "template",
+    "generation_time_ms": 0,
+    "wall_ms": 1,
+    "listing_has_price": false,
+    "check": "template_generate"
+  },
+  {
+    "present": 0,
+    "of": 30,
+    "check": "p2_14_medium_listing_price_present_30_runs"
+  },
+  {
+    "any_dollar_amount": false,
+    "check": "p2_14_absent_price_not_invented"
+  },
+  {
+    "status": 200,
+    "model_used": "template",
+    "wall_ms": 21,
+    "check": "model_unavailable"
+  },
+  {
+    "status": 200,
+    "model_used": "template",
+    "check": "remote_http_unconfigured"
+  },
+  {
+    "status": 200,
+    "bytes": 2687,
+    "file": "export_template.txt",
+    "ctype": "text/plain; charset=utf-8",
+    "all_channels_verbatim": true,
+    "check": "export_template_txt"
+  },
+  {
+    "status": 200,
+    "bytes": 4576,
+    "file": "export_template.pdf",
+    "ctype": "application/pdf",
+    "magic_ok": true,
+    "text_check": "pypdf not installed",
+    "check": "export_template_pdf"
+  },
+  {
+    "status": 200,
+    "bytes": 37733,
+    "file": "export_template.docx",
+    "ctype": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "zip_ok": true,
+    "paragraphs": 65,
+    "channel_paragraphs_found": {
+      "listing": true,
+      "social": true,
+      "email": true,
+      "video": true
+    },
+    "check": "export_template_docx"
+  },
+  {
+    "status": 404,
+    "check": "library_missing_404"
+  },
+  {
+    "status": 422,
+    "check": "export_bad_format"
+  },
+  {
+    "statuses": [
+      200
+    ],
+    "max_ms": 44,
+    "mean_ms": 10,
+    "check": "concurrency_template_10_workers_30_requests"
+  },
+  {
+    "before": 66,
+    "after": 67,
+    "db_rows": 67,
+    "by_type": {
+      "listing": 67
+    },
+    "check": "stats_from_db"
+  },
+  {
+    "library": 200,
+    "delete": 204,
+    "stats": 200,
+    "check": "unauthenticated_access"
+  },
+  {
+    "status": 200,
+    "body": "{\"path\":\"uploads/evil.html\"}",
+    "check": "upload_non_image_accepted"
+  }
+]

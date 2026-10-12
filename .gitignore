@@ -18,9 +18,6 @@ backend/.venv
 *.pyc
 *.pyo
 
-# Claude
-.claude/
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -31,3 +28,8 @@ backend/.venv
 *.njsproj
 *.sln
 *.sw?
+
+# Audit scratch data
+audit/raw/*.db
+audit/raw/*.log
+backend/uploads/

@@ -6,7 +6,9 @@ from pydantic import BaseModel, field_validator
 
 Tone = Literal["formal", "casual", "promotional", "luxury", "concise", "friendly"]
 ContentType = Literal["listing", "social", "email", "video"]
-Length = Literal["short", "medium", "long"]
+Length = Literal["short", "medium", "long", "extended"]
+# Extra formats generated alongside the four core channels (streaming endpoint only).
+ExtraFormat = Literal["headlines", "facebook_ad", "sms", "flyer", "seo"]
 ExportFormat = Literal["txt", "pdf", "docx"]
 
 
@@ -31,6 +33,17 @@ class GenerateRequest(BaseModel):
     tone: Tone = "formal"
     length: Length = "medium"
     keywords: str = ""
+
+    # Only used by /api/generate/stream; /api/generate ignores them.
+    extra_formats: list[ExtraFormat] = []
+    variations: int = 1
+
+    @field_validator("variations")
+    @classmethod
+    def variations_in_range(cls, v: int) -> int:
+        if not 1 <= v <= 3:
+            raise ValueError("variations must be between 1 and 3")
+        return v
 
     @field_validator("title")
     @classmethod
@@ -57,6 +70,8 @@ class GeneratedBundle(BaseModel):
 class GenerateResponse(BaseModel):
     id: int
     bundle: GeneratedBundle
+    model_used: str
+    generation_time_ms: int
 
 
 class LibraryItem(BaseModel):
@@ -66,6 +81,8 @@ class LibraryItem(BaseModel):
     content_type: str
     tone: str
     preview: str
+    model_used: str
+    generation_time_ms: int
     created_at: str
 
 
@@ -76,7 +93,12 @@ class LibraryDetail(BaseModel):
     content_type: str
     tone: str
     bundle: GeneratedBundle
+    model_used: str
+    generation_time_ms: int
     created_at: str
+    # Present for runs made through /api/generate/stream with extras or variations.
+    extras: dict[str, str] = {}
+    variants: dict[str, list[str]] = {}
 
 
 class ExportRequest(BaseModel):
@@ -84,6 +106,8 @@ class ExportRequest(BaseModel):
     format: ExportFormat
     title: str = "Property Content Pack"
     tone: str = "formal"
+    # Optional extra formats (headlines, SMS, ...) appended after the four channels.
+    extras: dict[str, str] = {}
 
 
 class RefineRequest(BaseModel):

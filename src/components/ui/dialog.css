@@ -1,0 +1,134 @@
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-dialog);
+  display: flex;
+  background: var(--color-overlay);
+  animation: dialog-fade var(--duration-base) var(--ease-standard);
+}
+
+.dialog-backdrop--center {
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+.dialog-backdrop--right {
+  justify-content: flex-end;
+}
+
+.dialog-backdrop--left {
+  justify-content: flex-start;
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  max-height: 100%;
+  min-width: 0;
+}
+
+.dialog:focus-visible {
+  box-shadow: var(--shadow-lg);
+}
+
+.dialog--center {
+  width: min(var(--dialog-width), 100%);
+  max-height: calc(100svh - var(--space-8));
+  border-radius: var(--radius-lg);
+  animation: dialog-rise var(--duration-base) var(--ease-standard);
+}
+
+.dialog--right,
+.dialog--left {
+  width: min(var(--drawer-width), 100%);
+  height: 100%;
+  animation: dialog-slide-right var(--duration-base) var(--ease-standard);
+}
+
+.dialog--left {
+  width: min(var(--sidebar-width), 85vw);
+  animation-name: dialog-slide-left;
+}
+
+.dialog__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-5) var(--space-3);
+}
+
+.dialog__header--bare {
+  justify-content: flex-end;
+  padding-bottom: 0;
+}
+
+.dialog__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.dialog__title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-regular);
+}
+
+.dialog__desc {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.dialog__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-2) var(--space-5) var(--space-5);
+}
+
+.dialog__footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--color-border);
+}
+
+@keyframes dialog-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes dialog-slide-right {
+  from {
+    transform: translateX(24px);
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-slide-left {
+  from {
+    transform: translateX(-24px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog-backdrop,
+  .dialog {
+    animation: none;
+  }
+}

@@ -1,0 +1,1 @@
+{"first_token_s": 0.3, "jobs_done": [["listing:0", "ai", 7.7], ["social:0", "ai", 19.6], ["email:0", "ai", 28.7], ["video:0", "ai", 43.2]], "total_s": 43.2, "model_used": "mistral"}

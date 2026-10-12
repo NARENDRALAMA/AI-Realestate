@@ -1,55 +1,62 @@
-import { Card } from '../components/Card'
+import { Card, CardHeader } from '../components/ui/Card'
+import { PageHeader } from '../components/ui/PageHeader'
+import { Badge } from '../components/ui/Badge'
+import { toneOptions } from '../lib/content-options'
 
 export function About() {
   return (
-    <div className="page">
-      <div className="page-header">
-        <h1 className="page-title">About this system</h1>
-        <p className="page-lead">
-          REM Content Studio — AI-assisted marketing content for real estate, without
-          turning the product into a listings marketplace.
-        </p>
-      </div>
+    <div className="page page--narrow">
+      <PageHeader
+        title="About REM Content Studio"
+        description="Marketing copy for real estate teams, built from one structured set of property details."
+      />
 
-      <div className="about-grid">
-        <Card>
-          <h2 className="about-card__title">Problem</h2>
-          <p className="about-card__body">
-            Marketing teams rewrite the same property facts across portals, social,
-            email, and video — often with inconsistent tone and wasted time. Briefs live
-            in spreadsheets, messages, and PDFs instead of a single structured source.
+      <div className="stack stack--lg">
+        <Card as="section" padding="lg">
+          <CardHeader title="The problem" />
+          <p>
+            Agents and marketing teams rewrite the same property facts for portals, social,
+            email and video, often with inconsistent tone and a lot of lost time. Briefs live
+            in spreadsheets, messages and PDFs rather than one reliable source.
           </p>
         </Card>
-        <Card>
-          <h2 className="about-card__title">Objective</h2>
-          <p className="about-card__body">
-            Provide a workflow that starts from structured property inputs and produces
-            channel-specific copy users can review, refine, and export — aligned to brand
-            voice and campaign goals.
+
+        <Card as="section" padding="lg">
+          <CardHeader title="What it does" />
+          <p>
+            You enter the property once. The studio writes channel-specific copy you can
+            review, refine and export, in a consistent voice that suits the campaign.
           </p>
-        </Card>
-        <Card>
-          <h2 className="about-card__title">System features</h2>
-          <ul className="about-list">
-            <li>Structured property capture (specs, amenities, agent notes)</li>
-            <li>Multi-channel generation: listing, social, email, video script</li>
-            <li>Tone control: formal, casual, promotional</li>
-            <li>Length presets and optional keyword steering</li>
-            <li>Review, refinement passes, and export utilities</li>
+          <ul className="check-list">
+            <li>Structured property details: specs, features, amenities, agent notes and a photo</li>
+            <li>Four channels per run: listing, social post, email and video script</li>
+            <li>Three lengths and optional keywords</li>
+            <li>Refinements: improve tone, make more persuasive, shorten</li>
+            <li>Export to PDF, Word or plain text, and a searchable library of past work</li>
           </ul>
+          <div className="cluster about-tones">
+            <span className="text-sm text-muted">Tones:</span>
+            {toneOptions.map((t) => (
+              <Badge key={t.value}>{t.label}</Badge>
+            ))}
+          </div>
         </Card>
-        <Card>
-          <h2 className="about-card__title">Tech stack</h2>
-          <ul className="about-list about-list--tags">
-            <li>React (this client)</li>
-            <li>Python & FastAPI (planned services)</li>
-            <li>LLM integration (planned for production generation)</li>
+
+        <Card as="section" padding="lg">
+          <CardHeader title="How it's built" />
+          <ul className="check-list">
+            <li>React and TypeScript web app</li>
+            <li>Python FastAPI service with a SQLite library</li>
+            <li>
+              Grounded LangChain prompts, one per channel, sent to an open-source instruction-tuned
+              model (Mistral 7B Instruct by default) — hosted on Colab, run locally with Transformers,
+              or served by Ollama
+            </li>
+            <li>
+              Channels are generated concurrently; any that time out or fail fall back to the template
+              engine, and each result records which engine was used and how long it took
+            </li>
           </ul>
-          <p className="about-card__note">
-            The current interface uses simulated generation for presentation and
-            usability testing; backend services can swap in without changing the core
-            workflow.
-          </p>
         </Card>
       </div>
     </div>

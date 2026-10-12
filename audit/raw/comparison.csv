@@ -1,0 +1,81 @@
+property,channel,engine,source,model_used,request_ms,channel_model_ms,word_count,length_ok,flesch,facts_ok,price_present,location_present,bedrooms_present,bathrooms_present,no_invented_bed_bath_count,numbers_not_in_input
+Sunlit 3-Bed Terrace,listing,template,template,template,0,,89,True,11.6,False,False,True,True,True,True,
+Sunlit 3-Bed Terrace,listing,llm_run,model,mistral,39378,28689,101,True,37.8,True,True,True,True,True,True,
+Sunlit 3-Bed Terrace,social,template,template,template,0,,23,True,19.1,True,True,True,True,True,True,
+Sunlit 3-Bed Terrace,social,llm_run,model,mistral,39378,21990,117,False,38.3,True,True,True,True,True,True,
+Sunlit 3-Bed Terrace,email,template,template,template,0,,108,True,32.7,True,True,True,True,True,True,
+Sunlit 3-Bed Terrace,email,llm_run,model,mistral,39378,39377,169,True,41.1,True,True,True,True,True,True,
+Sunlit 3-Bed Terrace,video,template,template,template,0,,123,True,44.3,True,True,True,True,True,True,
+Sunlit 3-Bed Terrace,video,llm_run,model,mistral,39378,11605,184,True,53.3,True,True,True,True,True,True,6
+Modern 2-Bed Apartment,listing,template,template,template,0,,83,True,13.0,False,False,True,True,True,True,
+Modern 2-Bed Apartment,listing,llm_run,model,mistral,42667,21024,146,True,31.1,False,True,True,True,False,True,
+Modern 2-Bed Apartment,social,template,template,template,0,,24,True,23.5,True,True,True,True,True,True,
+Modern 2-Bed Apartment,social,llm_run,model,mistral,42667,42666,161,False,59.6,True,True,True,True,True,True,
+Modern 2-Bed Apartment,email,template,template,template,0,,105,True,35.4,True,True,True,True,True,True,
+Modern 2-Bed Apartment,email,llm_run,model,mistral,42667,30918,167,True,45.8,False,True,True,True,False,True,
+Modern 2-Bed Apartment,video,template,template,template,0,,123,True,43.5,True,True,True,True,True,True,3;4
+Modern 2-Bed Apartment,video,llm_run,model,mistral,42667,12387,183,True,46.3,True,True,True,True,True,True,3;4;7
+Family Home with Pool,listing,template,template,template,0,,82,True,20.4,False,False,True,True,True,True,
+Family Home with Pool,listing,llm_run,model,mistral,41875,20271,140,True,31.2,True,True,True,True,True,True,
+Family Home with Pool,social,template,template,template,0,,24,True,33.2,True,True,True,True,True,True,
+Family Home with Pool,social,llm_run,model,mistral,41875,29884,113,False,44.9,False,True,True,True,False,True,
+Family Home with Pool,email,template,template,template,0,,105,True,40.4,True,True,True,True,True,True,
+Family Home with Pool,email,llm_run,model,mistral,41875,41873,197,False,38.2,False,True,True,True,False,True,
+Family Home with Pool,video,template,template,template,0,,122,True,45.9,True,True,True,True,True,True,
+Family Home with Pool,video,llm_run,model,mistral,41875,11714,190,True,53.7,True,True,True,True,True,True,
+Cosy 1-Bed Studio,listing,template,template,template,0,,83,True,16.0,False,False,True,True,True,True,
+Cosy 1-Bed Studio,listing,llm_run,model,mistral,42020,42019,109,True,40.3,True,True,True,True,True,True,
+Cosy 1-Bed Studio,social,template,template,template,0,,23,True,13.7,True,True,True,True,True,True,
+Cosy 1-Bed Studio,social,llm_run,model,mistral,42020,20659,112,False,20.4,True,True,True,True,True,True,
+Cosy 1-Bed Studio,email,template,template,template,0,,104,True,34.1,True,True,True,True,True,True,
+Cosy 1-Bed Studio,email,llm_run,model,mistral,42020,9097,147,True,56.0,True,True,True,True,True,True,
+Cosy 1-Bed Studio,video,template,template,template,0,,123,True,43.5,True,True,True,True,True,True,3;5
+Cosy 1-Bed Studio,video,llm_run,model,mistral,42020,35132,216,True,46.1,True,True,True,True,True,True,3;5;6
+Acreage Retreat,listing,template,template,template,0,,80,True,11.5,True,,True,True,True,True,
+Acreage Retreat,listing,llm_run,model,mistral,49238,35153,143,True,41.3,True,,True,True,True,True,
+Acreage Retreat,social,template,template,template,0,,25,True,14.6,True,,True,True,True,True,
+Acreage Retreat,social,llm_run,model,mistral,49238,25390,112,False,10.4,True,,True,True,True,True,
+Acreage Retreat,email,template,template,template,0,,96,True,35.5,True,,True,True,True,True,
+Acreage Retreat,email,llm_run,model,mistral,49238,12650,180,False,41.5,True,,True,True,True,True,
+Acreage Retreat,video,template,template,template,0,,122,True,41.1,True,,True,True,True,True,1
+Acreage Retreat,video,llm_run,model,mistral,49238,49236,199,True,55.6,True,,True,True,True,True,1;6
+Renovated Victorian Cottage,listing,template,template,template,0,,81,True,10.0,False,False,True,True,True,True,
+Renovated Victorian Cottage,listing,llm_run,model,mistral,50366,50366,141,True,30.0,True,True,True,True,True,True,
+Renovated Victorian Cottage,social,template,template,template,0,,23,True,-7.5,True,True,True,True,True,True,
+Renovated Victorian Cottage,social,llm_run,model,mistral,50366,12339,131,False,23.7,True,True,True,True,True,True,
+Renovated Victorian Cottage,email,template,template,template,0,,103,True,27.0,True,True,True,True,True,True,
+Renovated Victorian Cottage,email,llm_run,model,mistral,50366,23442,158,True,38.8,False,True,True,False,True,True,
+Renovated Victorian Cottage,video,template,template,template,0,,121,True,37.5,True,True,True,True,True,True,4
+Renovated Victorian Cottage,video,llm_run,model,mistral,50366,40685,232,False,24.0,True,True,True,True,True,True,4;6;7;8;9
+Beachside Apartment,listing,template,template,template,0,,81,True,7.7,False,False,True,True,True,True,
+Beachside Apartment,listing,llm_run,model,mistral,49703,8391,118,True,36.4,True,True,True,True,True,True,
+Beachside Apartment,social,template,template,template,0,,23,True,8.4,True,True,True,True,True,True,
+Beachside Apartment,social,llm_run,model,mistral,49703,49702,126,False,11.1,True,True,True,True,True,True,
+Beachside Apartment,email,template,template,template,0,,99,True,32.0,True,True,True,True,True,True,
+Beachside Apartment,email,llm_run,model,mistral,49703,33793,151,True,35.2,True,True,True,True,True,True,
+Beachside Apartment,video,template,template,template,0,,121,True,40.0,True,True,True,True,True,True,3;4
+Beachside Apartment,video,llm_run,model,mistral,49703,21522,182,True,53.0,True,True,True,True,True,True,3;4
+New Build Townhouse,listing,template,template,template,0,,80,True,14.5,False,False,True,True,True,True,
+New Build Townhouse,listing,llm_run,model,mistral,58034,58034,143,True,40.8,True,True,True,True,True,True,
+New Build Townhouse,social,template,template,template,0,,23,True,19.1,True,True,True,True,True,True,
+New Build Townhouse,social,llm_run,model,mistral,58034,32101,126,False,21.2,True,True,True,True,True,True,
+New Build Townhouse,email,template,template,template,0,,101,True,36.9,True,True,True,True,True,True,
+New Build Townhouse,email,llm_run,model,mistral,58034,45487,156,True,48.9,False,True,True,False,True,True,
+New Build Townhouse,video,template,template,template,0,,123,True,41.4,True,True,True,True,True,True,4;5
+New Build Townhouse,video,llm_run,model,mistral,58034,17538,236,False,44.8,True,True,True,True,True,True,4;5;7
+Inner-City Penthouse,listing,template,template,template,0,,80,True,12.3,False,False,True,True,True,True,
+Inner-City Penthouse,listing,llm_run,model,mistral,51803,34570,153,False,44.3,True,True,True,True,True,True,
+Inner-City Penthouse,social,template,template,template,0,,22,True,8.4,True,True,True,True,True,True,
+Inner-City Penthouse,social,llm_run,model,mistral,51803,10749,96,False,30.5,True,True,True,True,True,True,
+Inner-City Penthouse,email,template,template,template,0,,100,True,33.1,True,True,True,True,True,True,
+Inner-City Penthouse,email,llm_run,model,mistral,51803,22645,151,True,35.9,False,False,True,True,True,True,
+Inner-City Penthouse,video,template,template,template,0,,120,True,40.8,True,True,True,True,True,True,
+Inner-City Penthouse,video,llm_run,model,mistral,51803,51801,203,True,42.6,True,True,True,True,True,True,6;7;9
+Quiet Suburban Bungalow,listing,template,template,template,0,,79,True,16.4,True,,True,True,True,True,
+Quiet Suburban Bungalow,listing,llm_run,model,mistral,47349,7708,94,True,46.1,True,,True,True,True,True,
+Quiet Suburban Bungalow,social,template,template,template,0,,26,True,6.3,True,,True,True,True,True,
+Quiet Suburban Bungalow,social,llm_run,model,mistral,47349,23583,124,False,22.5,True,,True,True,True,True,
+Quiet Suburban Bungalow,email,template,template,template,0,,102,True,34.5,True,,True,True,True,True,
+Quiet Suburban Bungalow,email,llm_run,model,mistral,47349,47346,134,True,47.5,False,,True,True,False,True,
+Quiet Suburban Bungalow,video,template,template,template,0,,124,True,41.1,True,,True,True,True,True,3;5
+Quiet Suburban Bungalow,video,llm_run,model,mistral,47349,36747,172,True,36.0,True,,True,True,True,True,3;5;6

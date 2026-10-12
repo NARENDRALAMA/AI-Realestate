@@ -1,73 +1,84 @@
-import { Link } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
-import { Card } from '../components/Card'
+import { ArrowRight, Download, FileText, Mail, Share2, Sliders, Sparkles, Video, House } from 'lucide-react'
+import { LinkButton } from '../components/ui/Button'
+import { Card, CardHeader } from '../components/ui/Card'
+import { PageHeader } from '../components/ui/PageHeader'
 
 const steps = [
   {
-    n: 1,
-    title: 'Input property data',
-    desc: 'Structured fields capture specs, amenities, and agent notes.',
-    to: '/property',
+    icon: House,
+    title: 'Property details',
+    desc: 'Enter the listing title and location, plus any specs, features, amenities and agent notes. You can add a photo too.',
+    to: '/app/property',
+    cta: 'Enter details',
   },
   {
-    n: 2,
-    title: 'Select content type & tone',
-    desc: 'Choose channel focus, voice, length, and optional keywords.',
-    to: '/settings',
+    icon: Sliders,
+    title: 'Content settings',
+    desc: 'Choose a main focus channel, one of six tones, a length and optional keywords. You see a summary before generating.',
+    to: '/app/settings',
+    cta: 'Choose settings',
   },
   {
-    n: 3,
-    title: 'Generate content',
-    desc: 'Produce listing, social, email, and video drafts in one pass.',
-    to: '/generated',
+    icon: Sparkles,
+    title: 'Generate',
+    desc: 'All four channels are written in one pass. Each generation is saved to your library automatically.',
+    to: '/app/generated',
+    cta: 'View results',
   },
   {
-    n: 4,
-    title: 'Format output',
-    desc: 'Refine tone, persuasion, and length; track version checkpoints.',
-    to: '/edit',
+    icon: Download,
+    title: 'Review & export',
+    desc: 'Edit the copy, apply quick refinements per channel or to all, then copy it or download PDF, Word or plain text.',
+    to: '/app/edit',
+    cta: 'Review content',
   },
-  {
-    n: 5,
-    title: 'Review and export',
-    desc: 'Copy, download, or save the final pack for your marketing stack.',
-    to: '/export',
-  },
+]
+
+const channels = [
+  { icon: FileText, name: 'Listing', desc: 'Portal and website description.' },
+  { icon: Share2, name: 'Social post', desc: 'Short post with hashtags.' },
+  { icon: Mail, name: 'Email', desc: 'Subject line and body for your database.' },
+  { icon: Video, name: 'Video script', desc: 'Timed script for a walk-through.' },
 ]
 
 export function Workflow() {
   return (
-    <div className="page">
-      <div className="page-header">
-        <h1 className="page-title">System workflow</h1>
-        <p className="page-lead">
-          End-to-end flow from structured input to export — built for real estate
-          marketing teams.
-        </p>
-      </div>
+    <div className="page page--narrow">
+      <PageHeader
+        title="How it works"
+        description="Four steps from property facts to publish-ready copy."
+      />
 
-      <div className="stepper">
-        {steps.map((s, i) => (
-          <div key={s.n} className="stepper__row">
-            <div className="stepper__track" aria-hidden>
-              <span className="stepper__num">{s.n}</span>
-              {i < steps.length - 1 ? <span className="stepper__line" /> : null}
-            </div>
-            <Card className="stepper__card">
-              <div className="step-card">
-                <div>
-                  <h2 className="step-card__title">{s.title}</h2>
-                  <p className="step-card__desc">{s.desc}</p>
-                  <Link to={s.to} className="step-card__link">
-                    Open step
-                    <ArrowRight size={16} aria-hidden />
-                  </Link>
-                </div>
-              </div>
+      <ol className="timeline-steps">
+        {steps.map(({ icon: Icon, title, desc, to, cta }, i) => (
+          <li key={title} className="timeline-steps__item">
+            <span className="timeline-steps__num" aria-hidden>
+              {i + 1}
+            </span>
+            <Card className="timeline-steps__card">
+              <CardHeader level={2} icon={<Icon />} title={title} description={desc} />
+              <LinkButton to={to} variant="ghost" size="sm" iconAfter={<ArrowRight aria-hidden />}>
+                {cta}
+              </LinkButton>
             </Card>
-          </div>
+          </li>
         ))}
-      </div>
+      </ol>
+
+      <section className="section" aria-labelledby="channels-title">
+        <h2 id="channels-title" className="section-title section-head">
+          What each generation includes
+        </h2>
+        <ul className="feature-grid feature-grid--2">
+          {channels.map(({ icon: Icon, name, desc }) => (
+            <li key={name} className="feature">
+              <Icon className="feature__icon" aria-hidden />
+              <h3 className="feature__title">{name}</h3>
+              <p className="feature__desc">{desc}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   )
 }

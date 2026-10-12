@@ -13,25 +13,33 @@ _SECTIONS = [
 ]
 
 
+def _sections(bundle: GeneratedBundle, extras: dict[str, str] | None) -> list[tuple[str, str]]:
+    """(heading, text) for the four channels, then any extra formats."""
+    from extras import EXTRA_LABELS
+
+    items = [(heading, getattr(bundle, key)) for key, heading in _SECTIONS]
+    for key, text in (extras or {}).items():
+        items.append((EXTRA_LABELS.get(key, key.replace("_", " ").title()), text))
+    return [(h, t) for h, t in items if t]
+
+
 # ─── TXT ──────────────────────────────────────────────────────────────────────
 
-def build_txt(bundle: GeneratedBundle, title: str, tone: str) -> bytes:
+def build_txt(bundle: GeneratedBundle, title: str, tone: str, extras: dict[str, str] | None = None) -> bytes:
     lines: list[str] = [
         "REM CONTENT STUDIO",
         f"Property: {title}",
         f"Tone: {tone.title()}",
         "=" * 60,
     ]
-    for key, heading in _SECTIONS:
-        text = getattr(bundle, key)
-        if text:
-            lines += ["", f"## {heading}", "", text, "", "-" * 60]
+    for heading, text in _sections(bundle, extras):
+        lines += ["", f"## {heading}", "", text, "", "-" * 60]
     return "\n".join(lines).encode("utf-8")
 
 
 # ─── PDF ──────────────────────────────────────────────────────────────────────
 
-def build_pdf(bundle: GeneratedBundle, title: str, tone: str) -> bytes:
+def build_pdf(bundle: GeneratedBundle, title: str, tone: str, extras: dict[str, str] | None = None) -> bytes:
     from reportlab.lib.pagesizes import A4
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
     from reportlab.lib.units import cm
@@ -69,10 +77,7 @@ def build_pdf(bundle: GeneratedBundle, title: str, tone: str) -> bytes:
     story.append(Paragraph(f"Tone: {tone.title()}", styles["Italic"]))
     story.append(Spacer(1, 0.6 * cm))
 
-    for key, heading in _SECTIONS:
-        text: str = getattr(bundle, key)
-        if not text:
-            continue
+    for heading, text in _sections(bundle, extras):
         story.append(Paragraph(heading, heading2_style))
         for line in text.split("\n"):
             safe = (
@@ -93,7 +98,7 @@ def build_pdf(bundle: GeneratedBundle, title: str, tone: str) -> bytes:
 
 # ─── DOCX ─────────────────────────────────────────────────────────────────────
 
-def build_docx(bundle: GeneratedBundle, title: str, tone: str) -> bytes:
+def build_docx(bundle: GeneratedBundle, title: str, tone: str, extras: dict[str, str] | None = None) -> bytes:
     from docx import Document
     from docx.shared import Pt, RGBColor
     from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -109,10 +114,7 @@ def build_docx(bundle: GeneratedBundle, title: str, tone: str) -> bytes:
 
     doc.add_paragraph()
 
-    for key, heading in _SECTIONS:
-        text: str = getattr(bundle, key)
-        if not text:
-            continue
+    for heading, text in _sections(bundle, extras):
         doc.add_heading(heading, level=1)
         for line in text.split("\n"):
             p = doc.add_paragraph(line)

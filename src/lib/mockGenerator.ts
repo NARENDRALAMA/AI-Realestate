@@ -8,12 +8,12 @@ import type {
 
 function trimToLength(text: string, length: LengthOption): string {
   const sentences = text.split(/(?<=[.!?])\s+/).filter(Boolean)
-  const limits = { short: 3, medium: 6, long: 12 }
+  const limits = { short: 3, medium: 6, long: 12, extended: 18 }
   const limit = limits[length]
   if (sentences.length === 0) return text
   const joined = sentences.slice(0, limit).join(' ')
   if (joined.trim()) return joined
-  const approx = length === 'short' ? 280 : length === 'medium' ? 640 : 1200
+  const approx = length === 'short' ? 280 : length === 'medium' ? 640 : length === 'long' ? 1200 : 1800
   return text.length <= approx ? text : `${text.slice(0, approx).trim()}…`
 }
 

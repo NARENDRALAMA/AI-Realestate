@@ -1,0 +1,194 @@
+== 00_ping
+ok http://localhost:5173/app/property
+PAGE_ERRORS []
+== 01_generate
+url http://localhost:5173/app/generated first_content_ms 4342 complete_ms 43374
+BUTTONS ["Take the tour","Regenerate","Listing Focus","Social post","Email","Video script","Copy Listing"]
+BADGE ["AI · mistral","AI” means some channels came from templates — read those close","AI output: a checklist"]
+PAGE_ERRORS []
+== 02_regen
+complete_ms 31835 header Casual tone · Short length · focus on listing description words 78 words changed true
+PAGE_ERRORS []
+== 03_edit
+ERROR TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('button', { name: /Review & refine/ })[22m
+
+PAGE_ERRORS []
+== 04_find
+http://localhost:5173/app/generated
+["A:Skip to content","A:REM Content Studio Workspace","A:Home","A:Create content","A:Batch","A:Library","A:Learn","A:How it works","A:About","BUTTON:Take the tour","A:Back to website","A:REM Content StudioWorkspace","BUTTON:","A:Workspace","A:Create content","A:Property details (done)","A:Content settings (done)","A:3 Generate","A:4 Review & export","BUTTON:","BUTTON:Regenerate","A:Export","A:Review & refine","A:Guide: Reviewing AI output: a checklist","BUTTON:","BUTTON:Listing Focus","BUTTON:Social post","BUTTON:Email","BUTTON:Video script","A:Edit","BUTTON:Copy Listing","A:Edit"]
+PAGE_ERRORS []
+== 05_edit
+BUTTONS ["Edit & refine","Export","Continue to export","Guide: Reviewing AI output: a checklist","Listing","Social post","Email","Video script","Improve tone","More persuasive","Shorten","Improve tone","More persuasive","Shorten"]
+TEXTAREAS ["_r_1l_:Nestled in the heart of Katoomba, NSW, discover the Audit Te"]
+PAGE_ERRORS []
+== 06_editrefine
+listing ends with e getaway!
+
+AUDIT EDIT MARKER sentence added in the browser.
+ERROR TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByRole('button', { name: 'Email', exact: true }).first()[22m
+
+PAGE_ERRORS []
+== 07_refine
+email before words 91 after 50
+BEFORE Subject: 🏠 Cozy Mountain Retreat - Audit Test Cottage 🏞️
+
+Hey there! 🌞️
+
+Escape the hustle and bustle for the Audit Test Cottage, nestled in the heart of Katoomba, NSW. 🏞️
+
+Experience 95m² of renovated charm, boasting 2 bedrooms, 1 bathroom, and 
+AFTER Subject: 🏠 Cozy Mountain Retreat - Audit Test Cottage 🏞️
+
+Hey there!
+
+🌞️
+
+Escape the hustle and bustle for the Audit Test Cottage, nestled in the heart of Katoomba, NSW.
+
+🏞️
+
+Experience 95m² of renovated charm, boasting 2 bedrooms, 1 bathroom, and a warm wood fireplace for chilly nights.
+
+🛋️
+PAGE_ERRORS []
+== 08_export
+CONTROLS ["Edit & refine","Export","Guide: Exporting and publishing","Listing","Social post","Email","Video script","Copy Listing","PDF Formatted and ready to share","Word (DOCX) Editable in Microsoft Word","Plain text (TXT) Paste into any app or CRM","Copy everything","View in library","Start new content"]
+PAGE_ERRORS []
+== 09_download
+pdf saved rem-content-Audit Test Cottage-casual.pdf
+docx saved rem-content-Audit Test Cottage-casual.docx
+txt saved rem-content-casual-1791776262472.txt
+PAGE_ERRORS []
+== 10_library
+LIB TEXT Workspace
+Library
+Library
+
+Every piece of content you generate is saved here automatically.
+
+Refresh
+Create content
+Summary
+
+Total generated
+
+2
+
+This week
+
+2
+
+Last 7 days
+
+Top content type
+
+Listing
+
+2 pieces
+
+Top tone
+
+Casual
+
+1 piece
+
+By content type
+Listing
+2 (100%)
+By tone
+Casual
+1 (50%)
+Formal
+1 (50%)
+By engine
+AI · mistral
+2 (100%)
+Saved content
+Search
+Content type
+All types
+Listing
+Social post
+Email
+Video script
+Tone
+All tones
+Formal
+Friendly
+Casual
+Promotional
+Luxury
+Concise
+Engine
+All engines
+AI
+Partly AI
+Template fallback
+Date
+Any time
+Last 7 days
+Last 30 days
+
+2 items
+
+PROPERTY	FOCUS	TONE	ENGINE	CREATED	
+ACTIONS
+
+
+AT
+Audit Test Cottage
+Katoomba, NSW
+Nestled in the heart of Katoomba, NSW, discover the Audit Test Cottage. This charming 2-bedroom, 1-b
+	Listing	Casual	
+AI · mistral	12 Oct 2026, 14:35	
+View
+Audit Test Cottage
+
+
+AT
+Audit Test Cottage
+Katoomba, NSW
+Nestled in the hear
+CONTROLS ["BUTTON:Refresh","INPUT:Title, suburb or text","SELECT:All types Listing Social post Email Video script","SELECT:All tones Formal Friendly Casual Promotional Luxury Concise","SELECT:All engines AI Partly AI Template fallback","SELECT:Any time Last 7 days Last 30 days","BUTTON:View Audit Test Cottage","BUTTON:Delete Audit Test Cottage","BUTTON:View Audit Test Cottage","BUTTON:Delete Audit Test Cottage"]
+PAGE_ERRORS []
+== 11_libfilter
+filter tone=Formal -> ["Showing 1 of 2 items"]
+search none -> ["Showing 0 of 2 items","No matches"]
+detail has edit marker: false | detail snippet: Audit Test Cottage
+
+Katoomba, NSW · 12 Oct 2026, 14:35
+
+Focus: Listing
+Casual tone
+AI · mistral
+Listing
+Social post
+Email
+Video script
+78 words
+Copy
+Listing
+Nestled in the heart of Katoomba, NSW, disc
+reopened url http://localhost:5173/app/generated | property panel: Property details | (done) | Content settings | (done) | 3 | Generate | 4 | Review & export |  | STEP 3 |  | Your content is ready |  | Casual tone · Medium length · focus on listing description |  | AI · mistral | Generated in 31 s | Saved to library | Regenerate | Export | Review & refine |  | TIPS |  | 
+after reload url http://localhost:5173/app/generated | still has content: false
+PAGE_ERRORS []
+== 12_regen_from_library
+ms 47136 model mistral
+listing | has $720,000: false | has 2 bed: false | $ amounts: null | bed mentions: ["Three bedrooms","Each bedroom"]
+social | has $720,000: false | has 2 bed: false | $ amounts: null | bed mentions: null
+email | has $720,000: false | has 2 bed: false | $ amounts: null | bed mentions: ["cozy bedrooms"]
+video | has $720,000: false | has 2 bed: true | $ amounts: null | bed mentions: ["two bedrooms","Each bedroom"]
+LISTING Welcome to the Audit Test Cottage, nestled in the heart of Katoomba, NSW! This charming abode offers a unique blend of character and comfort. As you step inside, you'll be greeted by a warm and inviting atmosphere that instantly feels like home.
+
+The Audit Test Cottage boasts a cozy living area with a wood-burning fireplace perfect for those chilly mountain evenings. The kitchen is well-equipped with modern appliances, making cooking a delight.
+
+Three bedrooms provide ample space for a growing f
+PAGE_ERRORS []
+== 13_model_down
+ms 1546 | badge/notice: ["ails","Template fallback","aim against your notes before publishing.","“Partly AI” means some channels came from templates — read those closely.","AI output: a checklist"]
+HOME REM CONTENT STUDIO | Property marketing copy, in minutes | Turn a property's details into listing, social, email and video copy in your chosen tone. | Create your first listing content | It takes about two minutes. You'll review everything before it's used. | Start new content | Try a sample property | Recent activity | Open library | Audit Test Cottage | Listing · Formal | 12 Oct 2026, 14:39 | Audit Test Cottage | Listing · Casual | 12 Oct 2026, 14:39 | Audit Test Cottage | Listing · Casual | 12 Oct 2026, 14:35 | Audit Test 
+PAGE_ERRORS []

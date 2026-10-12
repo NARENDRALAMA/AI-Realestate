@@ -17,19 +17,30 @@ CREATE TABLE IF NOT EXISTS generated_outputs (
     tone            TEXT    NOT NULL,
     generated_content TEXT  NOT NULL,
     image_path      TEXT    NOT NULL DEFAULT '',
+    model_used      TEXT    NOT NULL DEFAULT 'template',
+    generation_time_ms INTEGER NOT NULL DEFAULT 0,
     created_at      TEXT    NOT NULL DEFAULT (datetime('now'))
 );
 """
+
+# Migrations applied on top of _CREATE_TABLE for databases created before a
+# column existed. Each is a no-op (caught below) once the column is present —
+# this is how backend/propcopy.db picks up new columns without losing data.
+_MIGRATIONS = [
+    "ALTER TABLE generated_outputs ADD COLUMN image_path TEXT NOT NULL DEFAULT ''",
+    "ALTER TABLE generated_outputs ADD COLUMN model_used TEXT NOT NULL DEFAULT 'template'",
+    "ALTER TABLE generated_outputs ADD COLUMN generation_time_ms INTEGER NOT NULL DEFAULT 0",
+]
 
 
 def init_db() -> None:
     with _connect() as conn:
         conn.execute(_CREATE_TABLE)
-        # Migration: add image_path column to existing databases
-        try:
-            conn.execute("ALTER TABLE generated_outputs ADD COLUMN image_path TEXT NOT NULL DEFAULT ''")
-        except sqlite3.OperationalError:
-            pass  # Column already exists
+        for migration in _MIGRATIONS:
+            try:
+                conn.execute(migration)
+            except sqlite3.OperationalError:
+                pass  # Column already exists
 
 
 @contextmanager
@@ -53,14 +64,17 @@ def save_output(
     tone: str,
     bundle: dict,
     image_path: str = "",
+    model_used: str = "template",
+    generation_time_ms: int = 0,
 ) -> int:
     with _connect() as conn:
         cursor = conn.execute(
             """
-            INSERT INTO generated_outputs (title, location, content_type, tone, generated_content, image_path)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO generated_outputs
+                (title, location, content_type, tone, generated_content, image_path, model_used, generation_time_ms)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
-            (title, location, content_type, tone, json.dumps(bundle), image_path),
+            (title, location, content_type, tone, json.dumps(bundle), image_path, model_used, generation_time_ms),
         )
         return cursor.lastrowid
 
@@ -69,7 +83,8 @@ def list_outputs() -> list[dict]:
     with _connect() as conn:
         rows = conn.execute(
             """
-            SELECT id, title, location, content_type, tone, generated_content, created_at
+            SELECT id, title, location, content_type, tone, generated_content,
+                   model_used, generation_time_ms, created_at
             FROM generated_outputs
             ORDER BY id DESC
             """
@@ -88,6 +103,8 @@ def list_outputs() -> list[dict]:
                 "content_type": row["content_type"],
                 "tone": row["tone"],
                 "preview": preview_text[:100].replace("\n", " "),
+                "model_used": row["model_used"],
+                "generation_time_ms": row["generation_time_ms"],
                 "created_at": row["created_at"],
             }
         )
@@ -98,7 +115,8 @@ def get_output(record_id: int) -> dict | None:
     with _connect() as conn:
         row = conn.execute(
             """
-            SELECT id, title, location, content_type, tone, generated_content, created_at
+            SELECT id, title, location, content_type, tone, generated_content,
+                   model_used, generation_time_ms, created_at
             FROM generated_outputs WHERE id = ?
             """,
             (record_id,),
@@ -112,6 +130,8 @@ def get_output(record_id: int) -> dict | None:
         "content_type": row["content_type"],
         "tone": row["tone"],
         "bundle": json.loads(row["generated_content"]),
+        "model_used": row["model_used"],
+        "generation_time_ms": row["generation_time_ms"],
         "created_at": row["created_at"],
     }
 

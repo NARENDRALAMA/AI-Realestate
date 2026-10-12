@@ -2,7 +2,10 @@ export type ContentType = 'listing' | 'social' | 'email' | 'video'
 
 export type Tone = 'formal' | 'casual' | 'promotional' | 'luxury' | 'concise' | 'friendly'
 
-export type LengthOption = 'short' | 'medium' | 'long'
+export type LengthOption = 'short' | 'medium' | 'long' | 'extended'
+
+/** Extra formats written alongside the four core channels (streaming endpoint). */
+export type ExtraFormat = 'headlines' | 'facebook_ad' | 'sms' | 'flyer' | 'seo'
 
 export interface PropertyData {
   title: string
@@ -26,6 +29,9 @@ export interface ContentSettings {
   tone: Tone
   length: LengthOption
   keywords: string
+  extraFormats: ExtraFormat[]
+  /** How many versions of each core channel to write (1–3). */
+  variations: 1 | 2 | 3
 }
 
 export interface GeneratedBundle {
@@ -33,6 +39,13 @@ export interface GeneratedBundle {
   social: string
   email: string
   video: string
+}
+
+/** Which engine produced the current content and how long the server took. */
+export interface GenerationMeta {
+  durationMs: number
+  engine: 'ai' | 'partial' | 'template'
+  model?: string
 }
 
 export interface VersionEntry {
@@ -63,4 +76,6 @@ export const defaultSettings = (): ContentSettings => ({
   tone: 'formal',
   length: 'medium',
   keywords: '',
+  extraFormats: [],
+  variations: 1,
 })
