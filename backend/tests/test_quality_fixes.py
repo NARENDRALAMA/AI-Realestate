@@ -65,7 +65,7 @@ def test_placeholders_removed_but_scene_labels_kept():
 @pytest.mark.parametrize("platform", ["facebook", "linkedin", "instagram"])
 def test_social_posts_fit_platform_limit(platform):
     long_post = ("A lovely sentence about this home. " * 120) + "\n\n#One #Two #Three"
-    out = clean_channel("social", long_post, platform)
+    out = clean_channel("social", long_post, _req(platform=platform))
     assert len(out) <= PLATFORM_CHAR_LIMITS[platform]
     assert out.endswith("#One #Two #Three")
     assert len(generate_bundle(_req(platform=platform, length="extended")).social) <= PLATFORM_CHAR_LIMITS[platform]
@@ -107,3 +107,24 @@ def test_channel_sources_record_which_channels_fell_back(monkeypatch):
     assert model_used == "stub (partial)"
     assert sources == {"listing": "ai", "social": "ai", "email": "template", "video": "ai"}
     assert "[Your Name]" not in bundle.listing  # model output is cleaned
+
+
+def test_unsupported_clauses_removed_supported_text_kept():
+    req = _req(features="SMEG kitchen, city views")
+    text = (
+        "The contemporary SMEG kitchen, equipped with modern appliances, is a delight. "
+        "Located in Ryde, you'll find shops and cafes at your doorstep. "
+        "Enjoy the city views.\n\nNearby schools and public transport make life easy."
+    )
+    out = clean_channel("listing", text, req)
+    assert "appliance" not in out and "shops" not in out and "school" not in out
+    assert "The contemporary SMEG kitchen is a delight." in out
+    assert "Located in Ryde." in out and "city views" in out  # supplied facts survive
+
+
+def test_missing_key_facts_added_once():
+    req = _req()
+    social = clean_channel("social", "Great family home in Ryde!\n\n#Ryde #ForSale", req)
+    assert "3 bed · 2 bath · $900,000" in social and social.endswith("#Ryde #ForSale")
+    complete = "Three bedrooms, 2 bathrooms, offered at $900,000."
+    assert clean_channel("listing", complete, req) == complete

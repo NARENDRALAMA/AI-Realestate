@@ -2,6 +2,7 @@ import type { PropertyData } from '../types'
 
 export const sampleProperty: PropertyData = {
   title: 'Sunlit 3-Bed Terrace with City Views',
+  propertyType: 'townhouse',
   price: '$1,250,000',
   location: 'Richmond, VIC',
   address: '42 Hawthorn Grove, Richmond VIC 3121',

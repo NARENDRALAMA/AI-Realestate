@@ -6,13 +6,19 @@ import type { GenerationMeta } from '../types'
  *   "<model>"              → all four channels written by the model
  *   "<model> (partial)"    → some channels fell back to templates
  */
-export function engineFromModelUsed(modelUsed: string | undefined | null, durationMs: number): GenerationMeta {
-  if (!modelUsed || modelUsed === 'template') return { engine: 'template', durationMs }
+export function engineFromModelUsed(
+  modelUsed: string | undefined | null,
+  durationMs: number,
+  sources?: GenerationMeta['sources'],
+): GenerationMeta {
+  const withSources = sources && Object.keys(sources).length ? { sources } : {}
+  if (!modelUsed || modelUsed === 'template') return { engine: 'template', durationMs, ...withSources }
   const partial = /\s*\(partial\)$/.test(modelUsed)
   return {
     engine: partial ? 'partial' : 'ai',
     model: modelUsed.replace(/\s*\(partial\)$/, ''),
     durationMs,
+    ...withSources,
   }
 }
 

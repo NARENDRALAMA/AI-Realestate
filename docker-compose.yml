@@ -16,6 +16,8 @@ services:
       - LLM_MODEL_NAME=mistral
       - LLM_OLLAMA_URL=http://host.docker.internal:11434
       - LLM_TIMEOUT_SECONDS=180
+      # Start Ollama with OLLAMA_NUM_PARALLEL=4 so the four channels are written at once.
+      - LLM_STREAM_CONCURRENCY=4
     extra_hosts:
       # Lets the container reach Ollama on the host on Linux too (built in on Mac/Windows).
       - "host.docker.internal:host-gateway"

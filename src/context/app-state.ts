@@ -8,6 +8,9 @@ import type {
   VersionEntry,
 } from '../types'
 
+/** Whether edits to the current result have been saved to the library. */
+export type SaveState = 'idle' | 'saving' | 'saved' | 'error'
+
 export interface LiveJob {
   text: string
   status: 'waiting' | 'writing' | 'done'
@@ -32,6 +35,7 @@ export interface AppState {
   isGenerating: boolean
   generationError: string | null
   generationId: number | null
+  saveState: SaveState
   /** Field-level messages from the last failed generation (e.g. a 422 from the API). */
   generationFieldErrors: Record<string, string>
   /** Epoch ms when the running generation started, for the progress timer. */

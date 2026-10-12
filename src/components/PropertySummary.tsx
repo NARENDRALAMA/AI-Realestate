@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Building2, ImageIcon, MapPin, Pencil } from 'lucide-react'
 import { useApp } from '../hooks/useApp'
+import { propertyTypeLabel } from '../lib/content-options'
 import type { PropertyData } from '../types'
 import { Card, CardHeader } from './ui/Card'
 
@@ -53,6 +54,12 @@ export function PropertySummary({
           <dt>Title</dt>
           <dd>{orDash(property.title)}</dd>
         </div>
+        {property.propertyType ? (
+          <div>
+            <dt>Type</dt>
+            <dd>{propertyTypeLabel(property.propertyType)}</dd>
+          </div>
+        ) : null}
         <div>
           <dt>Price</dt>
           <dd>{orDash(property.price)}</dd>

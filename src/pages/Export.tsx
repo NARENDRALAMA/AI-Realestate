@@ -36,7 +36,9 @@ const formats: { id: Format; label: string; description: string; icon: typeof Fi
   { id: 'txt', label: 'Plain text (TXT)', description: 'Paste into any app or CRM', icon: Download },
 ]
 
-const txtFilename = (tone: string) => `rem-content-${tone}-${Date.now()}.txt`
+// Same pattern as the server's PDF/DOCX names (backend/main.py export_content).
+const txtFilename = (title: string, tone: string) =>
+  `rem-content-${(title || 'Property').replace(/[^A-Za-z0-9\-_ ]/g, '_').slice(0, 40)}-${tone}.txt`
 
 const fullPack = (g: GeneratedBundle, extras: Partial<Record<ExtraFormat, string>>) =>
   [
@@ -89,7 +91,7 @@ export function Export() {
     setExportError(null)
     if (format === 'txt') {
       const blob = new Blob([fullPack(generated, extras)], { type: 'text/plain;charset=utf-8' })
-      downloadBlob(blob, txtFilename(settings.tone))
+      downloadBlob(blob, txtFilename(property.title, settings.tone))
       toast.show('TXT file downloaded')
       return
     }

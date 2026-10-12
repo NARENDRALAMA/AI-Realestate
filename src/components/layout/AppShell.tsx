@@ -10,11 +10,13 @@ import {
   Layers,
   Info,
   ListOrdered,
+  LogOut,
   Menu,
   PenLine,
   type LucideIcon,
 } from 'lucide-react'
 import { useApp } from '../../hooks/useApp'
+import { useAuth } from '../../hooks/useAuth'
 import { guideBySlug } from '../../content/guides'
 import { prefetchAppPages } from '../../lib/app-pages'
 import { startTour, TOUR_EVENT, tourDone } from '../../lib/tips-storage'
@@ -65,7 +67,8 @@ function Brand() {
 
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const { pathname } = useLocation()
-  const { generated, isGenerating } = useApp()
+  const { generated, isGenerating, startNew } = useApp()
+  const { user, signOut } = useAuth()
 
   const primary: NavItem[] = [
     { label: 'Home', to: '/app', icon: House, end: true },
@@ -126,6 +129,25 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
         <Compass aria-hidden />
         Take the tour
       </button>
+      {user ? (
+        <div className="side-nav__account">
+          <span className="side-nav__user" title={user.email}>
+            {user.name}
+          </span>
+          <button
+            type="button"
+            className="side-nav__link side-nav__button"
+            onClick={() => {
+              onNavigate?.()
+              startNew()
+              void signOut()
+            }}
+          >
+            <LogOut aria-hidden />
+            Sign out
+          </button>
+        </div>
+      ) : null}
       <Link to="/" className="side-nav__site" onClick={onNavigate}>
         Back to website
         <ArrowUpRight aria-hidden />

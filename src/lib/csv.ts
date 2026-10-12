@@ -1,4 +1,5 @@
-import { emptyProperty, type PropertyData } from '../types'
+import { emptyProperty, type PropertyData, type PropertyType } from '../types'
+import { propertyTypeOptions } from './content-options'
 
 /** Minimal RFC 4180 parser: commas, quoted fields, escaped quotes, CRLF/LF. */
 export function parseCsv(text: string): string[][] {
@@ -42,6 +43,9 @@ export function parseCsv(text: string): string[][] {
 const HEADER_MAP: Record<string, keyof PropertyData> = {
   title: 'title',
   'listing title': 'title',
+  type: 'propertyType',
+  property_type: 'propertyType',
+  'property type': 'propertyType',
   price: 'price',
   location: 'location',
   suburb: 'location',
@@ -65,7 +69,7 @@ const HEADER_MAP: Record<string, keyof PropertyData> = {
   notes: 'agentNotes',
 }
 
-export const CSV_COLUMNS = 'title, location, price, address, bedrooms, bathrooms, parking, land_size, interior_size, features, amenities, agent_notes'
+export const CSV_COLUMNS = 'title, location, property_type, price, address, bedrooms, bathrooms, parking, land_size, interior_size, features, amenities, agent_notes'
 
 /**
  * Turns pasted CSV (first row = headers) into property records. Unknown columns are
@@ -80,7 +84,13 @@ export function propertiesFromCsv(text: string): { properties: PropertyData[]; i
     const p = emptyProperty()
     cells.forEach((value, i) => {
       const key = keys[i]
-      if (key && key !== 'imageFileName' && key !== 'imagePath') p[key] = value.trim()
+      if (key === 'propertyType') {
+        // Unknown types are left blank rather than sent (the API would reject them).
+        const type = value.trim().toLowerCase()
+        p.propertyType = propertyTypeOptions.some((o) => o.value === type) ? (type as PropertyType) : ''
+      } else if (key && key !== 'imageFileName' && key !== 'imagePath') {
+        p[key] = value.trim()
+      }
     })
     return p
   })

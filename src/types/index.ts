@@ -7,8 +7,22 @@ export type LengthOption = 'short' | 'medium' | 'long' | 'extended'
 /** Extra formats written alongside the four core channels (streaming endpoint). */
 export type ExtraFormat = 'headlines' | 'facebook_ad' | 'sms' | 'flyer' | 'seo'
 
+export type SocialPlatform = 'instagram' | 'facebook' | 'linkedin'
+
+export type PropertyType =
+  | ''
+  | 'house'
+  | 'apartment'
+  | 'townhouse'
+  | 'unit'
+  | 'villa'
+  | 'land'
+  | 'acreage'
+  | 'other'
+
 export interface PropertyData {
   title: string
+  propertyType: PropertyType
   price: string
   location: string
   address: string
@@ -29,6 +43,8 @@ export interface ContentSettings {
   tone: Tone
   length: LengthOption
   keywords: string
+  /** Which social network the social post is written for (style + character limit). */
+  platform: SocialPlatform
   extraFormats: ExtraFormat[]
   /** How many versions of each core channel to write (1–3). */
   variations: 1 | 2 | 3
@@ -46,6 +62,8 @@ export interface GenerationMeta {
   durationMs: number
   engine: 'ai' | 'partial' | 'template'
   model?: string
+  /** Which engine wrote each channel, when the server reported it. */
+  sources?: Partial<Record<keyof GeneratedBundle, 'ai' | 'template'>>
 }
 
 export interface VersionEntry {
@@ -56,6 +74,7 @@ export interface VersionEntry {
 
 export const emptyProperty = (): PropertyData => ({
   title: '',
+  propertyType: '',
   price: '',
   location: '',
   address: '',
@@ -76,6 +95,7 @@ export const defaultSettings = (): ContentSettings => ({
   tone: 'formal',
   length: 'medium',
   keywords: '',
+  platform: 'instagram',
   extraFormats: [],
   variations: 1,
 })

@@ -1,4 +1,12 @@
-import type { ContentType, ExtraFormat, GeneratedBundle, LengthOption, Tone } from '../types'
+import type {
+  ContentType,
+  ExtraFormat,
+  GeneratedBundle,
+  LengthOption,
+  PropertyType,
+  SocialPlatform,
+  Tone,
+} from '../types'
 
 export const CHANNELS: (keyof GeneratedBundle)[] = ['listing', 'social', 'email', 'video']
 
@@ -18,7 +26,7 @@ export const contentTypeOptions: { value: ContentType; label: string; descriptio
   {
     value: 'social',
     label: 'Social media post',
-    description: 'A short, scroll-stopping post with hashtags for Instagram or Facebook.',
+    description: 'A post for Instagram, Facebook or LinkedIn, within the platform’s limit.',
   },
   {
     value: 'email',
@@ -42,10 +50,35 @@ export const toneOptions: { value: Tone; label: string; description: string }[] 
 ]
 
 export const lengthOptions: { value: LengthOption; label: string; description: string }[] = [
-  { value: 'short', label: 'Short', description: 'Key facts only' },
-  { value: 'medium', label: 'Medium', description: 'Balanced detail' },
-  { value: 'long', label: 'Long', description: 'Full story' },
-  { value: 'extended', label: 'Extra long', description: 'In-depth, 400+ words' },
+  { value: 'short', label: 'Short', description: 'Key facts · listing ~80–120 words' },
+  { value: 'medium', label: 'Medium', description: 'Balanced · listing ~150–220 words' },
+  { value: 'long', label: 'Long', description: 'Full story · listing ~230–300 words' },
+  { value: 'extended', label: 'Extra long', description: 'In-depth · 400+ words' },
+]
+
+export const platformOptions: { value: SocialPlatform; label: string; description: string }[] = [
+  { value: 'instagram', label: 'Instagram', description: 'Caption with emojis and up to 10 hashtags.' },
+  { value: 'facebook', label: 'Facebook', description: 'Conversational, clear call to action, few hashtags.' },
+  { value: 'linkedin', label: 'LinkedIn', description: 'Professional, no emojis, few hashtags.' },
+]
+
+/** Matches PLATFORM_CHAR_LIMITS in backend/models.py. */
+export const PLATFORM_CHAR_LIMITS: Record<SocialPlatform, number> = {
+  instagram: 2200,
+  facebook: 500,
+  linkedin: 1300,
+}
+
+export const propertyTypeOptions: { value: PropertyType; label: string }[] = [
+  { value: '', label: 'Not specified' },
+  { value: 'house', label: 'House' },
+  { value: 'apartment', label: 'Apartment' },
+  { value: 'townhouse', label: 'Townhouse' },
+  { value: 'unit', label: 'Unit' },
+  { value: 'villa', label: 'Villa' },
+  { value: 'land', label: 'Land' },
+  { value: 'acreage', label: 'Acreage' },
+  { value: 'other', label: 'Other' },
 ]
 
 export const extraFormatOptions: { value: ExtraFormat; label: string; description: string }[] = [
@@ -80,3 +113,5 @@ const lookup = <T extends string>(list: { value: T; label: string }[]) => (v: st
 export const toneLabel = lookup(toneOptions)
 export const lengthLabel = lookup(lengthOptions)
 export const contentTypeLabel = lookup(contentTypeOptions)
+export const platformLabel = lookup(platformOptions)
+export const propertyTypeLabel = lookup(propertyTypeOptions)

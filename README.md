@@ -1,383 +1,233 @@
 # REM Content Studio
 
-AI-powered real estate marketing content generator. Enter structured property data and produce listing copy, social posts, email newsletters, and video walk-through scripts across six tones and three length settings.
+AI-powered real estate marketing content generator (ITSU3009 Project 2, Tech Adaptive).
+Agents sign in, enter structured property details, and an open-weight LLM (Mistral 7B
+Instruct via Ollama) writes a listing description, a social post for Instagram, Facebook
+or LinkedIn, an email newsletter and a video walkthrough script in one of six tones and
+four lengths. Copy can be edited, refined, saved to a private library and exported as
+TXT, PDF or DOCX.
 
 ---
 
-## Quick start
+## Quick start (local, Apple Silicon or any machine with Ollama)
 
-### Option 1 — Docker (recommended)
-
-```bash
-docker-compose up --build
-```
-
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:8000
-- The SQLite database (`backend/propcopy.db`) is mounted as a volume and persists between restarts.
-
-### Option 2 — Manual (two terminals)
-
-**Terminal 1 — backend**
+Prerequisites: Python 3.9+, Node 20+, [Ollama](https://ollama.com).
 
 ```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
-```
-
-**Terminal 2 — frontend**
-
-```bash
+# once
+ollama pull mistral                      # ~4.4 GB, Mistral 7B Instruct Q4_K_M
+cd backend && python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt && cd ..
 npm install
+
+# every time
+scripts/run-local.sh                     # starts Ollama (4 parallel), the API and the web app
+```
+
+Open **http://localhost:5173**, choose **Create an account**, and start with
+**Create content**. The first account created also takes ownership of any records
+saved before accounts existed.
+
+Manual alternative (three terminals):
+
+```bash
+OLLAMA_NUM_PARALLEL=4 ollama serve
+cd backend && LLM_STREAM_CONCURRENCY=4 .venv/bin/uvicorn main:app --port 8000
 npm run dev
 ```
 
-Frontend runs at http://localhost:5173. Vite proxies `/api` requests to `http://localhost:8000` automatically.
+### Docker
+
+```bash
+OLLAMA_NUM_PARALLEL=4 ollama serve        # on the host; the container calls it
+docker compose up --build
+```
+
+The backend container reaches Ollama on the host through `host.docker.internal`.
+Docker was not available on the machine used for the audit, so this path is untested.
 
 ---
 
-## Workflow
+## Using the app
 
-| Step | Page | Description |
-|------|------|-------------|
-| 1 | `/property` | Enter structured property data |
-| 2 | `/settings` | Choose content type, tone, length, and keywords |
-| 3 | `/generated` | Review all four generated channels |
-| 4 | `/edit` | Refine copy with tone/persuasion/length controls |
-| 5 | `/export` | Copy, download (TXT/PDF/DOCX), or save to library |
-| — | `/library` | Browse and view all previously saved outputs |
+| Step | Page | What happens |
+|---|---|---|
+| — | `/login` | Sign in or create an account. Every page under `/app` requires it. |
+| 1 | `/app/property` | Property details: title*, location*, property type, price, address, bedrooms, bathrooms, parking, land/interior size, features, amenities, agent notes, photo (JPG/PNG/WebP ≤ 5 MB). Bedrooms/bathrooms must be numbers (2.5 allowed). |
+| 2 | `/app/settings` | Focus channel, tone (formal, friendly, casual, promotional, luxury, concise), social platform (Instagram 2,200 / Facebook 500 / LinkedIn 1,300 characters), length (short, medium, long, extra long), keywords, 1–3 versions, extra formats. |
+| 3 | `/app/generated` | Copy streams in live, channel by channel. Badges show the engine ("AI · mistral", "Partly AI", "Template fallback"), time taken, and a "Template" mark on any channel the model didn't finish. |
+| 4 | `/app/edit` | Edit directly or use Improve tone / More persuasive / Shorten. Edits are saved to the library automatically. |
+| 5 | `/app/export` | Copy, or download TXT, PDF or DOCX. |
+| — | `/app/library` | Private list of your content with search, filters (type, tone, engine, date) and stats. "Open in editor" restores the exact property details and settings, so Regenerate reuses them. |
+
+Listing length targets: short ~80–120 words, medium ~150–220, long ~230–300,
+extra long 400+. Medium and long meet the 150–300-word requirement for SEO listings.
+
+### Troubleshooting
+
+| Symptom | Cause / fix |
+|---|---|
+| "Template fallback" badge | Ollama isn't running or the model isn't pulled: `ollama serve`, `ollama pull mistral`. |
+| Generation takes ~45 s instead of ~20 s | Ollama is serving one request at a time. Restart it with `OLLAMA_NUM_PARALLEL=4` and set `LLM_STREAM_CONCURRENCY=4` for the API. |
+| Sent back to sign-in | Sessions last 7 days (`SESSION_DAYS`); signing out ends the session on the server. |
+| "Edits not saved" badge | The API was unreachable when saving; your edits stay in the page and are retried on the next change. |
 
 ---
 
 ## API reference
 
-Base URL: `http://localhost:8000`
+Base URL `http://localhost:8000`. Every route except `GET /api/health`,
+`POST /api/auth/register` and `POST /api/auth/login` needs
+`Authorization: Bearer <token>`; without it the API returns `401`. Records belonging to
+another account return `404`.
 
-### `POST /api/generate`
+| Method & path | Purpose |
+|---|---|
+| `POST /api/auth/register` | `{name, email, password(≥8)}` → `{token, user}` (201; 409 if the email exists) |
+| `POST /api/auth/login` | `{email, password}` → `{token, user}` (401 on bad credentials) |
+| `POST /api/auth/logout` | Ends the current session (204) |
+| `GET /api/auth/me` | Current user |
+| `POST /api/generate` | Generate all four channels and save → `{id, bundle, model_used, generation_time_ms, channel_sources}` |
+| `POST /api/generate/stream` | Same input plus `extra_formats`, `variations`; newline-delimited JSON events (`start`, `delta`, `job_done`, `done`, `error`) |
+| `GET /api/library` | Your saved records, newest first |
+| `GET /api/library/{id}` | One record with `property` facts, `length`, `platform`, `keywords`, `bundle`, `channel_sources`, `extras`, `variants`, `created_at`, `updated_at` |
+| `PUT /api/library/{id}` | Save edited copy `{bundle, extras}` |
+| `DELETE /api/library/{id}` | Delete (204) |
+| `GET /api/stats` | Totals, this week, by type, by tone, recent (your records only) |
+| `POST /api/refine/{tone,persuasive,shorten}` | Rule-based refinements of one channel |
+| `POST /api/upload-image` | Multipart `file`; real JPG/PNG/WebP only, ≤ 5 MB → `{path}` |
+| `POST /api/export` | `{bundle, format: txt|pdf|docx, title, tone, extras}` → file download |
 
-Generate content for all four channels and save to the library.
+Generate request body (snake_case): `title`*, `location`*, `property_type`
+(`house|apartment|townhouse|unit|villa|land|acreage|other`), `price`, `address`,
+`bedrooms`, `bathrooms`, `parking`, `land_size`, `interior_size`, `features`,
+`amenities`, `agent_notes`, `image_path`, `content_type`, `tone`, `length`,
+`keywords`, `platform`.
 
-**Request body**
-
-```json
-{
-  "title": "Sunlit 3-Bed Terrace with City Views",
-  "price": "$1,250,000",
-  "location": "Richmond, VIC",
-  "address": "42 Hawthorn Grove, Richmond VIC 3121",
-  "bedrooms": "3",
-  "bathrooms": "2",
-  "parking": "2",
-  "land_size": "320 m²",
-  "interior_size": "142 m²",
-  "features": "North-facing living, engineered oak floors, SMEG kitchen",
-  "amenities": "Split AC, NBN, security intercom",
-  "agent_notes": "Vendor motivated; flexible settlement.",
-  "content_type": "listing",
-  "tone": "formal",
-  "length": "medium",
-  "keywords": "north-facing, walk to schools"
-}
-```
-
-**Tone options:** `formal` | `casual` | `promotional` | `luxury` | `concise` | `friendly`
-
-**Length options:** `short` | `medium` | `long`
-
-**Response**
-
-```json
-{
-  "id": 1,
-  "bundle": {
-    "listing": "We are pleased to present…",
-    "social": "Now available: …",
-    "email": "Subject: Property Opportunity: …\n\nDear Client,\n…",
-    "video": "[Scene 1 — Introduction]\n…"
-  },
-  "model_used": "template",
-  "generation_time_ms": 2
-}
-```
-
-`model_used` is `"template"` when `USE_LLM=false` or every channel fell back,
-the model name (e.g. `"mistralai/Mistral-7B-Instruct-v0.2"`) when every
-channel used the LLM successfully, or `"<model name> (partial)"` when only
-some channels did. See "AI content generation" below.
+`model_used` is `"mistral"` when every channel came from the model,
+`"mistral (partial)"` when some fell back, and `"template"` when none did;
+`channel_sources` says which, per channel.
 
 ---
 
-### `GET /api/library`
+## Data model
 
-Return all saved outputs, newest first.
+SQLite (`backend/propcopy.db`, created and migrated on startup — see `database.py`):
 
-**Response** — array of:
-
-```json
-{
-  "id": 1,
-  "title": "Sunlit 3-Bed Terrace with City Views",
-  "location": "Richmond, VIC",
-  "content_type": "listing",
-  "tone": "formal",
-  "preview": "We are pleased to present Sunlit 3-Bed…",
-  "model_used": "template",
-  "generation_time_ms": 2,
-  "created_at": "2024-01-15 10:32:11"
-}
 ```
+users ──< sessions
+users ──< properties ──< generated_outputs >── content_types
+                                           >── tones
+```
+
+- `users`: name, email (unique), PBKDF2-SHA256 password hash (600k iterations), role, created_at
+- `sessions`: SHA-256 of the bearer token, user, expiry
+- `content_types`, `tones`: seeded lookup tables
+- `properties`: every input fact, owner
+- `generated_outputs`: owner, property, content type, tone, length, platform, keywords,
+  bundle JSON (channels, extras, variants), model_used, generation_time_ms,
+  channel_sources, created_at, updated_at
+
+Project 1 databases are migrated in place: missing tables/columns are added, each old
+record gets lookup ids and a property row, and the first registered account claims them.
 
 ---
 
-### `GET /api/library/{id}`
+## AI generation
 
-Return the full content bundle for one saved record.
-
-**Response**
-
-```json
-{
-  "id": 1,
-  "title": "Sunlit 3-Bed Terrace with City Views",
-  "location": "Richmond, VIC",
-  "content_type": "listing",
-  "tone": "formal",
-  "bundle": { "listing": "…", "social": "…", "email": "…", "video": "…" },
-  "model_used": "template",
-  "generation_time_ms": 2,
-  "created_at": "2024-01-15 10:32:11"
-}
 ```
+GenerateRequest ─► generator.generate_bundle()        template copy (always succeeds; fallback only)
+                ─► prompts.build_prompt(channel)       grounded LangChain prompt per channel
+                ─► ai_service.factory.get_backend()   Ollama (default) | Transformers | remote HTTP
+                ─► orchestrator / streaming           4 channels in parallel, one shared deadline;
+                                                      failed/late channels keep template text
+                ─► postprocess.clean_channel()        removes [placeholder] lines, fits social limit
+```
+
+Grounding: prompts list only supplied facts and tell the model not to describe
+anything else (appliances, gardens, views, nearby schools/shops…), to include price,
+location, bedrooms and bathrooms with digits, and never to use placeholders.
+Ollama runs at temperature 0.3 (`LLM_TEMPERATURE`).
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `USE_LLM` | `true` | `false` forces template-only output (tests/offline) |
+| `LLM_BACKEND` | `ollama` | `ollama`, `local_transformers` or `remote_http` |
+| `LLM_MODEL_NAME` | `mistral` for Ollama | Ollama tag or Hugging Face id |
+| `LLM_OLLAMA_URL` | `http://localhost:11434` | Ollama server |
+| `LLM_TIMEOUT_SECONDS` | `180` | Shared deadline for the 4 channels (`/api/generate`) and Ollama HTTP timeout |
+| `LLM_STREAM_TIMEOUT_SECONDS` | `300` | Deadline for a streaming run |
+| `LLM_STREAM_CONCURRENCY` | `1` for Ollama | Set to `4` when Ollama runs with `OLLAMA_NUM_PARALLEL=4` |
+| `LLM_TEMPERATURE` | `0.3` | Sampling temperature (Ollama) |
+| `LLM_SERVICE_URL` | — | `remote_http` only (e.g. Colab ngrok URL) |
+| `LLM_LOAD_IN_4BIT` | `false` | `local_transformers` on CUDA only |
+| `SESSION_DAYS` | `7` | Login session lifetime |
+| `CORS_ORIGINS` | localhost:5173 + Amplify URL | Comma-separated allowed origins |
+
+The Transformers and remote-HTTP backends (`ai_service/`, `colab_notebook.ipynb`)
+remain for GPU machines but have only been tested with stubs; Ollama is the backend
+used and measured. See `audit/AUDIT_REPORT.md` for the design change rationale.
+
+Measured on an Apple M5 (17 GB), Mistral 7B Q4_K_M, warm model, 4 channels, medium:
+~45 s with Ollama serving one request at a time; **~20 s** with
+`OLLAMA_NUM_PARALLEL=4`. In the UI the first text appears within a few seconds.
 
 ---
 
-### `DELETE /api/library/{id}`
+## Tests, lint and evaluation
 
-Delete a saved record. Returns `204 No Content`.
-
----
-
-### `POST /api/export`
-
-Generate a downloadable file. Returns a binary file with `Content-Disposition: attachment`.
-
-**Request body**
-
-```json
-{
-  "bundle": {
-    "listing": "…",
-    "social": "…",
-    "email": "…",
-    "video": "…"
-  },
-  "format": "pdf",
-  "title": "Sunlit 3-Bed Terrace",
-  "tone": "formal"
-}
+```bash
+cd backend
+.venv/bin/python -m pytest          # 97 tests; no model or GPU needed (stub backends)
+.venv/bin/ruff check .              # PEP 8 style, pyflakes, import order
+cd .. && npx eslint . && npm run build
 ```
 
-**Format options:** `txt` | `pdf` | `docx`
+```bash
+cd backend
+USE_LLM=false EVAL_OUTPUT=eval_template.csv .venv/bin/python evaluate.py   # template baseline
+USE_LLM=true  EVAL_OUTPUT=eval_llm.csv      .venv/bin/python evaluate.py   # real model
+```
+
+`evaluate.py` runs 10 synthetic properties once each (all four channels) and scores
+each channel: facts present (digits or words), contradicted bed/bath counts,
+unsupported-amenity terms, placeholders, word range, Flesch reading ease, source and
+timing. Human ratings of tone and relevance are not automated.
 
 ---
 
 ## Project structure
 
 ```
-.
-├── backend/
-│   ├── main.py             # FastAPI app and routes
-│   ├── generator.py        # Template-based content generation engine (Project 1, unchanged)
-│   ├── orchestrator.py     # LLM Orchestration Module — tries the AI backend, falls back to templates
-│   ├── prompts.py          # Prompt Engineering Module — LangChain PromptTemplates per content type
-│   ├── ai_service/         # AI service abstraction (Transformers / remote HTTP / Ollama backends)
-│   │   ├── interface.py
-│   │   ├── local_transformers_backend.py
-│   │   ├── remote_http_backend.py
-│   │   ├── ollama_backend.py    # For laptops with no CUDA GPU (e.g. Apple Silicon)
-│   │   ├── factory.py
-│   │   ├── service_app.py       # Standalone FastAPI inference service (POST /generate)
-│   │   └── colab_notebook.ipynb # Runs service_app.py on a Colab GPU
-│   ├── evaluate.py         # Template vs LLM evaluation script -> evaluate_results.csv
-│   ├── tests/               # pytest suite (prompts, orchestrator fallback, evaluation checks)
-│   ├── models.py           # Pydantic request/response models
-│   ├── database.py         # SQLite helpers (propcopy.db)
-│   ├── export_utils.py     # TXT / PDF / DOCX file builders
-│   ├── requirements.txt
-│   ├── requirements-llm.txt # torch/transformers/accelerate/bitsandbytes — only for local_transformers
-│   └── Dockerfile
-├── src/
-│   ├── context/            # React context + AppProvider (calls real API)
-│   ├── lib/
-│   │   ├── api.ts          # Typed fetch wrappers for all endpoints
-│   │   └── mockGenerator.ts  # Local edit refinements (improve/shorten)
-│   ├── pages/
-│   │   ├── Library.tsx     # Output library browser
-│   │   └── …               # Other workflow pages
-│   └── types/index.ts      # Shared TypeScript types
-├── docker-compose.yml
-└── vite.config.ts          # Proxy: /api → backend
+backend/
+  main.py            FastAPI routes (auth-protected)
+  auth.py            password hashing, sessions, current_user dependency
+  database.py        schema, migration, per-user queries
+  models.py          request/response models and validation
+  prompts.py         grounded LangChain prompts (channel × tone × length × platform)
+  orchestrator.py    parallel generation with shared deadline and per-channel fallback
+  streaming.py       live NDJSON generation used by the UI
+  postprocess.py     placeholder removal, social character limits
+  generator.py       template engine (fallback) and rule-based refinements
+  extras.py          headlines, Facebook ad, SMS, flyer, SEO
+  export_utils.py    TXT / PDF / DOCX
+  evaluate.py        template vs model evaluation
+  ai_service/        Ollama, Transformers and remote-HTTP backends
+  tests/
+src/
+  pages/             Login, PropertyInput, ContentSettings, GeneratedContent, EditReview, Export, Library, Batch…
+  context/           AuthProvider, AppProvider (workspace state, autosave, reload restore)
+  lib/api.ts         typed API client (adds the bearer token)
+audit/               requirements audit, evidence and re-test results
+scripts/run-local.sh one-command local start
 ```
 
----
+## Known limitations
 
-## AI content generation (Project 2)
-
-All marketing content is generated by a real open-source LLM — by default
-Mistral 7B running locally through Ollama (`ollama serve` + `ollama pull mistral`).
-`orchestrator.py` sends each of the 4 channels to the model and returns its
-output. Project 1's template engine (`generator.py`) is kept only as a
-**safety net**: if the model is unreachable, errors, or times out on a channel,
-that channel falls back to template text so a request never fails, and the UI
-badge shows "Template fallback". `USE_LLM=false` forces template-only output
-(used by the tests).
-
-### How it fits together
-
-```
-GenerateRequest
-      │
-      ▼
-generator.generate_bundle()   ──────────────► template bundle (always succeeds)
-      │
-      ▼ (only if USE_LLM=true)
-prompts.build_prompt(channel) ──► one grounded prompt per content type
-      │
-      ▼
-ai_service.factory.get_backend() ──► LocalTransformersBackend | RemoteHTTPBackend | OllamaBackend
-      │                                (runs a model here)   (calls another    (calls a local
-      │                                                        machine's       `ollama serve`)
-      │                                                        /generate)
-      ▼
-orchestrator runs all 4 channels concurrently, each with its own
-LLM_TIMEOUT_SECONDS budget; a channel that errors/times out keeps its
-template text. Returns (bundle, model_used, generation_time_ms).
-```
-
-### Environment variables
-
-| Variable | Default | Meaning |
-|---|---|---|
-| `USE_LLM` | `true` | `true` generates content with the LLM; `false` forces template-only output (tests/offline). |
-| `LLM_BACKEND` | `ollama` | `local_transformers` (load the model in this process with Transformers), `remote_http` (call another machine's inference service), or `ollama` (call a local `ollama serve` — best option for a laptop with no CUDA GPU, e.g. Apple Silicon Macs). |
-| `LLM_MODEL_NAME` | `mistralai/Mistral-7B-Instruct-v0.2` | Hugging Face model id for `local_transformers`/`remote_http`. For `ollama`, an Ollama model tag instead (e.g. `mistral`, `llama3`) — default `mistral`. For CPU-only Transformers, use a small model, e.g. `Qwen/Qwen2.5-0.5B-Instruct`. |
-| `LLM_LOAD_IN_4BIT` | `false` | `local_transformers` only, and only on a CUDA GPU — 4-bit quantisation via bitsandbytes. **Not supported on Apple Silicon / CPU**; use `ollama` there instead (it ships its own pre-quantised models). |
-| `LLM_SERVICE_URL` | _(empty)_ | `remote_http` only — base URL of a running `ai_service/service_app.py` (e.g. a Colab ngrok URL). Required when `LLM_BACKEND=remote_http`. |
-| `LLM_OLLAMA_URL` | `http://localhost:11434` | `ollama` only — base URL of a running `ollama serve`. |
-| `LLM_TIMEOUT_SECONDS` | `180` | Per-channel timeout before falling back to the template for that channel. |
-
-### Running the AI inference service
-
-**On a laptop with no CUDA GPU (e.g. an Apple Silicon MacBook) — Ollama:**
-
-`bitsandbytes` (used for 4-bit quantisation) is CUDA-only, so it doesn't work
-on Apple Silicon or plain CPU. [Ollama](https://ollama.com) sidesteps that
-entirely by shipping its own pre-quantised models and running them with Metal
-acceleration on Mac (or CPU/CUDA elsewhere) — no `torch`/`transformers`
-install needed on this side at all.
-
-```bash
-brew install ollama          # or see https://ollama.com/download
-ollama pull mistral          # downloads a 4-bit-quantised Mistral-7B-Instruct (~4GB)
-# ollama serve starts automatically after install; if not: `ollama serve`
-```
-
-Then point the main backend at it — this is the whole setup, no GPU/CUDA config needed:
-
-```bash
-cd backend
-pip install -r requirements.txt   # no requirements-llm.txt needed for Ollama
-USE_LLM=true LLM_BACKEND=ollama LLM_MODEL_NAME=mistral \
-    uvicorn main:app --reload --port 8000
-```
-
-Swap `LLM_MODEL_NAME=llama3` (after `ollama pull llama3`) to use Llama-3
-instead. `LLM_OLLAMA_URL` defaults to `http://localhost:11434`; only set it
-if Ollama is running on a different host/port.
-
-**Locally with Transformers (small model, CPU is fine for testing the wiring):**
-
-```bash
-cd backend
-pip install -r requirements.txt -r requirements-llm.txt
-LLM_MODEL_NAME=Qwen/Qwen2.5-0.5B-Instruct \
-    uvicorn ai_service.service_app:app --host 0.0.0.0 --port 9000
-```
-
-Then point the main backend at it:
-
-```bash
-USE_LLM=true LLM_BACKEND=remote_http LLM_SERVICE_URL=http://localhost:9000 \
-    uvicorn main:app --reload --port 8000
-```
-
-**On Google Colab (real GPU, Mistral-7B-Instruct or Llama-3-8B-Instruct):**
-
-1. Open `backend/ai_service/colab_notebook.ipynb` in Colab.
-2. Runtime → Change runtime type → GPU.
-3. Run the cells in order: clone the repo, install `requirements.txt` +
-   `requirements-llm.txt` + `pyngrok`, set `LLM_MODEL_NAME` /
-   `LLM_LOAD_IN_4BIT`, start `ai_service.service_app` in the background, wait
-   for `/health` to report `"ok"`, then open an ngrok tunnel (needs a free
-   ngrok auth token — https://dashboard.ngrok.com/get-started/your-authtoken).
-4. Copy the printed URL and set it on whichever machine runs the main
-   backend: `LLM_BACKEND=remote_http`, `LLM_SERVICE_URL=<that URL>`, `USE_LLM=true`.
-5. Llama-3 models are gated on Hugging Face — log in with
-   `huggingface_hub.login("hf_...")` in the notebook first.
-
-### Running the tests
-
-```bash
-cd backend
-pip install -r requirements.txt   # includes pytest, langchain-core, httpx
-pytest tests/ -v
-```
-
-All 25 tests use a stub `AIBackend` (or a mocked HTTP call for
-`OllamaBackend`) — none of them download a model or need a GPU, so they run
-the same everywhere.
-
-### Running the evaluation
-
-```bash
-cd backend
-python evaluate.py                        # template path only (works anywhere)
-USE_LLM=true LLM_BACKEND=remote_http LLM_SERVICE_URL=<url> python evaluate.py  # + real LLM path
-```
-
-Runs 10 sample properties × 4 content types through `generate_with_fallback()`,
-checks factual accuracy (supplied price/location/bedrooms/bathrooms present,
-no invented bed/bath counts), word-count bounds per content type, and a
-Flesch reading-ease score. Writes `backend/evaluate_results.csv` and prints a
-pass-rate summary split by `model_used` (`template` vs the real model name).
-
-### Known limitations / not implemented
-
-- **No real LLM inference has been run in the development environment used to
-  build this feature** — it has no GPU, and its network policy blocks
-  `huggingface.co` outright (confirmed with a direct connectivity test), so
-  even a tiny model download isn't possible there. The AI service, prompts,
-  and orchestration/fallback logic are implemented and tested against a stub
-  backend and a mocked HTTP call (`OllamaBackend`). Running an actual model
-  requires either Colab (see above, best for a real GPU), a machine with its
-  own CUDA GPU, or — the easiest path on a laptop with no CUDA GPU, e.g. an
-  Apple Silicon MacBook — Ollama (`LLM_BACKEND=ollama`, see above).
-- Login/authentication — not implemented.
-- User / ContentType / Tone lookup tables — content types and tones stay as
-  fixed enums (`models.py`), not database-backed lookup tables.
-- AWS S3 — uploaded images are stored on local disk (`backend/uploads/`), unchanged from Project 1.
-- Live dashboard data — the Library page's stats are the same simple SQL aggregates as Project 1; no real-time/streaming dashboard.
-- Image analysis — uploaded property images are stored but never inspected by the AI backend; prompts do not reference image content.
-- The evaluation script's factual-accuracy check is a simple substring/regex heuristic, not a full NLP fact-checker — it catches obvious hallucinated bedroom/bathroom counts and missing required facts, not every possible inaccuracy.
-- The template engine's `listing` content type does not print the `price` field at all (a pre-existing Project 1 behaviour, surfaced by `evaluate.py`'s factual-accuracy check — see `PROGRESS_LOG.md`). Not changed here to avoid touching tested Project 1 code outside this feature's scope.
-
----
-
-## Notes
-
-- Project 1's deterministic template engine (`generator.py`) is unchanged and remains the fallback for every request; see "AI content generation" above for how the LLM path layers on top of it.
-- The frontend `mockGenerator.ts` is still used for the **Edit & Review** in-session refinements (improve tone / make persuasive / shorten). These run locally with no network call.
-- The SQLite file lives at `backend/propcopy.db` and is auto-created on first run.
+- Generation of all four channels takes ~20 s on an Apple M5 even with parallel
+  requests, above the 15 s target; a GPU host or a smaller model would be needed.
+- Real-model concurrency beyond one user, Docker, Firefox/Edge, uptime, SUS usability
+  scores and HTTPS deployment have not been measured.
+- The model can still occasionally add details that weren't supplied; review copy
+  before publishing (the evaluation reports how often).
+- Refinements (Improve tone, More persuasive, Shorten) are rule-based, not AI.
+- Images are stored on local disk (`backend/uploads/`), not S3, and are not analysed.

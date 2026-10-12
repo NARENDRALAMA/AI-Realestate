@@ -50,6 +50,7 @@ export function EditReview() {
     applyPersuasiveAll,
     applyShortenAll,
     finalizeEdits,
+    saveState,
   } = useApp()
   const navigate = useNavigate()
   const toast = useToast()
@@ -130,14 +131,14 @@ export function EditReview() {
       <PageHeader
         eyebrow="Step 4"
         title="Review and refine"
-        description="Edit the copy directly or use a quick refinement. Changes are kept until you regenerate."
+        description="Edit the copy directly or use a quick refinement. Your edits are saved to the library automatically."
         actions={
           <Button
             variant="primary"
             iconAfter={<ArrowRight aria-hidden />}
             onClick={() => {
               finalizeEdits(drafts)
-              toast.show('Edits saved for export')
+              toast.show(saveState === 'error' ? "Edits kept for export, but they couldn't be saved to the library" : 'Edits saved')
               navigate('/app/export')
             }}
           >

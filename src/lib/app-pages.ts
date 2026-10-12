@@ -5,6 +5,7 @@
  */
 export const pageLoaders = {
   AppShell: () => import('../components/layout/AppShell'),
+  Login: () => import('../pages/Login'),
   FlowLayout: () => import('../components/layout/FlowLayout'),
   Home: () => import('../pages/Home'),
   PropertyInput: () => import('../pages/PropertyInput'),

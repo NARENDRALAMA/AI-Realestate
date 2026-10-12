@@ -40,6 +40,7 @@ from pathlib import Path
 
 from models import GenerateRequest
 from orchestrator import generate_with_sources
+from postprocess import NUMBER_WORDS, UNSUPPORTED_TERMS
 
 _CONTENT_TYPES = ["listing", "social", "email", "video"]
 
@@ -61,22 +62,8 @@ _LENGTH_WORD_RANGE = {
 # Write somewhere else (EVAL_OUTPUT=...) to keep a previous run, e.g. the template baseline.
 _OUTPUT_CSV = Path(os.environ.get("EVAL_OUTPUT", Path(__file__).parent / "evaluate_results.csv"))
 
-_NUMBER_WORDS = {
-    "1": "one", "2": "two", "3": "three", "4": "four", "5": "five",
-    "6": "six", "7": "seven", "8": "eight", "9": "nine", "10": "ten",
-}
+_NUMBER_WORDS = NUMBER_WORDS
 
-# Things models (and old templates) tend to claim without being told. A term counts
-# as unsupported when it appears in the copy but nowhere in the supplied facts.
-UNSUPPORTED_TERMS = [
-    "school", "transport", "train", "tram", "shop", "cafe", "café", "restaurant",
-    "appliance", "landscap", "dishwasher", "air condition", "natural light",
-    "storage", "ensuite", "balcony", "garden", "pool", "gym", "views", "beach",
-]
-
-# 10 synthetic sample properties covering a spread of locations, sizes, and
-# missing-field combinations (e.g. some have no price, to check we don't
-# invent one).
 SAMPLE_PROPERTIES: list[dict] = [
     dict(title="Sunlit 3-Bed Terrace", price="$1,250,000", location="Richmond, VIC",
          bedrooms="3", bathrooms="2", parking="2", land_size="320 m²", interior_size="142 m²",

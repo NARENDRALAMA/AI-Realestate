@@ -39,6 +39,7 @@ import {
   fetchLibrary,
   fetchLibraryItem,
   fetchStats,
+  propertyFromStored,
   type LibraryDetail,
   type LibraryItem,
 } from '../lib/api'
@@ -463,14 +464,25 @@ export function Library() {
                   variant="primary"
                   onClick={() => {
                     const d = detail.detail
+                    // Restore the exact facts and settings it was generated from, so
+                    // regenerating reuses them instead of a title and suburb only.
                     openResult(
-                      { ...emptyProperty(), title: d.title, location: d.location },
-                      { ...defaultSettings(), tone: d.tone as Tone, contentType: d.content_type as ContentType },
+                      d.property ? propertyFromStored(d.property) : { ...emptyProperty(), title: d.title, location: d.location },
+                      {
+                        ...defaultSettings(),
+                        tone: d.tone as Tone,
+                        contentType: d.content_type as ContentType,
+                        length: d.length ?? 'medium',
+                        platform: d.platform ?? 'instagram',
+                        keywords: d.keywords ?? '',
+                        extraFormats: Object.keys(d.extras ?? {}) as ExtraFormat[],
+                      },
                       {
                         id: d.id,
                         bundle: d.bundle,
                         model_used: d.model_used,
                         generation_time_ms: d.generation_time_ms,
+                        channel_sources: d.channel_sources,
                         extras: d.extras ?? {},
                         variants: d.variants ?? {},
                       },

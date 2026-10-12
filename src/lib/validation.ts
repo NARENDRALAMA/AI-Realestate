@@ -2,7 +2,8 @@ import type { PropertyData } from '../types'
 
 export type PropertyErrors = Partial<Record<keyof PropertyData, string>>
 
-const NUMBER = /^\d+(\.\d+)?$/
+// Matches the backend: whole numbers, optionally with a half (2.5 bathrooms).
+const NUMBER = /^\d{1,2}(\.5)?$/
 
 /**
  * Client-side checks that mirror the backend: title and location are required.
@@ -18,6 +19,7 @@ export function validateProperty(p: PropertyData): PropertyErrors {
   if (p.bathrooms.trim() && !NUMBER.test(p.bathrooms.trim())) {
     errors.bathrooms = 'Use a number, like 2 or 2.5'
   }
+  if (/^\s*\$?\s*-/.test(p.price)) errors.price = "Price can't be negative"
   return errors
 }
 

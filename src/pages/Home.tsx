@@ -89,7 +89,9 @@ export function Home() {
         ) : (
           <>
             <div className="hero-card__text">
-              <h2 className="hero-card__title">Create your first listing content</h2>
+              <h2 className="hero-card__title">
+                {stats.data && stats.data.total > 0 ? 'Create new listing content' : 'Create your first listing content'}
+              </h2>
               <p className="text-muted">It takes about two minutes. You'll review everything before it's used.</p>
             </div>
             <div className="hero-card__actions" data-tour="home-start">

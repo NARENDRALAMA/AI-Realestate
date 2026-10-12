@@ -1,5 +1,6 @@
 import {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -8,14 +9,18 @@ import {
 import { sampleProperty } from '../data/sampleProperty'
 import {
   ApiError,
+  fetchLibraryItem,
   generateContent,
   generateContentStream,
+  propertyFromStored,
   refineContent,
   StreamUnsupportedError,
+  updateLibraryItem,
   type StreamEvent,
   type StreamResult,
 } from '../lib/api'
 import { CHANNELS } from '../lib/content-options'
+import { getToken } from '../lib/auth'
 import { engineFromModelUsed } from '../lib/engine'
 import type {
   ContentSettings,
@@ -30,18 +35,46 @@ import {
   emptyProperty,
 } from '../types'
 import { AppContext } from './app-context'
-import type { LiveGeneration } from './app-state'
+import type { LiveGeneration, SaveState } from './app-state'
 
+// The current property, settings and result id survive a page reload (this tab only).
+const WORKSPACE_KEY = 'rem.workspace'
+
+interface SavedWorkspace {
+  property: PropertyData
+  settings: ContentSettings
+  generationId: number | null
+}
+
+function readWorkspace(): SavedWorkspace | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = sessionStorage.getItem(WORKSPACE_KEY)
+    if (!raw) return null
+    const saved = JSON.parse(raw) as SavedWorkspace
+    return {
+      property: { ...emptyProperty(), ...saved.property, imageFileName: null },
+      settings: { ...defaultSettings(), ...saved.settings },
+      generationId: saved.generationId ?? null,
+    }
+  } catch {
+    return null
+  }
+}
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [property, setProperty] = useState<PropertyData>(emptyProperty())
-  const [settings, setSettings] = useState<ContentSettings>(defaultSettings())
+  const [restored] = useState(readWorkspace)
+  const [property, setProperty] = useState<PropertyData>(() => restored?.property ?? emptyProperty())
+  const [settings, setSettings] = useState<ContentSettings>(() => restored?.settings ?? defaultSettings())
   const [generated, setGenerated] = useState<GeneratedBundle | null>(null)
   const [drafts, setDrafts] = useState<GeneratedBundle | null>(null)
   const [versionHistory, setVersionHistory] = useState<VersionEntry[]>([])
   const [isGenerating, setIsGenerating] = useState(false)
   const [generationError, setGenerationError] = useState<string | null>(null)
   const [generationId, setGenerationId] = useState<number | null>(null)
+  const [saveState, setSaveState] = useState<SaveState>('idle')
+  // JSON of the copy last stored on the server, so unchanged drafts aren't re-saved.
+  const savedRef = useRef<string | null>(null)
   const [generationFieldErrors, setGenerationFieldErrors] = useState<Record<string, string>>({})
   const [generationStartedAt, setGenerationStartedAt] = useState<number | null>(null)
   const [generationMeta, setGenerationMeta] = useState<GenerationMeta | null>(null)
@@ -104,8 +137,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const applyResult = useCallback((result: StreamResult, fallbackMs: number) => {
     const bundle = result.bundle
-    setGenerationMeta(engineFromModelUsed(result.model_used, result.generation_time_ms ?? fallbackMs))
+    setGenerationMeta(
+      engineFromModelUsed(result.model_used, result.generation_time_ms ?? fallbackMs, result.channel_sources),
+    )
     setGenerationId(result.id)
+    savedRef.current = JSON.stringify(bundle)
+    setSaveState('idle')
     setGenerated(bundle)
     setDrafts(bundle)
     setExtras(result.extras ?? {})
@@ -199,13 +236,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setGenerationStopped(false)
       applyResult(result, result.generation_time_ms)
       setVersionHistory([
-        { id: crypto.randomUUID(), label: 'Opened from batch', at: new Date().toLocaleString() },
+        { id: crypto.randomUUID(), label: 'Opened saved content', at: new Date().toLocaleString() },
       ])
     },
     [applyResult],
   )
 
   const clearGenerated = useCallback(() => {
+    savedRef.current = null
+    setSaveState('idle')
     setGenerated(null)
     setDrafts(null)
     setGenerationError(null)
@@ -306,6 +345,66 @@ export function AppProvider({ children }: { children: ReactNode }) {
     pushVersion('Shorten · all channels')
   }, [drafts, property, settings, pushVersion])
 
+  // Remember the workspace for this tab so a reload doesn't lose it.
+  useEffect(() => {
+    try {
+      const { imageFileName: _file, ...rest } = property
+      void _file
+      sessionStorage.setItem(
+        WORKSPACE_KEY,
+        JSON.stringify({ property: rest, settings, generationId }),
+      )
+    } catch {
+      // storage unavailable: nothing to restore later
+    }
+  }, [property, settings, generationId])
+
+  // After a reload, reopen the last result from the library (including saved edits).
+  const restoreId = restored?.generationId ?? null
+  useEffect(() => {
+    if (restoreId === null || !getToken()) return
+    let cancelled = false
+    fetchLibraryItem(restoreId)
+      .then((d) => {
+        if (cancelled) return
+        setGenerated((g) => g ?? d.bundle)
+        setDrafts((cur) => cur ?? d.bundle)
+        setGenerationId((id) => id ?? d.id)
+        setGenerationMeta((m) => m ?? engineFromModelUsed(d.model_used, d.generation_time_ms, d.channel_sources))
+        setExtras((e) => (Object.keys(e).length ? e : d.extras ?? {}))
+        setVersions((v) =>
+          Object.keys(v).length
+            ? v
+            : (Object.fromEntries(CHANNELS.map((c) => [c, [d.bundle[c], ...(d.variants?.[c] ?? [])]])) as Partial<
+                Record<keyof GeneratedBundle, string[]>
+              >),
+        )
+        setProperty((p) => (p.title ? p : propertyFromStored(d.property)))
+        savedRef.current = JSON.stringify(d.bundle)
+      })
+      .catch(() => undefined) // deleted or not ours: start fresh
+    return () => {
+      cancelled = true
+    }
+  }, [restoreId])
+
+  // Save edits back to the library shortly after the user stops typing.
+  useEffect(() => {
+    if (!drafts || generationId === null || isGenerating) return
+    const json = JSON.stringify(drafts)
+    if (json === savedRef.current) return
+    setSaveState('saving')
+    const timer = window.setTimeout(() => {
+      updateLibraryItem(generationId, drafts, extras)
+        .then(() => {
+          savedRef.current = json
+          setSaveState('saved')
+        })
+        .catch(() => setSaveState('error'))
+    }, 800)
+    return () => window.clearTimeout(timer)
+  }, [drafts, extras, generationId, isGenerating])
+
   const value = useMemo(
     () => ({
       property,
@@ -316,6 +415,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       isGenerating,
       generationError,
       generationId,
+      saveState,
       generationFieldErrors,
       generationStartedAt,
       generationMeta,
@@ -353,6 +453,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       isGenerating,
       generationError,
       generationId,
+      saveState,
       generationFieldErrors,
       generationStartedAt,
       generationMeta,

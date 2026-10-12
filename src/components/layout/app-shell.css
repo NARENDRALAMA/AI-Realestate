@@ -286,3 +286,36 @@
   text-align: left;
   cursor: pointer;
 }
+
+/* ── Signed-in account ─────────────────────────────────────────────── */
+
+.side-nav__account {
+  margin-top: auto;
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+}
+
+.side-nav__account + .side-nav__site {
+  margin-top: 0;
+  padding-top: var(--space-3);
+}
+
+.side-nav__user {
+  display: block;
+  padding: 0 var(--space-3) var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 64rem) {
+  .sidebar .side-nav__account {
+    border-top-color: var(--color-ink-line);
+  }
+
+  .sidebar .side-nav__user {
+    color: var(--color-ink-muted);
+  }
+}

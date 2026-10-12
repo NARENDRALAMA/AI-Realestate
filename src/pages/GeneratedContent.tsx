@@ -50,6 +50,7 @@ export function GeneratedContent() {
     extras,
     versions,
     selectVersion,
+    saveState,
   } = useApp()
   const [tab, setTab] = useState<string>(settings.contentType)
   const [confirmOpen, setConfirmOpen] = useState(false)
@@ -172,9 +173,15 @@ export function GeneratedContent() {
         }
       >
         {generationMeta ? <EngineBadge meta={generationMeta} /> : null}
-        <Badge tone="success" icon={<CheckCircle2 aria-hidden />}>
-          Saved to library
-        </Badge>
+        {saveState === 'error' ? (
+          <Badge tone="danger" icon={<AlertCircle aria-hidden />}>
+            Edits not saved — check your connection
+          </Badge>
+        ) : (
+          <Badge tone="success" icon={<CheckCircle2 aria-hidden />}>
+            {saveState === 'saving' ? 'Saving edits…' : 'Saved to library'}
+          </Badge>
+        )}
         {hasEdits ? <Badge tone="primary">Showing your edits</Badge> : null}
       </PageHeader>
 
@@ -190,12 +197,20 @@ export function GeneratedContent() {
               ...CHANNELS.map((ch) => ({
                 id: ch as string,
                 label: channelLabels[ch],
-                meta:
-                  ch === settings.contentType ? (
-                    <Badge tone="accent" className="tab-badge">
-                      Focus
-                    </Badge>
-                  ) : undefined,
+                meta: (
+                  <>
+                    {ch === settings.contentType ? (
+                      <Badge tone="accent" className="tab-badge">
+                        Focus
+                      </Badge>
+                    ) : null}
+                    {generationMeta?.engine === 'partial' && generationMeta.sources?.[ch] === 'template' ? (
+                      <Badge tone="neutral" className="tab-badge">
+                        Template
+                      </Badge>
+                    ) : null}
+                  </>
+                ),
               })),
               ...extraKeys.map((fmt) => ({
                 id: `extra:${fmt}`,

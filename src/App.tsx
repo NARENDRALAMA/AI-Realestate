@@ -2,6 +2,8 @@ import { lazy, Suspense, type ComponentType, type ReactNode } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { domAnimation, LazyMotion, MotionConfig } from 'motion/react'
 import { AppProvider } from './context/AppProvider'
+import { AuthProvider } from './context/AuthProvider'
+import { RequireAuth } from './components/layout/RequireAuth'
 import { ToastProvider } from './components/ui/Toast'
 import { RouteFallback } from './components/layout/RouteFallback'
 import { LandingPage } from './landing/LandingPage'
@@ -12,6 +14,7 @@ const named = <K extends string>(loader: () => Promise<Record<K, ComponentType>>
   lazy(() => loader().then((mod) => ({ default: mod[name] })))
 
 const AppShell = named(pageLoaders.AppShell, 'AppShell')
+const Login = named(pageLoaders.Login, 'Login')
 const FlowLayout = named(pageLoaders.FlowLayout, 'FlowLayout')
 const Home = named(pageLoaders.Home, 'Home')
 const PropertyInput = named(pageLoaders.PropertyInput, 'PropertyInput')
@@ -41,9 +44,11 @@ export function AppProviders({ children }: { children: ReactNode }) {
   return (
     <MotionConfig reducedMotion="user">
       <LazyMotion features={domAnimation} strict>
-        <AppProvider>
-          <ToastProvider>{children}</ToastProvider>
-        </AppProvider>
+        <AuthProvider>
+          <AppProvider>
+            <ToastProvider>{children}</ToastProvider>
+          </AppProvider>
+        </AuthProvider>
       </LazyMotion>
     </MotionConfig>
   )
@@ -56,7 +61,15 @@ export function AppRoutes() {
         <Route index element={<LandingPage />} />
         <Route path="guides" element={<GuidesIndex />} />
         <Route path="guides/:slug" element={<GuideDetail />} />
-        <Route path="app" element={<AppShell />}>
+        <Route path="login" element={<Login />} />
+        <Route
+          path="app"
+          element={
+            <RequireAuth>
+              <AppShell />
+            </RequireAuth>
+          }
+        >
           <Route index element={<Home />} />
           <Route element={<FlowLayout />}>
             <Route path="property" element={<PropertyInput />} />

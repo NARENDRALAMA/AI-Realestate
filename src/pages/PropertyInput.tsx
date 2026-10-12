@@ -15,12 +15,13 @@ import {
 import { Alert } from '../components/ui/Alert'
 import { Button } from '../components/ui/Button'
 import { Card, CardHeader } from '../components/ui/Card'
-import { Input, Textarea } from '../components/ui/Field'
+import { Input, Select, Textarea } from '../components/ui/Field'
 import { PageHeader } from '../components/ui/PageHeader'
 import { StepTips } from '../components/StepTips'
 import { useApp } from '../hooks/useApp'
 import { useToast } from '../hooks/useToast'
 import { uploadImage } from '../lib/api'
+import { propertyTypeOptions } from '../lib/content-options'
 import { validateProperty } from '../lib/validation'
 import type { PropertyData } from '../types'
 
@@ -32,6 +33,7 @@ const fieldLabels: Partial<Record<TextField, string>> = {
   location: 'Location',
   bedrooms: 'Bedrooms',
   bathrooms: 'Bathrooms',
+  price: 'Price',
 }
 
 const fieldId = (k: TextField) => `property-${k}`
@@ -189,6 +191,12 @@ export function PropertyInput() {
               required
               placeholder="e.g. Richmond, VIC"
               hint="Suburb and state."
+            />
+            <Select
+              {...bind('propertyType')}
+              label="Property type"
+              options={propertyTypeOptions}
+              hint="Helps the copy describe it correctly."
             />
             <Input
               {...bind('price')}

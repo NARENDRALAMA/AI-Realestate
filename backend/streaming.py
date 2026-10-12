@@ -21,8 +21,9 @@ others send each job's text in one chunk when it's done.
 Env vars (in addition to orchestrator.py's USE_LLM):
   LLM_STREAM_TIMEOUT_SECONDS   overall deadline for a streaming run (default 300)
   LLM_STREAM_CONCURRENCY       jobs sent to the model at once (default 4; 1 for Ollama,
-                               which serves one request at a time unless configured
-                               otherwise — sending them in order keeps the focus channel first)
+                               which serves one request at a time unless started with
+                               OLLAMA_NUM_PARALLEL=4 — then set this to 4 too: a 4-channel
+                               run drops from ~45 s to ~20 s on an Apple M5)
 """
 from __future__ import annotations
 
@@ -129,7 +130,7 @@ def _clean(job: str, text: str, request: GenerateRequest) -> str:
     kind = job.split(":")[0]
     if kind == "extra":
         return remove_placeholders(text)
-    return clean_channel(kind, text, request.platform)
+    return clean_channel(kind, text, request)
 
 
 def stream_generation(request: GenerateRequest, user_id: int | None = None) -> Iterator[str]:

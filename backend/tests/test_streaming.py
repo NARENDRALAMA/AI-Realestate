@@ -103,7 +103,8 @@ def test_streams_deltas_then_full_ai_result(monkeypatch, saved):
     assert "".join(d["text"] for d in deltas) == "Lovely home here."
     final = events[-1]
     assert final["model_used"] == "stub-stream"
-    assert final["bundle"]["listing"] == "Lovely home here."
+    # The model left out the supplied bed/bath counts, so the key-facts guard adds them.
+    assert final["bundle"]["listing"] == "Lovely home here.\n\nKey details: 3 bed · 2 bath."
     assert saved[0]["bundle"]["extras"] == {} and saved[0]["bundle"]["variants"] == {}
 
 

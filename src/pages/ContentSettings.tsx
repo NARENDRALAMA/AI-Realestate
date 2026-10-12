@@ -17,6 +17,9 @@ import {
   extraFormatOptions,
   lengthLabel,
   lengthOptions,
+  PLATFORM_CHAR_LIMITS,
+  platformLabel,
+  platformOptions,
   toneLabel,
   toneOptions,
   variationOptions,
@@ -77,6 +80,20 @@ export function ContentSettings() {
               value={settings.tone}
               onChange={(tone) => setSettings((s) => ({ ...s, tone }))}
               options={toneOptions}
+            />
+          </Card>
+
+          <Card as="section" padding="lg">
+            <ChoiceGroup
+              legend="Social platform"
+              hint={`The social post is written for this network and kept under its ${PLATFORM_CHAR_LIMITS[
+                settings.platform
+              ].toLocaleString()}-character limit.`}
+              name="platform"
+              columns={3}
+              value={settings.platform}
+              onChange={(platform) => setSettings((s) => ({ ...s, platform }))}
+              options={platformOptions}
             />
           </Card>
 
@@ -150,6 +167,10 @@ export function ContentSettings() {
                 <dd>{lengthLabel(settings.length)}</dd>
               </div>
               <div>
+                <dt>Social</dt>
+                <dd>{platformLabel(settings.platform)}</dd>
+              </div>
+              <div>
                 <dt>Versions</dt>
                 <dd>{settings.variations}</dd>
               </div>
@@ -170,7 +191,7 @@ export function ContentSettings() {
             {!ready ? (
               <Alert tone="warning" className="generate-card__alert">
                 <span id="generate-blocked">
-                  Add a listing title and location before generating.
+                  Fix the property details (a title and location are required) before generating.
                 </span>{' '}
                 <Link to="/app/property">Go to property details</Link>
               </Alert>

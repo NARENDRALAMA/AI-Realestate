@@ -49,7 +49,7 @@ def _timeout_seconds() -> float:
 def _generate_channel(backend: AIBackend, request: GenerateRequest, channel: str) -> str:
     prompt = build_prompt(channel, request)
     text = backend.generate(prompt, max_tokens_for(request.length))
-    return clean_channel(channel, text, request.platform)
+    return clean_channel(channel, text, request)
 
 
 def generate_with_fallback(request: GenerateRequest) -> tuple[GeneratedBundle, str, int]:

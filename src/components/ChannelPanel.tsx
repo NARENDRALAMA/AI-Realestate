@@ -1,14 +1,15 @@
 import type { ReactNode } from 'react'
 import { Copy } from 'lucide-react'
+import { useApp } from '../hooks/useApp'
 import { useToast } from '../hooks/useToast'
-import { channelLabels, extraFormatLabel } from '../lib/content-options'
+import { channelLabels, extraFormatLabel, PLATFORM_CHAR_LIMITS, platformLabel } from '../lib/content-options'
 import { copyText } from '../lib/copy'
 import { countChars, countWords, formatNumber } from '../lib/format'
 import type { ExtraFormat, GeneratedBundle } from '../types'
 import { Button } from './ui/Button'
 import { SegmentedToggle } from './ui/SegmentedToggle'
 
-/** Word/character counts for a channel. Social also shows characters (platform limits). */
+/** Word/character counts for a channel. Social shows characters against the platform limit. */
 export function ChannelCounts({
   channel,
   text,
@@ -16,11 +17,17 @@ export function ChannelCounts({
   channel: keyof GeneratedBundle
   text: string
 }) {
+  const { settings } = useApp()
+  const limit = PLATFORM_CHAR_LIMITS[settings.platform]
+  const chars = countChars(text)
   return (
     <span className="channel-counts">
       <span>{formatNumber(countWords(text))} words</span>
       {channel === 'social' ? (
-        <span>{formatNumber(countChars(text))} characters</span>
+        <span className={chars > limit ? 'channel-counts__over' : undefined}>
+          {formatNumber(chars)} / {formatNumber(limit)} characters ({platformLabel(settings.platform)})
+          {chars > limit ? ' — over the limit' : ''}
+        </span>
       ) : null}
     </span>
   )

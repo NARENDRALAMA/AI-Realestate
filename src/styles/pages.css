@@ -1345,3 +1345,8 @@
   color: var(--color-text);
   font-variant-numeric: tabular-nums;
 }
+
+.channel-counts__over {
+  color: var(--color-danger);
+  font-weight: var(--weight-semibold);
+}

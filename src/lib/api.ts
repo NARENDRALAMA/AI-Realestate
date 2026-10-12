@@ -7,8 +7,12 @@ import type {
   ContentSettings,
   ExtraFormat,
   GeneratedBundle,
+  LengthOption,
   PropertyData,
+  PropertyType,
+  SocialPlatform,
 } from '../types'
+import { authHeader, signalSignedOut, type User } from './auth'
 
 const BASE = (import.meta.env.VITE_API_URL ?? '') + '/api'
 
@@ -24,7 +28,33 @@ export interface LibraryItem {
   created_at: string
 }
 
+export type ChannelSources = Partial<Record<keyof GeneratedBundle, 'ai' | 'template'>>
+
+/** The property facts a library record was generated from (snake_case, as stored). */
+export interface StoredProperty {
+  title: string
+  property_type: string
+  price: string
+  location: string
+  address: string
+  bedrooms: string
+  bathrooms: string
+  parking: string
+  land_size: string
+  interior_size: string
+  features: string
+  amenities: string
+  agent_notes: string
+  image_path: string
+}
+
 export interface LibraryDetail extends LibraryItem {
+  length: LengthOption
+  platform: SocialPlatform
+  keywords: string
+  property: StoredProperty
+  channel_sources: ChannelSources
+  updated_at: string
   bundle: GeneratedBundle
   /** Present for runs made through the streaming endpoint with extras or variations. */
   extras?: Partial<Record<ExtraFormat, string>>
@@ -37,6 +67,29 @@ export interface GenerateResult {
   /** "template", "<model name>", or "<model name> (partial)". */
   model_used: string
   generation_time_ms: number
+  /** Which engine wrote each channel ("ai" or "template" fallback). */
+  channel_sources?: ChannelSources
+}
+
+/** Converts a stored record's facts back into the form's shape. */
+export function propertyFromStored(p: StoredProperty): PropertyData {
+  return {
+    title: p.title,
+    propertyType: (p.property_type || '') as PropertyType,
+    price: p.price,
+    location: p.location,
+    address: p.address,
+    bedrooms: p.bedrooms,
+    bathrooms: p.bathrooms,
+    parking: p.parking,
+    landSize: p.land_size,
+    interiorSize: p.interior_size,
+    features: p.features,
+    amenities: p.amenities,
+    agentNotes: p.agent_notes,
+    imageFileName: p.image_path ? p.image_path.split('/').pop() ?? null : null,
+    imagePath: p.image_path || null,
+  }
 }
 
 // ─── errors ───────────────────────────────────────────────────────────────────
@@ -100,18 +153,65 @@ async function toApiError(res: Response, fallback: string): Promise<ApiError> {
   return new ApiError(statusMessage(res.status, fallback), res.status)
 }
 
-/** fetch() that reports network failures in plain English. */
-async function send(url: string, init: RequestInit | undefined, fallback: string) {
+/** Adds the signed-in user's token to a request. */
+function withAuth(init: RequestInit = {}): RequestInit {
+  return { ...init, headers: { ...authHeader(), ...(init.headers as Record<string, string> | undefined) } }
+}
+
+/** fetch() with the session token that reports failures in plain English. A 401
+ * means the session ended: it signs the user out so the app returns to sign-in. */
+async function send(url: string, init: RequestInit | undefined, fallback: string, signOutOn401 = true) {
   let res: Response
   try {
-    res = await fetch(url, init)
+    res = await fetch(url, withAuth(init))
   } catch {
     throw new ApiError(
       `${fallback}. We couldn't reach the server — check your connection and try again.`,
     )
   }
+  if (res.status === 401 && signOutOn401) signalSignedOut()
   if (!res.ok) throw await toApiError(res, fallback)
   return res
+}
+
+// ─── auth ─────────────────────────────────────────────────────────────────────
+
+export interface AuthResult {
+  token: string
+  user: User
+}
+
+export async function login(email: string, password: string): Promise<AuthResult> {
+  const res = await send(
+    `${BASE}/auth/login`,
+    { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) },
+    "Couldn't sign in",
+    false,
+  )
+  return res.json() as Promise<AuthResult>
+}
+
+export async function register(name: string, email: string, password: string): Promise<AuthResult> {
+  const res = await send(
+    `${BASE}/auth/register`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password }),
+    },
+    "Couldn't create your account",
+    false,
+  )
+  return res.json() as Promise<AuthResult>
+}
+
+export async function logout(): Promise<void> {
+  await send(`${BASE}/auth/logout`, { method: 'POST' }, "Couldn't sign out", false).catch(() => undefined)
+}
+
+export async function fetchMe(): Promise<User> {
+  const res = await send(`${BASE}/auth/me`, undefined, "Couldn't load your account")
+  return res.json() as Promise<User>
 }
 
 export interface StatsResponse {
@@ -133,6 +233,7 @@ export interface StatsResponse {
 function generateBody(property: PropertyData, settings: ContentSettings) {
   return {
     title: property.title,
+    property_type: property.propertyType ?? '',
     price: property.price,
     location: property.location,
     address: property.address,
@@ -149,6 +250,7 @@ function generateBody(property: PropertyData, settings: ContentSettings) {
     tone: settings.tone,
     length: settings.length,
     keywords: settings.keywords,
+    platform: settings.platform ?? 'instagram',
   }
 }
 
@@ -208,18 +310,22 @@ export async function generateContentStream(
 
   let res: Response
   try {
-    res = await fetch(`${BASE}/generate/stream`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      signal,
-    })
+    res = await fetch(
+      `${BASE}/generate/stream`,
+      withAuth({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal,
+      }),
+    )
   } catch (err) {
     if (signal?.aborted) throw err
     throw new ApiError(
       "Couldn't generate content. We couldn't reach the server — check your connection and try again.",
     )
   }
+  if (res.status === 401) signalSignedOut()
   if (res.status === 404 || res.status === 405) throw new StreamUnsupportedError()
   if (!res.ok) throw await toApiError(res, "Couldn't generate content")
   if (!res.body) throw new StreamUnsupportedError()
@@ -313,6 +419,24 @@ export async function fetchLibrary(): Promise<LibraryItem[]> {
 
 export async function fetchLibraryItem(id: number): Promise<LibraryDetail> {
   const res = await send(`${BASE}/library/${id}`, undefined, "Couldn't open this item")
+  return res.json() as Promise<LibraryDetail>
+}
+
+/** Saves edited copy back to a library record. */
+export async function updateLibraryItem(
+  id: number,
+  bundle: GeneratedBundle,
+  extras: Partial<Record<ExtraFormat, string>> = {},
+): Promise<LibraryDetail> {
+  const res = await send(
+    `${BASE}/library/${id}`,
+    {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bundle, extras }),
+    },
+    "Couldn't save your edits",
+  )
   return res.json() as Promise<LibraryDetail>
 }
 
