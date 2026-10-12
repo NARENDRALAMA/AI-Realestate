@@ -8,7 +8,6 @@ import json
 import time
 
 import pytest
-from fastapi.testclient import TestClient
 
 import streaming
 from ai_service.interface import AIBackend, AIBackendError
@@ -173,22 +172,16 @@ def test_variations_out_of_range_rejected():
         _request(variations=4)
 
 
-def test_stream_endpoint_returns_ndjson(monkeypatch, saved):
-    import main
-
+def test_stream_endpoint_returns_ndjson(monkeypatch, saved, client, auth_headers):
     monkeypatch.setenv("USE_LLM", "false")
-    client = TestClient(main.app)
     body = {"title": "Test House", "location": "Testville", "tone": "casual", "length": "extended"}
-    with client.stream("POST", "/api/generate/stream", json=body) as res:
+    with client.stream("POST", "/api/generate/stream", json=body, headers=auth_headers) as res:
         assert res.status_code == 200
         assert res.headers["content-type"].startswith("application/x-ndjson")
         lines = [json.loads(line) for line in res.iter_lines() if line]
     assert lines[0]["type"] == "start" and lines[-1]["type"] == "done"
 
 
-def test_stream_endpoint_validates_like_generate():
-    import main
-
-    client = TestClient(main.app)
-    res = client.post("/api/generate/stream", json={"title": "", "location": ""})
+def test_stream_endpoint_validates_like_generate(client, auth_headers):
+    res = client.post("/api/generate/stream", json={"title": "", "location": ""}, headers=auth_headers)
     assert res.status_code == 422

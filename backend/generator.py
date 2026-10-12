@@ -9,11 +9,9 @@ from __future__ import annotations
 
 import random
 import re
-
 import re as _re
 
-from models import GenerateRequest, GeneratedBundle, RefineRequest
-
+from models import GeneratedBundle, GenerateRequest, RefineRequest
 
 # ─── tone definitions ─────────────────────────────────────────────────────────
 
@@ -22,13 +20,10 @@ _TONES: dict[str, dict] = {
         "hooks": [
             "We are pleased to present {title}, an outstanding property in {location}.",
             "It is our pleasure to introduce {title}, a refined and well-appointed residence in {location}.",
-            "We invite discerning purchasers to consider {title}, positioned in the sought-after precinct of {location}.",
+            "We invite discerning purchasers to consider {title}, positioned in {location}.",
         ],
         "feature_intro": "This distinguished residence offers the following:",
-        "lifestyle": (
-            "Ideally situated within convenient proximity to reputable schools, "
-            "efficient public transport, and a variety of retail and dining options,"
-        ),
+        "lifestyle": "Set in {location}, this residence presents a considered opportunity for discerning purchasers.",
         "cta_listing": (
             "We invite qualified purchasers to arrange a private and confidential "
             "inspection at their earliest convenience."
@@ -57,10 +52,7 @@ _TONES: dict[str, dict] = {
             "Been searching in {location}? {title} might just be the one.",
         ],
         "feature_intro": "Here's what this place brings to the table:",
-        "lifestyle": (
-            "You'll love being just moments from great cafes, parks, schools, "
-            "and local shops —"
-        ),
+        "lifestyle": "If you've had your eye on {location}, this one's well worth a look.",
         "cta_listing": "Message us to book a walk-through — we'd love to show you around!",
         "cta_email": "Flick us a message or give us a call — we're happy to show you around!",
         "cta_video": "Love what you see? Give us a call — we'd love to show you through in person!",
@@ -80,10 +72,9 @@ _TONES: dict[str, dict] = {
             "RARE FIND ALERT: {title} hits the market in {location}!",
         ],
         "feature_intro": "Standout highlights you cannot afford to overlook:",
-        "lifestyle": "Positioned in one of the most sought-after locations available today,",
+        "lifestyle": "Opportunities like this in {location} don't come along every day!",
         "cta_listing": (
-            "Act fast — this property is attracting significant interest. "
-            "Call now to secure your inspection!"
+            "Act fast — call now to secure your inspection!"
         ),
         "cta_email": "Do not delay — respond TODAY to secure your place on the inspection list!",
         "cta_video": "This property will not last! Call us RIGHT NOW to book your inspection before it is gone!",
@@ -91,7 +82,7 @@ _TONES: dict[str, dict] = {
         "sign_off": "Best,\nYour Property Marketing Team",
         "email_subject_prefix": "HOT NEW LISTING:",
         "social_opener": "🔥 JUST LISTED: {title} — {location}!",
-        "urgency": "Enquire immediately — strong buyer interest confirmed!",
+        "urgency": "Enquire immediately to book your inspection!",
         "adj": ["outstanding", "premium", "exceptional", "incredible", "unbeatable", "spectacular"],
         "video_intro": (
             "Stop what you're doing — {title} in {location} has just hit the market "
@@ -106,7 +97,7 @@ _TONES: dict[str, dict] = {
             "Welcome to {title}, where prestige and possibility converge in the heart of {location}.",
         ],
         "feature_intro": "Among its distinguished appointments and bespoke finishes:",
-        "lifestyle": "Positioned within one of the most coveted addresses this precinct has to offer,",
+        "lifestyle": "A residence of this standing in {location} is rarely offered to the market.",
         "cta_listing": "We invite serious purchasers to arrange a discreet private inspection.",
         "cta_email": "We welcome serious purchasers to reach out for an exclusive private viewing.",
         "cta_video": (
@@ -130,12 +121,12 @@ _TONES: dict[str, dict] = {
     },
     "concise": {
         "hooks": [
-            "{beds}BR / {baths}BA in {location}. {title}.",
-            "{title}. {location}. {beds} bed · {baths} bath · {parking} parking.",
+            "{title}. {location}.",
+            "{title} — {location}. {price}.",
             "{title} — {location}. Available now.",
         ],
         "feature_intro": "Key features:",
-        "lifestyle": "Well-located near transport, schools, and amenities.",
+        "lifestyle": "Located in {location}.",
         "cta_listing": "Contact us to inspect.",
         "cta_email": "Reply to arrange an inspection.",
         "cta_video": "Contact us to arrange an inspection.",
@@ -155,10 +146,7 @@ _TONES: dict[str, dict] = {
             "Looking for a place to truly call home? {title} in {location} just might be the one!",
         ],
         "feature_intro": "Here's what makes this home so special:",
-        "lifestyle": (
-            "The local community has so much to offer, from great schools and "
-            "friendly neighbours to parks and cafes —"
-        ),
+        "lifestyle": "We think you'll feel right at home here in {location}.",
         "cta_listing": "We'd love to show you around — just give us a call or drop us a message!",
         "cta_email": "Give us a call or send us a message — we're always happy to help!",
         "cta_video": "We hope you loved the tour! Give us a call and we'll arrange a visit in person.",
@@ -250,6 +238,28 @@ def _join(*parts: str) -> str:
 
 
 # ─── per-channel generators ───────────────────────────────────────────────────
+#
+# Templates only ever state facts that were supplied: missing values are left out
+# rather than replaced with filler ("—", "generous"), and there are no generic
+# claims about kitchens, gardens or nearby schools that the agent didn't give us.
+
+def _lifestyle(p: GenerateRequest, td: dict) -> str:
+    return td["lifestyle"].format(location=p.location or "this area")
+
+
+def _price_sentence(p: GenerateRequest) -> str:
+    return f"Offered at {p.price}." if p.price else ""
+
+
+def _spec_inline(p: GenerateRequest, sep: str = " · ") -> str:
+    """'3 bed · 2 bath · 2 parking' using only the values that were supplied."""
+    parts = [
+        f"{v} {label}"
+        for v, label in ((p.bedrooms, "bed"), (p.bathrooms, "bath"), (p.parking, "parking"))
+        if v
+    ]
+    return sep.join(parts)
+
 
 def _generate_listing(p: GenerateRequest, td: dict) -> str:
     features = _parse_list(p.features)
@@ -257,7 +267,7 @@ def _generate_listing(p: GenerateRequest, td: dict) -> str:
 
     hook = _fmt_hook(_pick(td["hooks"]), p)
     specs = _specs_sentence(p)
-    adj = _pick(td["adj"])
+    price = _price_sentence(p)
 
     feat_bullets = _bullet(features) if features else p.features
     amen_bullets = _bullet(amenities) if amenities else p.amenities
@@ -265,7 +275,7 @@ def _generate_listing(p: GenerateRequest, td: dict) -> str:
         (", ".join(amenities[:4]) + ".") if amenities else (p.amenities or "")
     )
     kw = _kw_sentence(p.keywords)
-    lifestyle = td["lifestyle"]
+    lifestyle = _lifestyle(p, td)
     cta = td["cta_listing"]
     notes = p.agent_notes
 
@@ -274,6 +284,7 @@ def _generate_listing(p: GenerateRequest, td: dict) -> str:
         return _join(
             hook,
             specs,
+            price,
             f"{td['feature_intro']}\n{top_feats}" if top_feats else "",
             notes,
             cta,
@@ -282,37 +293,27 @@ def _generate_listing(p: GenerateRequest, td: dict) -> str:
     if p.length == "medium":
         feat_block = f"{td['feature_intro']}\n{feat_bullets}" if feat_bullets else ""
         amen_line = f"Additional appointments include {amen_inline}" if amen_inline else ""
-        return _join(hook, specs, feat_block, amen_line, lifestyle, notes, cta)
+        return _join(hook, specs, price, feat_block, amen_line, lifestyle, notes, kw, cta)
 
-    # long
-    overview = (
-        f"This {adj} property presents a rare opportunity for buyers seeking "
-        f"quality and comfort in {p.location}."
-    )
+    # long / extended
+    adj = _pick(td["adj"])
+    overview = f"This {adj} property is now available in {p.location}."
     feat_block = f"{td['feature_intro']}\n{feat_bullets}" if feat_bullets else ""
     amen_block = f"Additional features and appointments:\n{amen_bullets}" if amen_bullets else ""
-    lifestyle_sentence = (
-        lifestyle.rstrip(",")
-        + " this property offers an outstanding lifestyle opportunity."
-    )
-    return _join(hook, overview, specs, feat_block, amen_block, lifestyle_sentence, notes, kw, cta)
+    return _join(hook, overview, specs, price, feat_block, amen_block, lifestyle, notes, kw, cta)
 
 
 def _generate_social(p: GenerateRequest, td: dict) -> str:
+    from models import PLATFORM_CHAR_LIMITS
+    from postprocess import fit_char_limit
+
     features = _parse_list(p.features)
     opener = td["social_opener"].format(
         title=p.title or "New Listing",
         location=p.location or "Prime Location",
         price=p.price or "POA",
-        beds=p.bedrooms or "—",
-        baths=p.bathrooms or "—",
-        parking=p.parking or "—",
     )
-    specs = (
-        f"{p.bedrooms} bed · {p.bathrooms} bath · {p.parking} parking"
-        if p.bedrooms
-        else ""
-    )
+    specs = _spec_inline(p)
     price_line = p.price or "Price on application"
     urgency = td["urgency"]
 
@@ -324,23 +325,21 @@ def _generate_social(p: GenerateRequest, td: dict) -> str:
     hashtags = td["hashtags"][:]
     if loc_tag:
         hashtags.append(loc_tag)
+    # Facebook and LinkedIn posts read better with only a few hashtags.
+    max_tags = 3 if p.platform in ("facebook", "linkedin") else len(hashtags)
 
     if p.length == "short":
-        ht = " ".join(hashtags[:3])
+        ht = " ".join(hashtags[: min(3, max_tags)])
         body = "\n".join(s for s in [opener, specs, price_line] if s)
-        return f"{body}\n\n{ht}"
-
-    if p.length == "medium":
-        ht = " ".join(hashtags[:4])
+    elif p.length == "medium":
+        ht = " ".join(hashtags[: min(4, max_tags)])
         top = f"✓ {features[0]}" if features else ""
         body = "\n".join(s for s in [opener, specs, top, price_line] if s)
-        return f"{body}\n\n{ht}"
-
-    # long
-    ht = " ".join(hashtags)
-    feat_lines = "\n".join(f"✓ {f}" for f in features[:3]) if features else ""
-    body = "\n".join(s for s in [opener, specs, feat_lines, price_line, urgency] if s)
-    return f"{body}\n\n{ht}"
+    else:
+        ht = " ".join(hashtags[:max_tags])
+        feat_lines = "\n".join(f"✓ {f}" for f in features[:3]) if features else ""
+        body = "\n".join(s for s in [opener, specs, feat_lines, price_line, urgency] if s)
+    return fit_char_limit(f"{body}\n\n{ht}", PLATFORM_CHAR_LIMITS[p.platform])
 
 
 def _generate_email(p: GenerateRequest, td: dict) -> str:
@@ -355,8 +354,8 @@ def _generate_email(p: GenerateRequest, td: dict) -> str:
 
     # Build bullet list
     spec_bullets: list[str] = []
-    if p.bedrooms:
-        spec_bullets.append(f"{p.bedrooms} bed / {p.bathrooms} bath / {p.parking} parking")
+    if _spec_inline(p):
+        spec_bullets.append(_spec_inline(p, " / "))
     if p.land_size:
         spec_bullets.append(f"Land: {p.land_size}")
     if p.interior_size:
@@ -366,53 +365,23 @@ def _generate_email(p: GenerateRequest, td: dict) -> str:
 
     feat_bullets = spec_bullets + features[:5] + amenities[:3]
     bullets_text = _bullet(feat_bullets)
-
-    lifestyle_close = (
-        td["lifestyle"].rstrip(",")
-        + " this property ticks every box."
-    )
+    highlights = ["Property highlights:", bullets_text, ""] if bullets_text else []
+    lifestyle = _lifestyle(p, td)
 
     if p.length == "short":
-        return "\n".join([
-            subject, "",
-            greeting, "",
-            intro, "",
-            bullets_text, "",
-            cta, "",
-            sign_off,
-        ])
+        bullets = [bullets_text, ""] if bullets_text else []
+        return "\n".join([subject, "", greeting, "", intro, "", *bullets, cta, "", sign_off])
 
     if p.length == "medium":
-        return "\n".join([
-            subject, "",
-            greeting, "",
-            intro, "",
-            "Property highlights:",
-            bullets_text, "",
-            lifestyle_close, "",
-            cta, "",
-            sign_off,
-        ])
+        return "\n".join([subject, "", greeting, "", intro, "", *highlights, lifestyle, "", cta, "", sign_off])
 
-    # long
+    # long / extended
     kw = _kw_sentence(p.keywords)
     notes = p.agent_notes
-    long_lifestyle = (
-        td["lifestyle"].rstrip(",")
-        + " this property presents an outstanding opportunity for buyers seeking "
-        "quality and lifestyle in one complete package."
-    )
-    extra = [s for s in [kw, notes] if s]
-    body_parts = [
-        subject, "",
-        greeting, "",
-        intro, "",
-        "Property highlights:",
-        bullets_text, "",
-        long_lifestyle, "",
-    ]
-    for e in extra:
-        body_parts += [e, ""]
+    body_parts = [subject, "", greeting, "", intro, "", *highlights, lifestyle, ""]
+    for e in (kw, notes):
+        if e:
+            body_parts += [e, ""]
     body_parts += [cta, "", sign_off]
     return "\n".join(body_parts)
 
@@ -422,103 +391,31 @@ def _generate_video(p: GenerateRequest, td: dict) -> str:
     amenities = _parse_list(p.amenities)
     title = p.title or "this property"
     location = p.location or "the area"
-    adj = _pick(td["adj"])
 
-    intro_narration = td["video_intro"].format(title=title, location=location)
-    cta = td["cta_video"]
-
-    feat_line = lambda i: features[i] if len(features) > i else "quality finishes throughout"
-    amen_str = ", ".join(amenities[:3]) if amenities else (p.amenities or "quality throughout")
+    intro = td["video_intro"].format(title=title, location=location)
+    facts = " ".join(s for s in [_specs_sentence(p), _price_sentence(p)] if s)
+    scenes: list[tuple[str, str]] = [("Introduction", _join(intro, facts).replace("\n\n", "\n"))]
 
     if p.length == "short":
-        feat_block = _bullet(features[:2]) if features else "Quality features throughout."
-        scenes = [
-            (
-                "[Scene 1 — Introduction]\n"
-                + intro_narration
-                + f"\nPriced at {p.price or 'price on application'}, "
-                f"offering {p.bedrooms} bedrooms and {p.bathrooms} bathrooms."
-            ),
-            (
-                f"[Scene 2 — Key Features]\n{feat_block}"
-            ),
-            (
-                f"[Scene 3 — Closing]\n{cta}"
-            ),
-        ]
-        return "\n\n".join(scenes)
-
-    if p.length == "medium":
-        scenes = [
-            (
-                "[Scene 1 — Introduction]\n"
-                + intro_narration
-                + f"\nPriced at {p.price or 'price on application'}, this property offers "
-                f"{p.bedrooms} bedrooms and {p.bathrooms} bathrooms across "
-                f"approximately {p.interior_size or 'generous'} of interior space."
-            ),
-            (
-                f"[Scene 2 — Living Areas & Kitchen]\n"
-                f"The open-plan living and dining areas are {adj}, perfect for both "
-                f"everyday living and entertaining. The kitchen features {feat_line(0)} "
-                f"and {feat_line(1)}."
-            ),
-            (
-                f"[Scene 3 — Bedrooms & Bathrooms]\n"
-                f"The property offers {p.bedrooms or 'multiple'} well-appointed bedrooms "
-                f"and {p.bathrooms or 'generous'} bathrooms. {feat_line(2).capitalize()}."
-            ),
-            (
-                f"[Scene 4 — Outdoor & Parking]\n"
-                f"The outdoor areas are ideal for entertaining, with "
-                f"{p.parking or 'secure'} parking and a land size of "
-                f"{p.land_size or 'generous proportions'}."
-            ),
-            (
-                f"[Scene 5 — Closing]\n{cta}"
-            ),
-        ]
-        return "\n\n".join(scenes)
-
-    # long
-    scenes = [
-        (
-            f"[Scene 1 — Title Card & Introduction]\n"
-            + intro_narration
-            + f"\nAddress: {p.address or 'available on request'}. "
-            f"Price: {p.price or 'price on application'}."
-        ),
-        (
-            f"[Scene 2 — Living Areas]\n"
-            f"Step inside to discover {adj} open-plan living and dining areas, "
-            f"designed for both relaxed daily living and seamless entertaining. "
-            f"Natural light fills the space, creating a warm and welcoming atmosphere."
-        ),
-        (
-            f"[Scene 3 — Kitchen]\n"
-            f"The kitchen is the heart of this home, featuring {feat_line(0)} "
-            f"and {feat_line(1)}. {feat_line(2).capitalize()}."
-        ),
-        (
-            f"[Scene 4 — Bedrooms]\n"
-            f"The property offers {p.bedrooms or 'multiple'} generously proportioned "
-            f"bedrooms. {feat_line(3).capitalize()}. "
-            f"Each bedroom is designed with comfort and functionality in mind."
-        ),
-        (
-            f"[Scene 5 — Outdoor Areas]\n"
-            f"Outdoor living is equally impressive, with a {adj} alfresco area "
-            f"perfect for year-round entertaining. "
-            f"Set on {p.land_size or 'a generous block'}, "
-            f"the property also includes {p.parking or 'secure'} parking."
-        ),
-        (
-            f"[Scene 6 — Amenities & Closing]\n"
-            f"Among the additional features: {amen_str}.\n\n"
-            + cta
-        ),
-    ]
-    return "\n\n".join(scenes)
+        if features:
+            scenes.append(("Key Features", _bullet(features[:2])))
+    elif p.length == "medium":
+        if features:
+            scenes.append(("Highlights", _bullet(features[:4])))
+        if amenities:
+            scenes.append(("Appointments", _bullet(amenities[:3])))
+    else:
+        if p.address:
+            scenes.append(("Address", f"You'll find {title} at {p.address}."))
+        adj = _pick(td["adj"])
+        for feature in features[:4]:
+            scenes.append((feature[:40].title(), f"A {adj} highlight: {feature}."))
+        if amenities:
+            scenes.append(("Appointments", _bullet(amenities)))
+        if p.agent_notes:
+            scenes.append(("Agent Notes", p.agent_notes))
+    scenes.append(("Closing", td["cta_video"]))
+    return "\n\n".join(f"[Scene {i} — {name}]\n{text}" for i, (name, text) in enumerate(scenes, 1))
 
 
 # ─── public entry point ───────────────────────────────────────────────────────
@@ -582,23 +479,27 @@ def refine_persuasive(req: RefineRequest) -> str:
 
 
 def refine_shorten(req: RefineRequest) -> str:
-    """Condense content to approximately 60% of the original word count."""
+    """Condense content to roughly 60% of its words, keeping whole sentences and
+    the original paragraph breaks."""
     content = req.content.strip()
     words = content.split()
     target = max(10, int(len(words) * 0.6))
     if len(words) <= target:
         return content
 
-    chunks = _re.split(r'(?<=[.!?])\s+|\n\n', content)
-    result: list[str] = []
+    kept: list[str] = []
     count = 0
-    for chunk in chunks:
-        chunk_words = len(chunk.split())
-        if count + chunk_words <= target or not result:
-            result.append(chunk)
-            count += chunk_words
-        else:
+    for paragraph in _re.split(r"\n\s*\n", content):
+        sentences = _re.split(r"(?<=[.!?])\s+", paragraph.strip())
+        taken: list[str] = []
+        for sentence in sentences:
+            n = len(sentence.split())
+            if count + n > target and (kept or taken):
+                break
+            taken.append(sentence)
+            count += n
+        if taken:
+            kept.append(" ".join(taken))
+        if count >= target:
             break
-
-    sep = "\n\n" if "\n\n" in content else " "
-    return sep.join(result)
+    return "\n\n".join(kept)

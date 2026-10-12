@@ -65,7 +65,7 @@ def test_each_content_type_gets_a_distinct_instruction():
     request = _request()
     prompts = {ct: build_prompt(ct, request) for ct in CONTENT_TYPES}
     assert "LISTING DESCRIPTION" in prompts["listing"]
-    assert "SOCIAL MEDIA POST" in prompts["social"]
+    assert "INSTAGRAM caption" in prompts["social"]
     assert "hashtags" in prompts["social"].lower()
     assert "EMAIL" in prompts["email"]
     assert "subject line" in prompts["email"].lower()
@@ -77,4 +77,4 @@ def test_tone_and_length_are_reflected_in_the_prompt():
     request = _request(tone="luxury", length="short")
     prompt = build_prompt("listing", request)
     assert "luxury" in prompt.lower()
-    assert "60-90 words" in prompt
+    assert "80-120 words" in prompt

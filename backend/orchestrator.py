@@ -27,8 +27,10 @@ from concurrent.futures import wait as futures_wait
 
 from ai_service.factory import get_backend
 from ai_service.interface import AIBackend, AIBackendError
+from extras import max_tokens_for
 from generator import generate_bundle
-from models import GenerateRequest, GeneratedBundle
+from models import GeneratedBundle, GenerateRequest
+from postprocess import clean_channel
 from prompts import build_prompt
 
 logger = logging.getLogger("orchestrator")
@@ -46,14 +48,24 @@ def _timeout_seconds() -> float:
 
 def _generate_channel(backend: AIBackend, request: GenerateRequest, channel: str) -> str:
     prompt = build_prompt(channel, request)
-    return backend.generate(prompt)
+    text = backend.generate(prompt, max_tokens_for(request.length))
+    return clean_channel(channel, text, request.platform)
 
 
 def generate_with_fallback(request: GenerateRequest) -> tuple[GeneratedBundle, str, int]:
+    """(bundle, model_used, generation_time_ms) — see generate_with_sources."""
+    bundle, model_used, elapsed_ms, _sources = generate_with_sources(request)
+    return bundle, model_used, elapsed_ms
+
+
+def generate_with_sources(
+    request: GenerateRequest,
+) -> tuple[GeneratedBundle, str, int, dict[str, str]]:
     """
     Build the marketing copy bundle for a request.
 
-    Returns (bundle, model_used, generation_time_ms):
+    Returns (bundle, model_used, generation_time_ms, channel_sources), where
+    channel_sources maps each channel to "ai" or "template" (fallback):
       - model_used == "template" when USE_LLM is off, the backend is
         unavailable, or every channel fell back.
       - model_used == "<model name>" when every channel succeeded via the LLM.
@@ -61,18 +73,19 @@ def generate_with_fallback(request: GenerateRequest) -> tuple[GeneratedBundle, s
     """
     start = time.monotonic()
     bundle = generate_bundle(request)  # template safety net, always succeeds
+    sources = {channel: "template" for channel in CHANNELS}
 
     if not _use_llm():
         elapsed_ms = int((time.monotonic() - start) * 1000)
         logger.info("path=template reason=use_llm_disabled time_ms=%d", elapsed_ms)
-        return bundle, "template", elapsed_ms
+        return bundle, "template", elapsed_ms, sources
 
     try:
         backend = get_backend()
     except Exception as exc:
         elapsed_ms = int((time.monotonic() - start) * 1000)
         logger.warning("path=template reason=backend_unavailable error=%s time_ms=%d", exc, elapsed_ms)
-        return bundle, "template", elapsed_ms
+        return bundle, "template", elapsed_ms, sources
 
     timeout = _timeout_seconds()
     values = bundle.model_dump()
@@ -101,6 +114,7 @@ def generate_with_fallback(request: GenerateRequest) -> tuple[GeneratedBundle, s
                 continue
             try:
                 values[channel] = future.result()
+                sources[channel] = "ai"
                 successes += 1
             except AIBackendError as exc:
                 logger.warning("path=template channel=%s reason=backend_error error=%s", channel, exc)
@@ -126,4 +140,4 @@ def generate_with_fallback(request: GenerateRequest) -> tuple[GeneratedBundle, s
         path, model_used, successes, len(CHANNELS), elapsed_ms,
     )
 
-    return GeneratedBundle(**values), model_used, elapsed_ms
+    return GeneratedBundle(**values), model_used, elapsed_ms, sources

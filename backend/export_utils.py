@@ -2,8 +2,21 @@
 from __future__ import annotations
 
 import io
+import re
 
 from models import GeneratedBundle
+
+# The PDF uses ReportLab's built-in fonts, which have no emoji glyphs (they print as
+# black boxes). Emoji and pictographs are dropped from the PDF only; TXT and DOCX
+# keep them. Check marks (✓ ✔) render fine and are kept.
+_EMOJI = re.compile(
+    "[\U0001F000-\U0001FAFF\U00002600-\U000026FF\U00002B00-\U00002BFF"
+    "\U00002700-\U00002712\U00002715-\U000027BF\uFE0F\u200D\u20E3]"
+)
+
+
+def _pdf_text(line: str) -> str:
+    return re.sub(r"[ \t]{2,}", " ", _EMOJI.sub("", line)).strip()
 
 _SECTIONS = [
     ("listing", "Listing Description"),
@@ -41,7 +54,7 @@ def build_txt(bundle: GeneratedBundle, title: str, tone: str, extras: dict[str, 
 
 def build_pdf(bundle: GeneratedBundle, title: str, tone: str, extras: dict[str, str] | None = None) -> bytes:
     from reportlab.lib.pagesizes import A4
-    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
     from reportlab.lib.units import cm
     from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
 
@@ -81,7 +94,7 @@ def build_pdf(bundle: GeneratedBundle, title: str, tone: str, extras: dict[str, 
         story.append(Paragraph(heading, heading2_style))
         for line in text.split("\n"):
             safe = (
-                line
+                _pdf_text(line)
                 .replace("&", "&amp;")
                 .replace("<", "&lt;")
                 .replace(">", "&gt;")
@@ -100,8 +113,8 @@ def build_pdf(bundle: GeneratedBundle, title: str, tone: str, extras: dict[str, 
 
 def build_docx(bundle: GeneratedBundle, title: str, tone: str, extras: dict[str, str] | None = None) -> bytes:
     from docx import Document
-    from docx.shared import Pt, RGBColor
     from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.shared import Pt
 
     doc = Document()
 

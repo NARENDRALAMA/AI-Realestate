@@ -42,6 +42,7 @@ from extras import build_extra_prompt, max_tokens_for, max_tokens_for_extra, tem
 from generator import generate_bundle
 from models import GenerateRequest
 from orchestrator import CHANNELS, _use_llm
+from postprocess import clean_channel, remove_placeholders
 from prompts import build_prompt
 
 logger = logging.getLogger("streaming")
@@ -124,7 +125,14 @@ def _run_job(
         events.put(("fail", job, str(exc)))
 
 
-def stream_generation(request: GenerateRequest) -> Iterator[str]:
+def _clean(job: str, text: str, request: GenerateRequest) -> str:
+    kind = job.split(":")[0]
+    if kind == "extra":
+        return remove_placeholders(text)
+    return clean_channel(kind, text, request.platform)
+
+
+def stream_generation(request: GenerateRequest, user_id: int | None = None) -> Iterator[str]:
     start = time.monotonic()
     jobs = _plan_jobs(request)
     job_ids = [j for j, _, _ in jobs]
@@ -179,8 +187,9 @@ def stream_generation(request: GenerateRequest) -> Iterator[str]:
                     yield _line({"type": "delta", "job": job, "text": payload})
                 elif kind == "ok":
                     pending.discard(job)
-                    final[job], sources[job] = payload, "ai"
-                    yield _line({"type": "job_done", "job": job, "source": "ai", "text": payload})
+                    text = _clean(job, payload, request)
+                    final[job], sources[job] = text, "ai"
+                    yield _line({"type": "job_done", "job": job, "source": "ai", "text": text})
                 else:
                     pending.discard(job)
                     logger.warning("stream path=template job=%s reason=backend_error error=%s", job, payload)
@@ -207,18 +216,17 @@ def stream_generation(request: GenerateRequest) -> Iterator[str]:
         if request.variations > 1
     }
     extras = {fmt: final[f"extra:{fmt}"] for fmt in request.extra_formats}
+    channel_sources = {channel: sources[f"{channel}:0"] for channel in CHANNELS}
     elapsed_ms = int((time.monotonic() - start) * 1000)
 
     try:
         record_id = database.save_output(
-            title=request.title,
-            location=request.location,
-            content_type=request.content_type,
-            tone=request.tone,
+            user_id=user_id,
+            request=request,
             bundle={**bundle, "extras": extras, "variants": variants},
-            image_path=request.image_path,
             model_used=model_used,
             generation_time_ms=elapsed_ms,
+            channel_sources=channel_sources,
         )
     except Exception as exc:
         logger.exception("stream save failed")
@@ -231,6 +239,7 @@ def stream_generation(request: GenerateRequest) -> Iterator[str]:
         "id": record_id,
         "model_used": model_used,
         "generation_time_ms": elapsed_ms,
+        "channel_sources": channel_sources,
         "bundle": bundle,
         "variants": variants,
         "extras": extras,

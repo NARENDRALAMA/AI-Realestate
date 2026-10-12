@@ -39,7 +39,7 @@ import time
 from pathlib import Path
 
 from models import GenerateRequest
-from orchestrator import generate_with_fallback
+from orchestrator import generate_with_sources
 
 _CONTENT_TYPES = ["listing", "social", "email", "video"]
 
@@ -50,13 +50,29 @@ _CONTENT_TYPES = ["listing", "social", "email", "video"]
 # output, which won't hit the exact same word counts as the deterministic
 # templates). This evaluation always runs at length="medium".
 _LENGTH_WORD_RANGE = {
-    "listing": (50, 150),
-    "social": (10, 50),
-    "email": (60, 170),
-    "video": (80, 220),
+    # Medium-length targets from prompts.py with margin. Listings are held to the
+    # requirement of roughly 150-300 words.
+    "listing": (130, 300),
+    "social": (25, 160),
+    "email": (110, 280),
+    "video": (110, 280),
 }
 
-_OUTPUT_CSV = Path(__file__).parent / "evaluate_results.csv"
+# Write somewhere else (EVAL_OUTPUT=...) to keep a previous run, e.g. the template baseline.
+_OUTPUT_CSV = Path(os.environ.get("EVAL_OUTPUT", Path(__file__).parent / "evaluate_results.csv"))
+
+_NUMBER_WORDS = {
+    "1": "one", "2": "two", "3": "three", "4": "four", "5": "five",
+    "6": "six", "7": "seven", "8": "eight", "9": "nine", "10": "ten",
+}
+
+# Things models (and old templates) tend to claim without being told. A term counts
+# as unsupported when it appears in the copy but nowhere in the supplied facts.
+UNSUPPORTED_TERMS = [
+    "school", "transport", "train", "tram", "shop", "cafe", "café", "restaurant",
+    "appliance", "landscap", "dishwasher", "air condition", "natural light",
+    "storage", "ensuite", "balcony", "garden", "pool", "gym", "views", "beach",
+]
 
 # 10 synthetic sample properties covering a spread of locations, sizes, and
 # missing-field combinations (e.g. some have no price, to check we don't
@@ -135,67 +151,79 @@ def _check_facts(text: str, prop: dict) -> dict:
     if prop.get("location"):
         loc_first_part = prop["location"].split(",")[0].strip().lower()
         checks["location_present"] = loc_first_part in lower
-    if prop.get("bedrooms"):
-        checks["bedrooms_present"] = prop["bedrooms"] in text
-    if prop.get("bathrooms"):
-        checks["bathrooms_present"] = prop["bathrooms"] in text
+    for field in ("bedrooms", "bathrooms"):
+        value = prop.get(field)
+        if value:
+            word = _NUMBER_WORDS.get(value, value)
+            checks[f"{field}_present"] = bool(
+                re.search(rf"\b({re.escape(value)}|{word})\b", lower)
+            )
 
     # No-invention check: any "<N> bed/bedroom" or "<N> bath/bathroom" mention
-    # in the text must match the supplied count (if one was supplied).
+    # (digits or words) must match the supplied count (if one was supplied).
+    to_digit = {w: d for d, w in _NUMBER_WORDS.items()}
     invented = False
-    for n in re.findall(r"(\d+)\s*(?:-|\s)?bed(?:room)?s?\b", lower):
-        if prop.get("bedrooms") and n != prop["bedrooms"]:
-            invented = True
-    for n in re.findall(r"(\d+)\s*(?:-|\s)?bath(?:room)?s?\b", lower):
-        if prop.get("bathrooms") and n != prop["bathrooms"]:
-            invented = True
+    for field, stem in (("bedrooms", "bed"), ("bathrooms", "bath")):
+        pattern = rf"\b(\d+|{'|'.join(to_digit)})\s*(?:-|\s)?{stem}(?:room)?s?\b"
+        for n in re.findall(pattern, lower):
+            if prop.get(field) and to_digit.get(n, n) != prop[field]:
+                invented = True
     checks["no_invented_bed_bath_count"] = not invented
 
     return checks
+
+
+def unsupported_terms(text: str, prop: dict) -> list[str]:
+    supplied = " ".join(str(v) for v in prop.values()).lower()
+    lower = text.lower()
+    return [t for t in UNSUPPORTED_TERMS if t in lower and t not in supplied]
 
 
 def _evaluate_text(text: str, prop: dict, content_type: str) -> dict:
     words = _word_count(text)
     lo, hi = _LENGTH_WORD_RANGE[content_type]
     facts = _check_facts(text, prop)
+    unsupported = unsupported_terms(text, prop)
     return {
         "word_count": words,
         "length_ok": lo <= words <= hi,
         "readability": _flesch_reading_ease(text),
         **facts,
         "facts_ok": all(facts.values()) if facts else True,
+        "unsupported_terms": ";".join(unsupported),
+        "placeholders": bool(re.search(r"\[(?!\s*scene)[^\]]{2,60}\]", text, re.IGNORECASE)),
     }
 
 
 def run_evaluation() -> list[dict]:
+    """One generation per property (all four channels at once, as the app does),
+    then every channel is scored separately with its own source (ai/template)."""
     rows: list[dict] = []
-    length = "medium"
-
     for prop in SAMPLE_PROPERTIES:
+        request = GenerateRequest(
+            title=prop["title"],
+            price=prop.get("price", ""),
+            location=prop["location"],
+            bedrooms=prop.get("bedrooms", ""),
+            bathrooms=prop.get("bathrooms", ""),
+            parking=prop.get("parking", ""),
+            land_size=prop.get("land_size", ""),
+            interior_size=prop.get("interior_size", ""),
+            features=prop.get("features", ""),
+            content_type="listing",
+            tone="formal",
+            length="medium",
+        )
+        start = time.monotonic()
+        bundle, model_used, generation_time_ms, sources = generate_with_sources(request)
+        wall_ms = int((time.monotonic() - start) * 1000)
         for content_type in _CONTENT_TYPES:
-            request = GenerateRequest(
-                title=prop["title"],
-                price=prop.get("price", ""),
-                location=prop["location"],
-                bedrooms=prop.get("bedrooms", ""),
-                bathrooms=prop.get("bathrooms", ""),
-                parking=prop.get("parking", ""),
-                land_size=prop.get("land_size", ""),
-                interior_size=prop.get("interior_size", ""),
-                features=prop.get("features", ""),
-                content_type=content_type,
-                tone="formal",
-                length=length,
-            )
-            start = time.monotonic()
-            bundle, model_used, generation_time_ms = generate_with_fallback(request)
-            wall_ms = int((time.monotonic() - start) * 1000)
             text = getattr(bundle, content_type)
             evaluation = _evaluate_text(text, prop, content_type)
-
             rows.append({
                 "property": prop["title"],
                 "content_type": content_type,
+                "source": sources[content_type],
                 "model_used": model_used,
                 "generation_time_ms": generation_time_ms,
                 "wall_clock_ms": wall_ms,
@@ -203,7 +231,11 @@ def run_evaluation() -> list[dict]:
                 "length_ok": evaluation["length_ok"],
                 "readability_flesch": evaluation["readability"],
                 "facts_ok": evaluation["facts_ok"],
+                "unsupported_terms": evaluation["unsupported_terms"],
+                "placeholders": evaluation["placeholders"],
+                "text": text,
             })
+        print(f"{prop['title']}: {model_used} {generation_time_ms} ms", flush=True)
     return rows
 
 
@@ -217,12 +249,14 @@ def write_csv(rows: list[dict], path: Path = _OUTPUT_CSV) -> None:
 
 
 def print_summary(rows: list[dict]) -> None:
-    by_path: dict[str, list[dict]] = {"template": [], "llm": []}
+    by_path: dict[str, list[dict]] = {"template": [], "ai": []}
     for row in rows:
-        key = "template" if row["model_used"] == "template" else "llm"
-        by_path[key].append(row)
+        by_path[row["source"]].append(row)
 
-    print(f"\n{'Path':<10} {'N':>4} {'Facts OK':>10} {'Length OK':>10} {'Avg Readability':>16} {'Avg Time (ms)':>14}")
+    print(
+        f"\n{'Source':<10} {'N':>4} {'Facts OK':>10} {'Length OK':>10} {'Avg Readability':>16} "
+        f"{'Avg Time (ms)':>14} {'Unsupported':>12} {'Placeholders':>13}"
+    )
     for path_name, path_rows in by_path.items():
         if not path_rows:
             continue
@@ -231,7 +265,12 @@ def print_summary(rows: list[dict]) -> None:
         length_pct = 100 * sum(r["length_ok"] for r in path_rows) / n
         avg_read = sum(r["readability_flesch"] for r in path_rows) / n
         avg_time = sum(r["generation_time_ms"] for r in path_rows) / n
-        print(f"{path_name:<10} {n:>4} {facts_pct:>9.1f}% {length_pct:>9.1f}% {avg_read:>16.1f} {avg_time:>14.1f}")
+        unsupported = sum(bool(r["unsupported_terms"]) for r in path_rows)
+        placeholders = sum(r["placeholders"] for r in path_rows)
+        print(
+            f"{path_name:<10} {n:>4} {facts_pct:>9.1f}% {length_pct:>9.1f}% {avg_read:>16.1f} "
+            f"{avg_time:>14.1f} {unsupported:>9}/{n} {placeholders:>10}/{n}"
+        )
 
     print(f"\nFull results written to {_OUTPUT_CSV}")
 

@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from langchain_core.prompts import PromptTemplate
 
-from models import GenerateRequest
+from models import PLATFORM_CHAR_LIMITS, GenerateRequest
 
 _GROUNDING_RULES = (
     "Rules:\n"
@@ -24,6 +24,14 @@ _GROUNDING_RULES = (
     "is not explicitly given — this includes bedrooms, bathrooms, price, sizes, "
     "features, amenities, and location.\n"
     "- If a fact is missing from the list, simply omit it. Never make one up.\n"
+    "- Do not describe anything that is not in the facts: no appliances, finishes, "
+    "room layouts, gardens, landscaping, views, natural light, storage, or "
+    "renovations, and nothing about the neighbourhood (schools, transport, shops, "
+    "cafes, restaurants, beaches, parks) unless it is listed.\n"
+    "- When the price, location, bedrooms or bathrooms are given, include them, "
+    "written with digits exactly as given (for example 3 bedrooms, $850,000).\n"
+    "- Never write placeholders in square brackets such as [Your Name], [Agent] or "
+    "[Contact details]; write copy that is ready to publish.\n"
     "- Do not add disclaimers, meta-commentary, or notes about what you did.\n"
     "- Output only the marketing copy itself, nothing else."
 )
@@ -37,12 +45,49 @@ _TONE_GUIDANCE: dict[str, str] = {
     "friendly": "a warm, friendly, welcoming tone",
 }
 
-# Roughly matches the word counts the template engine already targets per length.
-_LENGTH_WORDS: dict[str, str] = {
-    "short": "60-90 words",
-    "medium": "120-180 words",
-    "long": "220-320 words",
-    "extended": "400-550 words",
+# Target word counts per channel and length. Listings at medium/long fall inside the
+# 150-300 words the requirements specify for SEO listing descriptions; social posts are
+# shorter and also capped by the platform's character limit (see _PLATFORM_STYLE).
+_LENGTH_WORDS: dict[str, dict[str, str]] = {
+    "listing": {
+        "short": "80-120 words",
+        "medium": "150-220 words",
+        "long": "230-300 words",
+        "extended": "400-550 words",
+    },
+    "social": {
+        "short": "30-50 words",
+        "medium": "60-100 words",
+        "long": "100-150 words",
+        "extended": "150-220 words",
+    },
+    "email": {
+        "short": "80-120 words",
+        "medium": "150-220 words",
+        "long": "250-350 words",
+        "extended": "400-550 words",
+    },
+    "video": {
+        "short": "80-120 words",
+        "medium": "150-220 words",
+        "long": "250-350 words",
+        "extended": "400-550 words",
+    },
+}
+
+_PLATFORM_STYLE: dict[str, str] = {
+    "instagram": (
+        "an INSTAGRAM caption: a strong first line, short paragraphs, a few emojis are "
+        "fine, and 5-10 relevant hashtags on the last line"
+    ),
+    "facebook": (
+        "a FACEBOOK post: conversational, one to three short paragraphs, a clear call to "
+        "action, and at most 3 hashtags on the last line"
+    ),
+    "linkedin": (
+        "a LINKEDIN post: professional, no emojis, a clear call to action, and at most "
+        "3 hashtags on the last line"
+    ),
 }
 
 _TEMPLATES: dict[str, PromptTemplate] = {
@@ -53,16 +98,16 @@ _TEMPLATES: dict[str, PromptTemplate] = {
     ),
     "social": PromptTemplate.from_template(
         "{grounding}\n\n"
-        "Write a SOCIAL MEDIA POST advertising this property in {tone_guidance}, "
-        "{length_words} long, suitable for Instagram/Facebook, including a few "
-        "relevant hashtags.\n\n"
+        "Write {platform_style} advertising this property, in {tone_guidance}, "
+        "{length_words} long and under {char_limit} characters in total.\n\n"
         "Property facts:\n{facts}\n\nSocial media post:"
     ),
     "email": PromptTemplate.from_template(
         "{grounding}\n\n"
         "Write a MARKETING EMAIL for this property in {tone_guidance}, "
-        "{length_words} long. Include a subject line, a greeting, the body, "
-        "and a sign-off.\n\n"
+        "{length_words} long. Start with a subject line ('Subject: ...'), then a greeting "
+        "(e.g. 'Hi there,'), the body, and a sign-off from 'The sales team' — no "
+        "personal names or contact placeholders.\n\n"
         "Property facts:\n{facts}\n\nEmail:"
     ),
     "video": PromptTemplate.from_template(
@@ -77,6 +122,7 @@ _TEMPLATES: dict[str, PromptTemplate] = {
 # Fields listed in the facts block, in a sensible reading order.
 _FACT_FIELDS: list[tuple[str, str]] = [
     ("title", "Title"),
+    ("property_type", "Property type"),
     ("price", "Price"),
     ("location", "Location"),
     ("address", "Address"),
@@ -105,9 +151,13 @@ def _facts_block(request: GenerateRequest) -> str:
 def build_prompt(content_type: str, request: GenerateRequest) -> str:
     """Build the final prompt string for one content type from a validated request."""
     template = _TEMPLATES[content_type]
-    return template.format(
+    values = dict(
         grounding=_GROUNDING_RULES,
         tone_guidance=_TONE_GUIDANCE[request.tone],
-        length_words=_LENGTH_WORDS[request.length],
+        length_words=_LENGTH_WORDS[content_type][request.length],
         facts=_facts_block(request),
     )
+    if content_type == "social":
+        values["platform_style"] = _PLATFORM_STYLE[request.platform]
+        values["char_limit"] = PLATFORM_CHAR_LIMITS[request.platform]
+    return template.format(**values)

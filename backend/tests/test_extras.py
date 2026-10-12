@@ -3,7 +3,7 @@ import pytest
 
 import export_utils
 from extras import EXTRA_LABELS, build_extra_prompt, template_extra
-from models import GenerateRequest, GeneratedBundle
+from models import GeneratedBundle, GenerateRequest
 
 
 def _request(**overrides) -> GenerateRequest:

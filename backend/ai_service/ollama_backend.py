@@ -29,10 +29,21 @@ from .interface import AIBackend, AIBackendError
 
 
 class OllamaBackend(AIBackend):
-    def __init__(self, model_name: str, base_url: str = "http://localhost:11434", request_timeout: float = 60.0) -> None:
+    def __init__(
+        self, model_name: str, base_url: str = "http://localhost:11434", request_timeout: float = 60.0
+    ) -> None:
         self.model_name = model_name
         self.base_url = base_url.rstrip("/")
         self.request_timeout = request_timeout
+
+    @staticmethod
+    def _options(max_new_tokens: int) -> dict:
+        # A low temperature keeps the model closer to the supplied facts
+        # (fewer invented amenities); LLM_TEMPERATURE overrides it.
+        return {
+            "num_predict": max_new_tokens,
+            "temperature": float(os.environ.get("LLM_TEMPERATURE", "0.3")),
+        }
 
     def generate(self, prompt: str, max_new_tokens: int = 400) -> str:
         try:
@@ -42,7 +53,7 @@ class OllamaBackend(AIBackend):
                     "model": self.model_name,
                     "prompt": prompt,
                     "stream": False,
-                    "options": {"num_predict": max_new_tokens},
+                    "options": self._options(max_new_tokens),
                 },
                 timeout=self.request_timeout,
             )
@@ -79,7 +90,7 @@ class OllamaBackend(AIBackend):
                     "model": self.model_name,
                     "prompt": prompt,
                     "stream": True,
-                    "options": {"num_predict": max_new_tokens},
+                    "options": self._options(max_new_tokens),
                 },
                 timeout=httpx.Timeout(10.0, read=read_timeout),
             ) as response:

@@ -1,0 +1,7 @@
+# Python lint (PEP 8 style + pyflakes + import order). Run: ruff check .
+line-length = 120
+target-version = "py39"
+extend-exclude = [".venv", "*.ipynb"]
+
+[lint]
+select = ["E", "F", "W", "I"]
