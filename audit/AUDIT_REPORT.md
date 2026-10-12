@@ -243,3 +243,83 @@ The browser automation extension wasn't connected, so installed Chrome was scrip
 6. **Evidence:** browser walkthrough, Docker run, SUS, Python linting, doc updates.
 
 Each step should be re-verified with the scripts in `audit/` before it is reported as done.
+
+---
+
+# Re-test after fixes (12 October 2026, branch `project2-audit-fixes`)
+
+Everything above describes the state **before** the fixes and is kept as the audit record. This section re-runs the same checks on commits `6b307f6` and `13512fe` and later. Evidence: `audit/after/` (evaluation CSVs/logs, `browser/` screenshots and exports).
+
+Environment as before (Apple M5, 17 GB, Ollama 0.34.3, Mistral 7B Q4_K_M), now with `OLLAMA_NUM_PARALLEL=4` and `LLM_STREAM_CONCURRENCY=4`. A macOS background service (`duetexpertd`) was using ~95 % of a CPU core during these runs, so timings vary.
+
+## What changed
+
+| Area | Fix |
+|---|---|
+| Auth & ownership | Accounts (PBKDF2-SHA256, 600k iterations), bearer sessions stored as SHA-256, 7-day expiry, logout revokes. Every `/api` route except register/login/health requires sign-in; records are per user (other users get 404). Sign-in page, route guard, sign-out in the UI. |
+| Schema | `users`, `sessions`, `content_types`, `tones`, `properties` added; `generated_outputs` linked to all of them and stores length, platform, keywords, per-channel sources, `updated_at`. In-place migration of Project 1 DBs; first account claims old records. |
+| Library | Stores and restores all property facts and settings; `PUT /api/library/{id}` saves edits (autosaved from the review step); reload restores the current result. |
+| Validation | Numeric bedrooms/bathrooms (x or x.5), non-negative price, property type, platform; uploads must be real JPG/PNG/WebP ≤ 5 MB with unique names. |
+| Grounding | Stricter prompt, temperature 0.3, post-generation guard that removes clauses with unsupplied claims and adds missing price/bed/bath, placeholder removal. (Naming forbidden terms in the prompt was tested and made invention worse — not used.) |
+| Social | Platform selector (Instagram 2,200 / Facebook 500 / LinkedIn 1,300 chars), platform-specific prompt, limit enforced and shown. |
+| Templates | Price in every listing length; no invented schools/transport/kitchens/alfresco/"strong interest"; no filler for missing values; Shorten keeps paragraphs. |
+| Export | Emoji removed from PDF only (no ■ boxes); consistent TXT filename. |
+| Lengths | Listing targets: short 80–120, medium 150–220, long 230–300, extra long 400–550 words (medium/long meet 150–300). Four lengths are now documented. |
+| Speed | Parallel Ollama requests documented and scripted (`scripts/run-local.sh`). |
+| Code quality | ruff (PEP 8/pyflakes/imports) configured and clean; ESLint clean; dev requirements split; dead `mockGenerator.ts` removed; README rewritten. |
+
+## Results
+
+| Check | Before | After |
+|---|---|---|
+| Backend tests | 47 pass | **99 pass** (`pytest`), ruff clean, ESLint clean, build + prerender pass |
+| Unauthenticated `GET/DELETE /api/library` | 200 / **204** | **401 / 401** (all 11 protected routes tested) |
+| Other user's record | n/a | **404** for GET/PUT/DELETE (tested in pytest and in Chrome) |
+| Project 1 DB migration | rows kept | rows kept, lookup ids + property rows back-filled, idempotent; real DB copy: 33 records claimed by first account (Chrome) |
+| Model output: all key facts present (10 properties × 4) | 38/40 | **40/40** |
+| Model output: unsupported amenity claims | 25/40 | **1/40** |
+| Model output: placeholders (`[Your Name]`) | 10/10 emails | **0/40** |
+| Model output: within length targets | 25/40 | **40/40** (listing 131–183 words) |
+| Template: price in medium listing | 0/30 | **every length, 10/10 random draws** (pytest) |
+| Template: unsupported claims | 20/40 | **0/40** |
+| Template: length targets | — | 2/40 — fallback copy is shorter than the new targets (listing 73–83 words) |
+| PDF emoji boxes | 22 | **0** |
+| Library reopen → Regenerate | invented "Three bedrooms", no price | **facts restored; 2-bedroom + $720,000 in all 4 channels** |
+| Edits saved to library | no | **yes** (server record updated, survives reload) |
+| Social platform / limit | none | **LinkedIn post 508 / 1,300 chars**, limit shown in UI |
+| `bedrooms="lots"` at the API | 200 | **422** |
+| HTML file upload | accepted | **415** |
+
+## Speed (NFR-01 — still not met)
+
+| Measurement | Before | After |
+|---|---|---|
+| 4 channels, Ollama serving 1 request at a time | 39–58 s | — |
+| 4 channels, `OLLAMA_NUM_PARALLEL=4` (evaluation, 10 properties, longer listings) | — | **26–48 s** |
+| Same, single test property | — | **20–40 s** across runs (machine load varied) |
+| Chrome: first text visible | 4.3 s | **1.1 s** |
+| Chrome: all channels complete | 43 s | **26.3 s**; regenerate 24.9 s |
+| Model unreachable → fallback | 1.5 s | 1.5 s |
+
+The 15 s target for a full 4-channel generation is **not met** on this laptop. Meeting it would need a GPU host or a smaller model (e.g. a 3B instruct model), which is a quality trade-off for the team to decide.
+
+## Browser journey after fixes (Chrome 154)
+
+Login redirect → sign-up validation ("at least 8 characters") → account created and 33 old records claimed → property (type House) → LinkedIn/Formal/Medium → live streaming (all four channels in parallel) → result "AI · mistral · Saved to library" → edit + autosave → reload keeps edit → PDF/DOCX/TXT contain the edit, PDF has no boxes → library detail shows edit → Open in editor shows all facts → Regenerate keeps facts → sign out (old token 401) → second account sees 0 items, 404 on first user's record → wrong password message → model down shows "Template fallback". No console/page errors other than the expected 401/422 responses. Screenshots `audit/after/browser/01–14`.
+
+One environment note: when the Mac suspended network activity mid-run, the Vite **dev** server reloaded the page and the stream was cancelled; the API itself completed normally when called directly (24.6 s). Production builds don't include Vite's reload client.
+
+## Still open
+
+| Item | Status |
+|---|---|
+| NFR-01 15 s generation | FAIL (20–48 s) — needs hardware/model decision |
+| NFR-02 10 concurrent users with the real model | UNVERIFIED (Ollama serves 4 at once; more queue) |
+| NFR-03 99 % availability | UNVERIFIED — no observation period |
+| NFR-04 HTTPS deployment | UNVERIFIED — not deployed (auth and logging fixed) |
+| NFR-05 SUS > 70 | UNVERIFIED — needs real participants |
+| NFR-07 Docker, Firefox, Edge | UNVERIFIED — not installed here (compose file updated) |
+| Transformers / remote HTTP backends | UNVERIFIED with a real model — documented as kept for GPU hosts; Ollama is the backend in use |
+| AWS S3 | Not implemented — documented scope change (local disk) |
+| Refinements (tone / persuasive / shorten) | Rule-based, not AI — documented |
+| Human rating of tone/relevance | Not done |

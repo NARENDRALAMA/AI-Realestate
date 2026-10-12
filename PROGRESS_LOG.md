@@ -4,6 +4,20 @@ This log records what was built on top of the Project 1 codebase, how each
 piece was tested, problems that came up and how they were fixed, and what is
 explicitly not done. Written for the team report.
 
+## Update — 12 October 2026 (audit fixes)
+
+The sections below describe the 28 September state. Since then: Ollama/Mistral is the
+default engine (the Transformers/Colab path is kept but untested with a real model),
+and a requirements audit (`audit/AUDIT_REPORT.md`) found and fixed missing
+authentication, the incomplete schema, unsaved property facts and edits, invented
+amenities and placeholders in model output, the missing price in medium template
+listings, missing social platforms/limits, weak input/upload validation and emoji
+boxes in PDFs. The backend suite is now 99 tests (was 25), ruff and ESLint are clean,
+and real-model evaluation shows 40/40 channels with all key facts, 1/40 with an
+unsupported claim and no placeholders. Full four-channel generation is ~20–48 s on an
+Apple M5 with parallel Ollama requests — still above the 15 s target. See the
+"Re-test after fixes" section of the audit for evidence and what remains unverified.
+
 ## Summary
 
 Project 1's template-based content generator (`backend/generator.py`) is
