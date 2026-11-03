@@ -1,0 +1,20 @@
+# Keep local state, secrets and dev-only files out of the image.
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.db
+*.db-journal
+uploads/
+.env
+.env.*
+tests/
+conftest.py
+evaluate*.py
+evaluate_results*.csv
+ai_service/colab_notebook.ipynb
+requirements-dev.txt
+requirements-llm.txt
+Dockerfile
+.dockerignore

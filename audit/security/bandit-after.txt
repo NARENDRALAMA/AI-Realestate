@@ -1,0 +1,74 @@
+Run started:2026-11-03 07:24:12.856236
+
+Test results:
+>> Issue: [B615:huggingface_unsafe_download] Unsafe Hugging Face Hub download without revision pinning in from_pretrained()
+   Severity: Medium   Confidence: High
+   CWE: CWE-494 (https://cwe.mitre.org/data/definitions/494.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b615_huggingface_unsafe_download.html
+   Location: ./ai_service/local_transformers_backend.py:41:25
+40	        revision = os.environ.get("LLM_MODEL_REVISION", "main")
+41	        self.tokenizer = AutoTokenizer.from_pretrained(model_name, revision=revision)
+42	
+
+--------------------------------------------------
+>> Issue: [B615:huggingface_unsafe_download] Unsafe Hugging Face Hub download without revision pinning in from_pretrained()
+   Severity: Medium   Confidence: High
+   CWE: CWE-494 (https://cwe.mitre.org/data/definitions/494.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b615_huggingface_unsafe_download.html
+   Location: ./ai_service/local_transformers_backend.py:50:25
+49	        try:
+50	            self.model = AutoModelForCausalLM.from_pretrained(model_name, revision=revision, **load_kwargs)
+51	        except Exception as exc:
+
+--------------------------------------------------
+>> Issue: [B107:hardcoded_password_default] Possible hardcoded password: 'correct horse'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b107_hardcoded_password_default.html
+   Location: ./conftest.py:34:0
+33	
+34	def register(client, email="agent@example.com", name="Agent", password="correct horse"):
+35	    res = client.post("/api/auth/register", json={"name": name, "email": email, "password": password})
+36	    assert res.status_code == 201, res.text
+37	    return {"Authorization": f"Bearer {res.json()['token']}"}
+38	
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/plugins/b101_assert_used.html
+   Location: ./conftest.py:36:4
+35	    res = client.post("/api/auth/register", json={"name": name, "email": email, "password": password})
+36	    assert res.status_code == 201, res.text
+37	    return {"Authorization": f"Bearer {res.json()['token']}"}
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.8.6/blacklists/blacklist_calls.html#b311-random
+   Location: ./generator.py:182:11
+181	def _pick(options: list[str]) -> str:
+182	    return random.choice(options)
+183	
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 2896
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 1
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 3
+		Medium: 2
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 1
+		High: 4
+Files skipped (0):

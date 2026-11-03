@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import os
 import re
 import sqlite3
@@ -7,7 +8,7 @@ import uuid
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, StreamingResponse
 
@@ -34,30 +35,94 @@ from models import (
     UserOut,
 )
 from orchestrator import generate_with_sources
+from ratelimit import limiter
 from streaming import stream_generation
+
+logger = logging.getLogger("main")
+
+
+def seed_demo_account() -> None:
+    """Create the demo login from DEMO_EMAIL / DEMO_PASSWORD (and optional DEMO_NAME)
+    if it doesn't exist yet. On Cloud Run the SQLite file is wiped on every restart,
+    so this runs at each startup to keep the live demo login working."""
+    email = os.environ.get("DEMO_EMAIL", "").strip().lower()
+    password = os.environ.get("DEMO_PASSWORD", "")
+    if not email or not password:
+        return
+    if len(password) < 8:
+        logger.warning("DEMO_PASSWORD is shorter than 8 characters; demo account not created")
+        return
+    if database.get_user_by_email(email) is None:
+        name = os.environ.get("DEMO_NAME", "Demo Agent")
+        database.create_user(name, email, auth.hash_password(password))
+        logger.info("demo account created")
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     database.init_db()
+    seed_demo_account()
     yield
 
 
-app = FastAPI(title="REM Content Studio API", version="2.0.0", lifespan=lifespan)
+# Interactive API docs (/docs, /redoc, /openapi.json) are on for local development
+# and turned off in production with ENABLE_API_DOCS=false.
+_DOCS = os.environ.get("ENABLE_API_DOCS", "true").lower() == "true"
 
-_ORIGINS = os.environ.get(
-    "CORS_ORIGINS", "http://localhost:5173,https://main.d1zu60c9lypz4g.amplifyapp.com"
+app = FastAPI(
+    title="REM Content Studio API",
+    version="2.0.0",
+    lifespan=lifespan,
+    docs_url="/docs" if _DOCS else None,
+    redoc_url="/redoc" if _DOCS else None,
+    openapi_url="/openapi.json" if _DOCS else None,
 )
+
+
+def allowed_origins() -> list[str]:
+    """Exact origins from ALLOWED_ORIGINS (comma-separated; CORS_ORIGINS is the older
+    name). Wildcards are dropped: only listed origins may call the API from a browser."""
+    raw = os.environ.get("ALLOWED_ORIGINS") or os.environ.get("CORS_ORIGINS") or "http://localhost:5173"
+    origins = [o.strip().rstrip("/") for o in raw.split(",") if o.strip()]
+    return [o for o in origins if "*" not in o]
+
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[o.strip() for o in _ORIGINS.split(",") if o.strip()],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=allowed_origins(),
+    # Sign-in uses a bearer token in the Authorization header, not cookies.
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
+    # The export download reads its filename from this header.
+    expose_headers=["Content-Disposition"],
+    max_age=600,
 )
 
+_SECURITY_HEADERS = {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "no-referrer",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+    "Cross-Origin-Resource-Policy": "cross-origin",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+}
+# The API only returns JSON and file downloads, so nothing it serves may run scripts.
+# The Swagger UI (local development only) needs its own scripts, so it is exempt.
+_API_CSP = "default-src 'none'; frame-ancestors 'none'"
+_DOC_PATHS = ("/docs", "/redoc", "/openapi.json")
 
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    response = await call_next(request)
+    for name, value in _SECURITY_HEADERS.items():
+        response.headers.setdefault(name, value)
+    if not request.url.path.startswith(_DOC_PATHS):
+        response.headers.setdefault("Content-Security-Policy", _API_CSP)
+    if request.url.path.startswith("/api/") and request.url.path != "/api/health":
+        response.headers.setdefault("Cache-Control", "no-store")
+    return response
 
 
 # ─── health & auth ────────────────────────────────────────────────────────────
@@ -67,7 +132,9 @@ def health() -> dict:
     return {"status": "ok"}
 
 
-@app.post("/api/auth/register", response_model=AuthResponse, status_code=201)
+@app.post(
+    "/api/auth/register", response_model=AuthResponse, status_code=201, dependencies=[Depends(limiter("auth"))]
+)
 def register(request: RegisterRequest) -> AuthResponse:
     try:
         user = database.create_user(request.name, request.email, auth.hash_password(request.password))
@@ -76,7 +143,7 @@ def register(request: RegisterRequest) -> AuthResponse:
     return AuthResponse(token=auth.start_session(user["id"]), user=UserOut(**auth.public_user(user)))
 
 
-@app.post("/api/auth/login", response_model=AuthResponse)
+@app.post("/api/auth/login", response_model=AuthResponse, dependencies=[Depends(limiter("auth"))])
 def login(request: LoginRequest) -> AuthResponse:
     user = database.get_user_by_email(request.email)
     if user is None or not auth.verify_password(request.password, user["password_hash"]):
@@ -97,7 +164,7 @@ def me(user: dict = Depends(current_user)) -> UserOut:
 
 # ─── generate ─────────────────────────────────────────────────────────────────
 
-@app.post("/api/generate", response_model=GenerateResponse)
+@app.post("/api/generate", response_model=GenerateResponse, dependencies=[Depends(limiter("generate"))])
 def generate(request: GenerateRequest, user: dict = Depends(current_user)) -> GenerateResponse:
     bundle, model_used, generation_time_ms, sources = generate_with_sources(request)
     record_id = database.save_output(
@@ -117,7 +184,7 @@ def generate(request: GenerateRequest, user: dict = Depends(current_user)) -> Ge
     )
 
 
-@app.post("/api/generate/stream")
+@app.post("/api/generate/stream", dependencies=[Depends(limiter("generate"))])
 def generate_stream(request: GenerateRequest, user: dict = Depends(current_user)) -> StreamingResponse:
     """Same inputs as /api/generate (plus extra_formats and variations), streamed as
     newline-delimited JSON events while the model writes. See streaming.py."""
@@ -185,17 +252,17 @@ def delete_library_item(record_id: int, user: dict = Depends(current_user)) -> R
 
 # ─── refine ───────────────────────────────────────────────────────────────────
 
-@app.post("/api/refine/tone", response_model=RefineResponse)
+@app.post("/api/refine/tone", response_model=RefineResponse, dependencies=[Depends(limiter("refine"))])
 def refine_tone_endpoint(request: RefineRequest, user: dict = Depends(current_user)) -> RefineResponse:
     return RefineResponse(refined=refine_tone(request))
 
 
-@app.post("/api/refine/persuasive", response_model=RefineResponse)
+@app.post("/api/refine/persuasive", response_model=RefineResponse, dependencies=[Depends(limiter("refine"))])
 def refine_persuasive_endpoint(request: RefineRequest, user: dict = Depends(current_user)) -> RefineResponse:
     return RefineResponse(refined=refine_persuasive(request))
 
 
-@app.post("/api/refine/shorten", response_model=RefineResponse)
+@app.post("/api/refine/shorten", response_model=RefineResponse, dependencies=[Depends(limiter("refine"))])
 def refine_shorten_endpoint(request: RefineRequest, user: dict = Depends(current_user)) -> RefineResponse:
     return RefineResponse(refined=refine_shorten(request))
 

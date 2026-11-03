@@ -12,6 +12,9 @@ sys.path.insert(0, os.path.dirname(__file__))
 @pytest.fixture(autouse=True)
 def temp_database(tmp_path, monkeypatch):
     import database
+    import ratelimit
+
+    ratelimit.reset()  # every test starts with empty rate-limit counters
 
     monkeypatch.setattr(database, "DB_PATH", tmp_path / "test.db")
     database.init_db()

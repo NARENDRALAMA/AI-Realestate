@@ -40,3 +40,6 @@ propcopy.backup-*.db
 .env
 .env.*
 !.env.example
+
+# Large raw scanner output (summaries are kept as .txt)
+audit/security/trivy-image.json

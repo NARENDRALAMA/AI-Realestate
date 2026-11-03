@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import re
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 
 Tone = Literal["formal", "casual", "promotional", "luxury", "concise", "friendly"]
 ContentType = Literal["listing", "social", "email", "video"]
@@ -24,37 +24,90 @@ PLATFORM_CHAR_LIMITS: dict[str, int] = {
     "linkedin": 1300,
 }
 
+# Input length limits. Every free-text field is capped so a single request can't
+# send megabytes into the prompt, the database or the PDF/DOCX builders.
+Tiny = Annotated[str, Field(max_length=50)]        # price, sizes, counts
+Short = Annotated[str, Field(max_length=200)]      # title, location, keywords
+Medium = Annotated[str, Field(max_length=500)]     # address, image path
+Long = Annotated[str, Field(max_length=2000)]      # features, amenities, notes
+Content = Annotated[str, Field(max_length=20000)]  # generated / edited copy
+ExtrasMap = Annotated[dict[Short, Content], Field(max_length=20)]
+
+# Free-text fields go into the LLM prompt, so they are checked for prompt-injection
+# attempts (OWASP LLM01) and links (phishing via generated copy). This is a heuristic
+# first line of defence; the prompt rules and the output guard in postprocess.py
+# back it up.
+_FREE_TEXT_FIELDS = (
+    "title", "location", "address", "features", "amenities", "agent_notes", "keywords",
+)
+_URL_IN_INPUT = re.compile(
+    r"(https?://|www\.)\S"
+    r"|\b[\w.-]+\.(com|net|org|io|xyz|ru|info|biz|example)(/|\b)",
+    re.I,
+)
+_INJECTION = re.compile(
+    r"\b(ignore|disregard|forget|override|bypass)\b[^.\n]{0,60}\b(instructions?|rules?|prompts?|directions?|guidelines)\b"
+    r"|\b(ignore|disregard|forget)\s+(all|everything|the)\s+(above|previous|prior|earlier)"
+    r"|\b(system|hidden|initial|original)\s+prompt\b"
+    r"|\b(repeat|reveal|print|show|output|tell me)\b[^.\n]{0,40}\b(your|the)\s+(rules|instructions|prompt)\b"
+    r"|\bnote\s+to\s+(the\s+)?(ai|assistant|model|llm|chatbot|gpt)\b"
+    r"|\b(you are now|act as an?|pretend to be|from now on,? you)\b"
+    r"|\bnew (task|instructions?|role)\b"
+    r"|\binstead of (an?|the|this) (advert|ad|listing|post|email|script|copy)\b"
+    r"|\bwrite (a|an) (poem|story|song|essay|joke|limerick)\b"
+    r"|\bdescribe (it|the property|the home|the house|this) as (a|an)\b"
+    r"|\b(everything|all) (you were|you've been|you have been|you are) (told|given)\b"
+    r"|\b(also\s+)?(say|claim|state|write|mention)\s+(that\s+)?(the\s+)?"
+    r"(property|home|house|apartment|it)\s+(has|is|includes|comes with)\b",
+    re.I,
+)
+
+
+def check_free_text(value: str) -> str:
+    """Reject links and instruction-like text in a field that is sent to the model."""
+    if _URL_IN_INPUT.search(value):
+        raise ValueError("web links aren't allowed in property details")
+    if _INJECTION.search(value):
+        raise ValueError("property details can't contain instructions to the AI")
+    return value
+
+
 _COUNT_FIELDS = ("bedrooms", "bathrooms")
 _NUMBER = re.compile(r"^\d{1,2}(\.5)?$")
 
 
 class GenerateRequest(BaseModel):
     # Property fields (snake_case; frontend API client converts from camelCase)
-    title: str
+    title: Short
     property_type: PropertyType = ""
-    price: str = ""
-    location: str
-    address: str = ""
-    bedrooms: str = ""
-    bathrooms: str = ""
-    parking: str = ""
-    land_size: str = ""
-    interior_size: str = ""
-    features: str = ""
-    amenities: str = ""
-    agent_notes: str = ""
-    image_path: str = ""
+    price: Tiny = ""
+    location: Short
+    address: Medium = ""
+    bedrooms: Tiny = ""
+    bathrooms: Tiny = ""
+    parking: Tiny = ""
+    land_size: Tiny = ""
+    interior_size: Tiny = ""
+    features: Long = ""
+    amenities: Long = ""
+    agent_notes: Long = ""
+    image_path: Medium = ""
 
     # Content settings
     content_type: ContentType = "listing"
     tone: Tone = "formal"
     length: Length = "medium"
-    keywords: str = ""
+    keywords: Short = ""
     platform: Platform = "instagram"
 
     # Only used by /api/generate/stream; /api/generate ignores them.
     extra_formats: list[ExtraFormat] = []
     variations: int = 1
+
+    @field_validator(*_FREE_TEXT_FIELDS)
+    @classmethod
+    def no_prompt_injection(cls, v: str) -> str:
+        return check_free_text(v)
 
     @field_validator("variations")
     @classmethod
@@ -95,10 +148,10 @@ class GenerateRequest(BaseModel):
 
 
 class GeneratedBundle(BaseModel):
-    listing: str
-    social: str
-    email: str
-    video: str
+    listing: Content
+    social: Content
+    email: Content
+    video: Content
 
 
 class GenerateResponse(BaseModel):
@@ -125,20 +178,20 @@ class LibraryItem(BaseModel):
 class PropertyFacts(BaseModel):
     """The property details a record was generated from, so it can be reopened and
     regenerated with the same facts."""
-    title: str = ""
-    property_type: str = ""
-    price: str = ""
-    location: str = ""
-    address: str = ""
-    bedrooms: str = ""
-    bathrooms: str = ""
-    parking: str = ""
-    land_size: str = ""
-    interior_size: str = ""
-    features: str = ""
-    amenities: str = ""
-    agent_notes: str = ""
-    image_path: str = ""
+    title: Short = ""
+    property_type: Tiny = ""
+    price: Tiny = ""
+    location: Short = ""
+    address: Medium = ""
+    bedrooms: Tiny = ""
+    bathrooms: Tiny = ""
+    parking: Tiny = ""
+    land_size: Tiny = ""
+    interior_size: Tiny = ""
+    features: Long = ""
+    amenities: Long = ""
+    agent_notes: Long = ""
+    image_path: Medium = ""
 
 
 class LibraryDetail(BaseModel):
@@ -165,36 +218,41 @@ class LibraryDetail(BaseModel):
 class LibraryUpdate(BaseModel):
     """Edited copy saved back to a library record from the review step."""
     bundle: GeneratedBundle
-    extras: dict[str, str] = {}
+    extras: ExtrasMap = {}
 
 
 class ExportRequest(BaseModel):
     bundle: GeneratedBundle
     format: ExportFormat
-    title: str = "Property Content Pack"
-    tone: str = "formal"
+    title: Short = "Property Content Pack"
+    tone: Tiny = "formal"
     # Optional extra formats (headlines, SMS, ...) appended after the four channels.
-    extras: dict[str, str] = {}
+    extras: ExtrasMap = {}
 
 
 class RefineRequest(BaseModel):
-    content: str
+    content: Content
     channel: ContentType
     tone: Tone
     length: Length = "medium"
-    title: str = "Property"
-    price: str = ""
-    location: str = "this suburb"
-    address: str = ""
-    bedrooms: str = ""
-    bathrooms: str = ""
-    parking: str = ""
-    land_size: str = ""
-    interior_size: str = ""
-    features: str = ""
-    amenities: str = ""
-    agent_notes: str = ""
-    keywords: str = ""
+    title: Short = "Property"
+    price: Tiny = ""
+    location: Short = "this suburb"
+    address: Medium = ""
+    bedrooms: Tiny = ""
+    bathrooms: Tiny = ""
+    parking: Tiny = ""
+    land_size: Tiny = ""
+    interior_size: Tiny = ""
+    features: Long = ""
+    amenities: Long = ""
+    agent_notes: Long = ""
+    keywords: Short = ""
+
+    @field_validator(*_FREE_TEXT_FIELDS)
+    @classmethod
+    def no_prompt_injection(cls, v: str) -> str:
+        return check_free_text(v)
 
 
 class RefineResponse(BaseModel):
@@ -222,9 +280,9 @@ _EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 
 class RegisterRequest(BaseModel):
-    name: str
-    email: str
-    password: str
+    name: Annotated[str, Field(max_length=100)]
+    email: Annotated[str, Field(max_length=254)]
+    password: Annotated[str, Field(max_length=128)]
 
     @field_validator("name")
     @classmethod
@@ -250,8 +308,8 @@ class RegisterRequest(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    email: str
-    password: str
+    email: Annotated[str, Field(max_length=254)]
+    password: Annotated[str, Field(max_length=128)]
 
     @field_validator("email")
     @classmethod

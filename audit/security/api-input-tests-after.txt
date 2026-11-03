@@ -1,0 +1,27 @@
+## Authentication
+PASS | generate without token | expected 401 got 401 
+PASS | generate with forged token | expected 401 got 401 
+PASS | library without token | expected 401 got 401 
+PASS | library item of another user / missing id | expected 404 got 404 
+## Missing fields / wrong types
+PASS | missing title+location | expected 422 got 422 
+PASS | blank title | expected 422 got 422 
+PASS | title is a number (wrong type) | expected 422 got 422 
+PASS | bedrooms is text | expected 422 got 422 
+PASS | negative price | expected 422 got 422 
+PASS | unknown tone enum | expected 422 got 422 
+PASS | variations out of range | expected 422 got 422 
+PASS | malformed JSON | expected 422 got 422 
+PASS | SQL-like id in path | expected 422 got 422 
+## Very long strings
+PASS | features = 10,000 chars | expected 422 got 422 (1.3s)
+PASS | features = 200,000 chars | expected 422 got 422 (4.0s)
+PASS | register with 100k-char name/password | expected 422 got 422 (3.1s)
+PASS | export with 500k-char title | expected 422 got 422 (18.4s)
+## CORS
+PASS | preflight from disallowed origin rejected | expected 400 got 400 ACAO=None
+PASS | simple GET from disallowed origin has no ACAO header | expected None got None 
+PASS | preflight from Pages origin allowed | expected https://rem-content-studio.pages.dev got https://rem-content-studio.pages.dev 
+PASS | preflight from 'null' origin rejected | expected 400 got 400 
+## Rate limiting (login, limit 10/min)
+PASS | 12 bad logins -> last ones 429 | expected 429 got 429 codes=[401, 401, 401, 401, 401, 401, 401, 401, 401, 429, 429, 429]

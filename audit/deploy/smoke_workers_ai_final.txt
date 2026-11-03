@@ -1,0 +1,19 @@
+generate #1: model_used=workers-ai/mistral-small-3.1-24b-instruct generation_time_ms=7027 wall=7.4s sources={'listing': 'ai', 'social': 'ai', 'email': 'ai', 'video': 'ai'}
+  words: {'listing': 128, 'social': 107, 'email': 148, 'video': 306}
+  --- listing ---
+  Welcome to your new haven in Sandy Bay! This charming 3 bedroom, 2 bathroom home is a delightful blend of comfort and convenience, priced at $895,000. Nestled on a spacious 620 m2 block perfect for enjoying the outdoors. ...
+  --- social ---
+  Discover your new haven in the heart of Sandy Bay! This sunny family home is ready to welcome you with open arms. With 3 cozy bedrooms and 2 modern bathrooms, there's plenty of space for everyone. Enjoy the warmth of the ...
+  --- email ---
+  Subject: Discover Your New Family Haven in Sandy Bay  Hi there,  We are thrilled to introduce you to Sunny Family Home, a delightful 3-bedroom house nestled in the heart of Sandy Bay, Hobart. This charming property is pr ...
+  --- video ---
+  [Scene 1 - Introduction] "Hello, and welcome to this delightful Sunny Family Home nestled in the heart of Sandy Bay, Hobart. This charming house is priced at $895,000 and is ready to welcome you with open arms."  [Scene  ...
+generate #2: model_used=workers-ai/mistral-small-3.1-24b-instruct generation_time_ms=6776 wall=7.7s sources={'listing': 'ai', 'social': 'ai', 'email': 'ai', 'video': 'ai'}
+  words: {'listing': 137, 'social': 91, 'email': 179, 'video': 328}
+generate #3: model_used=workers-ai/mistral-small-3.1-24b-instruct generation_time_ms=6898 wall=7.4s sources={'listing': 'ai', 'social': 'ai', 'email': 'ai', 'video': 'ai'}
+  words: {'listing': 156, 'social': 78, 'email': 163, 'video': 308}
+generate #4: model_used=workers-ai/mistral-small-3.1-24b-instruct generation_time_ms=7117 wall=8.1s sources={'listing': 'ai', 'social': 'ai', 'email': 'ai', 'video': 'ai'}
+  words: {'listing': 177, 'social': 94, 'email': 159, 'video': 314}
+generate #5: model_used=workers-ai/mistral-small-3.1-24b-instruct generation_time_ms=6844 wall=7.4s sources={'listing': 'ai', 'social': 'ai', 'email': 'ai', 'video': 'ai'}
+  words: {'listing': 176, 'social': 95, 'email': 160, 'video': 313}
+stream: model_used=workers-ai/mistral-small-3.1-24b-instruct generation_time_ms=7164 wall=7.7s

@@ -43,7 +43,7 @@ from extras import build_extra_prompt, max_tokens_for, max_tokens_for_extra, tem
 from generator import generate_bundle
 from models import GenerateRequest
 from orchestrator import CHANNELS, _use_llm
-from postprocess import clean_channel, remove_placeholders
+from postprocess import clean_channel, guard_output, remove_placeholders
 from prompts import build_prompt
 
 logger = logging.getLogger("streaming")
@@ -129,7 +129,7 @@ def _run_job(
 def _clean(job: str, text: str, request: GenerateRequest) -> str:
     kind = job.split(":")[0]
     if kind == "extra":
-        return remove_placeholders(text)
+        return remove_placeholders(guard_output(text, request))
     return clean_channel(kind, text, request)
 
 
@@ -188,7 +188,13 @@ def stream_generation(request: GenerateRequest, user_id: int | None = None) -> I
                     yield _line({"type": "delta", "job": job, "text": payload})
                 elif kind == "ok":
                     pending.discard(job)
-                    text = _clean(job, payload, request)
+                    try:
+                        text = _clean(job, payload, request)
+                    except AIBackendError as exc:  # output guard rejected the copy
+                        logger.warning("stream path=template job=%s reason=output_guard error=%s", job, exc)
+                        final[job], sources[job] = templates[job], "template"
+                        yield _line({"type": "job_done", "job": job, "source": "template", "text": templates[job]})
+                        continue
                     final[job], sources[job] = text, "ai"
                     yield _line({"type": "job_done", "job": job, "source": "ai", "text": text})
                 else:

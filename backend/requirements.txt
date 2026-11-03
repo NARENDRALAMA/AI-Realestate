@@ -1,8 +1,11 @@
-fastapi==0.115.6
+# Python 3.10+ (the Docker image uses 3.12). Versions bumped 2026-11-03 to clear
+# pip-audit / Trivy findings in starlette, python-multipart and langchain-core.
+fastapi==0.162.0
 uvicorn[standard]==0.32.1
-pydantic==2.10.4
-python-multipart==0.0.20
+pydantic==2.14.2
+python-multipart==0.0.33
 python-docx==1.1.2
 reportlab==4.2.5
-langchain-core==0.3.29
+langchain-core==1.7.4
+langsmith>=0.8.18
 httpx==0.28.1

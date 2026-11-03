@@ -11,7 +11,7 @@ TXT, PDF or DOCX.
 
 ## Quick start (local, Apple Silicon or any machine with Ollama)
 
-Prerequisites: Python 3.9+, Node 20+, [Ollama](https://ollama.com).
+Prerequisites: Python 3.10+ (3.12 recommended; the backend dependencies no longer install on 3.9), Node 20+, [Ollama](https://ollama.com). The cloud deployment is described in [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ```bash
 # once

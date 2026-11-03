@@ -1,0 +1,30 @@
+== Test B: feature flag USE_LLM=false (revision rem-api-00003-wfg) ==
+generate #1: model_used=template generation_time_ms=0 wall=0.4s sources={'listing': 'template', 'social': 'template', 'email': 'template', 'video': 'template'}
+  words: {'listing': 93, 'social': 28, 'email': 104, 'video': 96}
+  --- listing ---
+  Introducing Sunny Family Home — a warm and inviting property in the heart of Sandy Bay, Hobart.  Offering 3 bedrooms, 2 bathrooms, 2 car spaces across a land of approximately 620 m2.  Offered at $895,000.  Here's what ma ...
+  --- social ---
+  What a lovely home! Sunny Family Home in Sandy Bay, Hobart 😊 3 bed · 2 bath · 2 parking ✓ North-facing garden $895,000  #HomeSweet #NewHome #RealEstate #HouseHunting ...
+  --- email ---
+  Subject: A Home You'll Love: Sunny Family Home — Sandy Bay, Hobart  Hi there!  Looking for a place to truly call home? Sunny Family Home in Sandy Bay, Hobart just might be the one!  Property highlights: • 3 bed / 2 bath  ...
+  --- video ---
+  [Scene 1 — Introduction] Welcome, welcome! Come on in and take a look at Sunny Family Home, a truly lovely home in the wonderful suburb of Sandy Bay, Hobart. Offering 3 bedrooms, 2 bathrooms, 2 car spaces across a land o ...
+stream: model_used=template generation_time_ms=1 wall=0.3s
+
+== Test A: invalid Cloudflare credentials (CF_ACCOUNT_ID all zeros, revision rem-api-00004-5jm) ==
+generate #1: model_used=template generation_time_ms=275 wall=0.7s sources={'listing': 'template', 'social': 'template', 'email': 'template', 'video': 'template'}
+  words: {'listing': 93, 'social': 28, 'email': 104, 'video': 96}
+  --- listing ---
+  Welcome to Sunny Family Home, a wonderful home waiting for its next family in Sandy Bay, Hobart!  Offering 3 bedrooms, 2 bathrooms, 2 car spaces across a land of approximately 620 m2.  Offered at $895,000.  Here's what m ...
+  --- social ---
+  What a lovely home! Sunny Family Home in Sandy Bay, Hobart 😊 3 bed · 2 bath · 2 parking ✓ North-facing garden $895,000  #HomeSweet #NewHome #RealEstate #HouseHunting ...
+  --- email ---
+  Subject: A Home You'll Love: Sunny Family Home — Sandy Bay, Hobart  Hi there!  Looking for a place to truly call home? Sunny Family Home in Sandy Bay, Hobart just might be the one!  Property highlights: • 3 bed / 2 bath  ...
+  --- video ---
+  [Scene 1 — Introduction] Welcome, welcome! Come on in and take a look at Sunny Family Home, a truly lovely home in the wonderful suburb of Sandy Bay, Hobart. Offering 3 bedrooms, 2 bathrooms, 2 car spaces across a land o ...
+stream: model_used=template generation_time_ms=83 wall=0.4s
+
+Cloud Run log lines from that revision:
+stream path=template job=listing:0 reason=backend_error error=Workers AI returned HTTP 401
+stream path=template job=social:0 reason=backend_error error=Workers AI returned HTTP 401
+stream path=template job=email:0 reason=backend_error error=Workers AI returned HTTP 401

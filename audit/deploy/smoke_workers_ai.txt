@@ -1,0 +1,15 @@
+generate #1: model_used=workers-ai/mistral-small-3.1-24b-instruct generation_time_ms=9040 wall=9.4s sources={'listing': 'ai', 'social': 'ai', 'email': 'ai', 'video': 'ai'}
+  words: {'listing': 154, 'social': 90, 'email': 191, 'video': 310}
+  --- listing ---
+  Welcome home to Sunny Family Home in the heart of Sandy Bay, Hobart! This charming 3-bedroom, 2-bathroom house is perfect for families looking for a blend of comfort and convenience. Situated on a spacious 620 m2 block,  ...
+  --- social ---
+  Welcome to your new haven in Sandy Bay! This sunny family home is ready to embrace you with open arms. With 3 bedrooms and 2 bathrooms, there's plenty of space for everyone. Enjoy the warmth of a wood heater and the char ...
+  --- email ---
+  Subject: Welcome Home to Sunny Family Living in Sandy Bay!  Hi there,  We are thrilled to introduce you to "Sunny Family Home," a charming house nestled in the heart of Sandy Bay, Hobart. This delightful property is perf ...
+  --- video ---
+  [Scene 1 - Introduction] Hello and welcome to Sunny Family Home, a delightful house located in the charming suburb of Sandy Bay, Hobart. This gorgeous property is priced at $895,000 and is perfect for families looking fo ...
+generate #2: model_used=workers-ai/mistral-small-3.1-24b-instruct generation_time_ms=7097 wall=7.5s sources={'listing': 'ai', 'social': 'ai', 'email': 'ai', 'video': 'ai'}
+  words: {'listing': 173, 'social': 111, 'email': 155, 'video': 285}
+generate #3: model_used=workers-ai/mistral-small-3.1-24b-instruct generation_time_ms=7184 wall=7.6s sources={'listing': 'ai', 'social': 'ai', 'email': 'ai', 'video': 'ai'}
+  words: {'listing': 170, 'social': 99, 'email': 191, 'video': 285}
+stream: model_used=workers-ai/mistral-small-3.1-24b-instruct generation_time_ms=7251 wall=7.7s

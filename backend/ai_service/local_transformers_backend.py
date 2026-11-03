@@ -16,6 +16,8 @@ backend/requirements-llm.txt.
 """
 from __future__ import annotations
 
+import os
+
 from .interface import AIBackend, AIBackendError
 
 
@@ -33,7 +35,10 @@ class LocalTransformersBackend(AIBackend):
         self.model_name = model_name
         self._torch = torch
 
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        # Pin the exact model files with LLM_MODEL_REVISION=<commit sha> so a changed
+        # upstream repo can't swap in different weights or code (defaults to "main").
+        revision = os.environ.get("LLM_MODEL_REVISION", "main")
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, revision=revision)
 
         load_kwargs: dict = {"device_map": "auto"}
         if load_in_4bit:
@@ -42,7 +47,7 @@ class LocalTransformersBackend(AIBackend):
             load_kwargs["quantization_config"] = BitsAndBytesConfig(load_in_4bit=True)
 
         try:
-            self.model = AutoModelForCausalLM.from_pretrained(model_name, **load_kwargs)
+            self.model = AutoModelForCausalLM.from_pretrained(model_name, revision=revision, **load_kwargs)
         except Exception as exc:
             raise AIBackendError(f"failed to load model '{model_name}': {exc}") from exc
 

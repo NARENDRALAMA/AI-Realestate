@@ -18,7 +18,16 @@ const html = render('/')
 let page = await readFile(indexPath, 'utf8')
 
 if (!page.includes('<div id="root"></div>')) throw new Error('root placeholder not found in dist/index.html')
-page = page.replace('<div id="root"></div>', `<div id="root">${html}</div>`)
+// Motion renders its settled state as inline styles (style="opacity:1;transform:none").
+// Those values are the CSS defaults, so the attributes change nothing visually; removing
+// them lets the Content-Security-Policy forbid inline style attributes entirely (no
+// 'unsafe-inline' or 'unsafe-hashes'). Motion sets later styles through element.style,
+// which CSP allows. Attributes with any non-default declaration are kept.
+const DEFAULT_DECLARATIONS = new Set(['opacity:1', 'transform:none', 'height:auto', 'width:auto'])
+const isDefaultOnly = (value) =>
+  value.split(';').map((d) => d.trim().replace(/\s+/g, '')).filter(Boolean).every((d) => DEFAULT_DECLARATIONS.has(d))
+const bodyHtml = html.replace(/\sstyle="([^"]*)"/g, (attr, value) => (isDefaultOnly(value) ? '' : attr))
+page = page.replace('<div id="root"></div>', `<div id="root">${bodyHtml}</div>`)
 
 // Inline the (single) stylesheet so first paint doesn't wait on a render-blocking request.
 const cssRe = /<link rel="stylesheet" crossorigin href="([^"]+)">/

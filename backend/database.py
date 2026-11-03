@@ -21,11 +21,14 @@ existed have no owner until the first account is registered, which claims them.
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 from contextlib import contextmanager
 from pathlib import Path
 
-DB_PATH = Path(__file__).parent / "propcopy.db"
+# DB_PATH env var overrides the location (the Cloud Run image uses /tmp/propcopy.db,
+# which is wiped whenever the container restarts).
+DB_PATH = Path(os.environ.get("DB_PATH") or Path(__file__).parent / "propcopy.db")
 
 CONTENT_TYPES = {
     "listing": "Listing description",
@@ -134,6 +137,7 @@ CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
 
 
 def init_db() -> None:
+    Path(DB_PATH).parent.mkdir(parents=True, exist_ok=True)
     with _connect() as conn:
         conn.executescript(_SCHEMA)
         existing = {r["name"] for r in conn.execute("PRAGMA table_info(generated_outputs)")}
@@ -249,8 +253,10 @@ def save_output(
     """Store the property facts and the generated copy. `request` is a GenerateRequest."""
     with _connect() as conn:
         facts = {f: getattr(request, f, "") or "" for f in PROPERTY_FIELDS}
+        # Column names come from the PROPERTY_FIELDS constant, never from input;
+        # every value is a bound "?" parameter.
         cur = conn.execute(
-            f"INSERT INTO properties (user_id, {', '.join(PROPERTY_FIELDS)}) "
+            f"INSERT INTO properties (user_id, {', '.join(PROPERTY_FIELDS)}) "  # nosec B608
             f"VALUES (?, {', '.join('?' for _ in PROPERTY_FIELDS)})",
             (user_id, *facts.values()),
         )

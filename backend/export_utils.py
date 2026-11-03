@@ -85,13 +85,17 @@ def build_pdf(bundle: GeneratedBundle, title: str, tone: str, extras: dict[str, 
         spaceAfter=6,
     )
 
+    from xml.sax.saxutils import escape
+
+    # ReportLab's Paragraph reads its text as markup, so every user-supplied string
+    # (title, tone, extra-format names) is escaped, not just the body lines.
     story = []
-    story.append(Paragraph(f"REM Content Studio — {title}", styles["Title"]))
-    story.append(Paragraph(f"Tone: {tone.title()}", styles["Italic"]))
+    story.append(Paragraph(escape(f"REM Content Studio — {title}"), styles["Title"]))
+    story.append(Paragraph(escape(f"Tone: {tone.title()}"), styles["Italic"]))
     story.append(Spacer(1, 0.6 * cm))
 
     for heading, text in _sections(bundle, extras):
-        story.append(Paragraph(heading, heading2_style))
+        story.append(Paragraph(escape(heading), heading2_style))
         for line in text.split("\n"):
             safe = (
                 _pdf_text(line)

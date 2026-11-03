@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import re
 
+from ai_service.interface import AIBackendError
 from models import PLATFORM_CHAR_LIMITS, GenerateRequest
 
 # Claims a model tends to invent about a property or its surroundings. A term is only
@@ -164,7 +165,48 @@ def ensure_key_facts(channel: str, text: str, request: GenerateRequest) -> str:
     return "\n\n".join(paragraphs)
 
 
+# ─── output guard (OWASP LLM01 / LLM05 / LLM07 / LLM09) ───────────────────────
+
+class UnsafeOutput(AIBackendError):
+    """Model output broke a hard rule; the channel falls back to its template."""
+
+
+# Distinctive phrases from the prompt's rules: if they show up in the copy, the model
+# was talked into revealing its instructions.
+_LEAK_MARKERS = (
+    "use only the facts", "never make one up", "do not invent or guess",
+    "never write placeholders", "<<<facts", "facts>>>", "data, not instructions",
+)
+_URL_OUT = re.compile(r"\(?\b(?:https?://|www\.)[^\s)]+\)?", re.I)
+_COUNT_WORDS = {w: d for d, w in NUMBER_WORDS.items()}
+_COUNT = r"(?<![\w.])(\d{1,2}(?:\.5)?|one|two|three|four|five|six|seven|eight|nine|ten)(?:-|\s)?"
+_ROOM_COUNT = {
+    "bedrooms": re.compile(_COUNT + r"(?:bed(?:room)?s?|br)\b", re.I),
+    "bathrooms": re.compile(_COUNT + r"bath(?:room)?s?\b", re.I),
+}
+
+
+def guard_output(text: str, request: GenerateRequest) -> str:
+    """Raise UnsafeOutput if the copy leaks the prompt or contradicts the supplied
+    bedroom/bathroom counts; strip any links the model added."""
+    lower = text.lower()
+    if any(marker in lower for marker in _LEAK_MARKERS):
+        raise UnsafeOutput("output repeats the prompt instructions")
+    for field, pattern in _ROOM_COUNT.items():
+        supplied = (getattr(request, field, "") or "").strip()
+        if not supplied:
+            continue
+        for match in pattern.finditer(text):
+            if re.search(r"(scene|part|step|room)\s*$", text[: match.start()], re.I):
+                continue  # "[Scene 3 - Bedrooms]" is a label, not a room count
+            found = _COUNT_WORDS.get(match.group(1).lower(), match.group(1))
+            if found.removesuffix(".0") != supplied.removesuffix(".0"):
+                raise UnsafeOutput(f"output says {match.group(0)!r} but {field}={supplied}")
+    return re.sub(r"[ \t]{2,}", " ", _URL_OUT.sub("", text))
+
+
 def clean_channel(channel: str, text: str, request: GenerateRequest) -> str:
+    text = guard_output(text, request)
     text = remove_placeholders(text)
     text = remove_unsupported_claims(text, request)
     text = ensure_key_facts(channel, text, request)

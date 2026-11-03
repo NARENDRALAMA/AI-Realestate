@@ -1,0 +1,37 @@
+== rem-content-studio.pages.dev
+http:// -> 301 https://rem-content-studio.pages.dev/
+  tls1: New, (NONE), Cipher is (NONE)
+  tls1_1: New, (NONE), Cipher is (NONE)
+  tls1_2: New, TLSv1.2, Cipher is ECDHE-ECDSA-CHACHA20-POLY1305
+  tls1_3: New, TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+  issuer=C=US, O=Let's Encrypt, CN=YE2
+  notAfter=Feb  1 06:12:18 2027 GMT
+== rem-api-154218404779.australia-southeast1.run.app
+http:// -> 302 https://rem-api-154218404779.australia-southeast1.run.app/
+  tls1: New, (NONE), Cipher is (NONE)
+  tls1_1: New, (NONE), Cipher is (NONE)
+  tls1_2: New, TLSv1.2, Cipher is ECDHE-ECDSA-CHACHA20-POLY1305
+  tls1_3: New, TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+  issuer=C=US, O=Google Trust Services, CN=WR2
+  notAfter=Dec 30 19:07:21 2026 GMT
+
+== Pages response headers
+strict-transport-security: max-age=31536000; includeSubDomains
+content-security-policy: default-src 'self'; script-src 'self' 'sha256-BElXv597RbQ/UJYURS2ObEoi1LbBAueEI0MXt05dbZ8=' 'sha256-mt2we4nsnTinLq+lkztiqHC/f1etefs/8wp
+cross-origin-embedder-policy: require-corp
+cross-origin-opener-policy: same-origin
+cross-origin-resource-policy: same-origin
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-frame-options: DENY
+
+== API response headers
+x-content-type-options: nosniff
+x-frame-options: DENY
+referrer-policy: no-referrer
+strict-transport-security: max-age=31536000; includeSubDomains
+cross-origin-resource-policy: cross-origin
+permissions-policy: camera=(), microphone=(), geolocation=()
+content-security-policy: default-src 'none'; frame-ancestors 'none'
+server: Google Frontend
