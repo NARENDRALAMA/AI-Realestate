@@ -34,3 +34,9 @@ audit/raw/*.db
 audit/raw/*.log
 backend/uploads/
 propcopy.backup-*.db
+
+# Local databases and secrets
+*.db
+.env
+.env.*
+!.env.example
